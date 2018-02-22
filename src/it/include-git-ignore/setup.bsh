@@ -25,7 +25,12 @@ boolean result = true;
 
 try
 {
-    File resources = new File( basedir, "src/main/resources" );
+    File resources = new File( basedir, "src/main/resources/" );
+    if ( !resources.mkdirs() ) {
+      System.out.println ( "Failed to create src/main/resources directory." );
+      result = false;
+    }
+
     File gitIgnore = new File ( resources, ".gitignore" );
 
 
@@ -54,10 +59,10 @@ catch( IOException e )
 
 try
 {
-    File resources = new File( basedir, "src/main/resources/dir-with-dot-file" );
+    File resources = new File( basedir, "src/main/resources/dir-with-dot-file/" );
 
     if ( !resources.mkdirs() ) {
-      System.out.println ( "Failed to created dir-with-dot-file folder." );
+      System.out.println ( "Failed to create dir-with-dot-file folder." );
       result = false;
     }
     File gitIgnore = new File ( resources, ".gitignore" );
