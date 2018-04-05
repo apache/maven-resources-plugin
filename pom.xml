@@ -73,6 +73,7 @@ under the License.
     <mavenFilteringVersion>3.1.1</mavenFilteringVersion>
     <mavenVersion>3.0</mavenVersion>
     <surefire.version>2.21.0</surefire.version>
+    <javaVersion>7</javaVersion>
   </properties>
 
   <contributors>
