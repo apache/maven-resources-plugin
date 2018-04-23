@@ -89,8 +89,8 @@ public class ResourcesMojo
 
     /**
      * The list of additional filter properties files to be used along with System and project properties, which would
-     * be used for the filtering. <br/>
-     * See also: {@link ResourcesMojo#filters}.
+     * be used for the filtering.
+     * @see ResourcesMojo#filters
      *
      * @since 2.4
      */
@@ -98,22 +98,25 @@ public class ResourcesMojo
     protected List<String> buildFilters;
 
     /**
+     * <p>
      * The list of extra filter properties files to be used along with System properties, project properties, and filter
      * properties files specified in the POM build/filters section, which should be used for the filtering during the
-     * current mojo execution. <br/>
+     * current mojo execution.</p>
+     * <p>
      * Normally, these will be configured from a plugin's execution section, to provide a different set of filters for a
      * particular execution. For instance, starting in Maven 2.2.0, you have the option of configuring executions with
      * the id's <code>default-resources</code> and <code>default-testResources</code> to supply different configurations
      * for the two different types of resources. By supplying <code>extraFilters</code> configurations, you can separate
-     * which filters are used for which type of resource.
+     * which filters are used for which type of resource.</p>
      */
     @Parameter
     protected List<String> filters;
 
     /**
      * If false, don't use the filters specified in the build/filters section of the POM when processing resources in
-     * this mojo execution. <br/>
-     * See also: {@link ResourcesMojo#buildFilters} and {@link ResourcesMojo#filters}
+     * this mojo execution.
+     * @see ResourcesMojo#buildFilters 
+     * @see ResourcesMojo#filters
      *
      * @since 2.4
      */
@@ -136,7 +139,6 @@ public class ResourcesMojo
      * Expressions preceded with this string won't be interpolated. Anything else preceded with this string will be
      * passed through unchanged. For example {@code \${foo}} will be replaced with {@code ${foo}} but {@code \\${foo}}
      * will be replaced with {@code \\value of foo}, if this parameter has been set to the backslash.
-     * <br/>
      * @since 2.3
      */
     @Parameter
