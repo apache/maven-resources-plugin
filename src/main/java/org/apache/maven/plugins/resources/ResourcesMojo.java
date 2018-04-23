@@ -304,6 +304,7 @@ public class ResourcesMojo
         {
             getLog().warn( "File encoding has not been set, using platform encoding " + ReaderFactory.FILE_ENCODING
                 + ", i.e. build is platform dependent!" );
+            getLog().warn( "Please take a look into the FAQ: https://maven.apache.org/general.html#encoding-warning" );
         }
 
         try
