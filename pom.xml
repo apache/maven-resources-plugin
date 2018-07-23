@@ -25,7 +25,7 @@ under the License.
   <parent>
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>31</version>
+    <version>32</version>
     <relativePath>../../pom/maven/maven-plugins/pom.xml</relativePath>
   </parent>
 
@@ -72,7 +72,6 @@ under the License.
   <properties>
     <mavenFilteringVersion>3.1.1</mavenFilteringVersion>
     <mavenVersion>3.0</mavenVersion>
-    <surefire.version>2.21.0</surefire.version>
     <javaVersion>7</javaVersion>
   </properties>
 
