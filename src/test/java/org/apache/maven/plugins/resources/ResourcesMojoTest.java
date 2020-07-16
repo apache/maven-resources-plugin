@@ -38,7 +38,7 @@ import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.sonatype.aether.RepositorySystemSession;
+import org.eclipse.aether.RepositorySystemSession;
 
 public class ResourcesMojoTest
     extends AbstractMojoTestCase
