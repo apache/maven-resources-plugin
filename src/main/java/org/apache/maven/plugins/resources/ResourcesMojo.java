@@ -70,6 +70,13 @@ public class ResourcesMojo
     protected String encoding;
 
     /**
+     * The character encoding to use when reading and writing filtered properties files.
+     * If not specified, it will default to the value of the "encoding" parameter.
+     */
+    @Parameter
+    protected String propertiesEncoding;
+
+    /**
      * The output directory into which to copy the resources.
      */
     @Parameter( defaultValue = "${project.build.outputDirectory}", required = true )
@@ -337,6 +344,9 @@ public class ResourcesMojo
 
             // if these are NOT set, just use the defaults, which are '${*}' and '@'.
             mavenResourcesExecution.setDelimiters( delimiters, useDefaultDelimiters );
+
+            // Handle MRESOURCES-171
+            mavenResourcesExecution.setPropertiesEncoding( propertiesEncoding );
 
             if ( nonFilteredFileExtensions != null )
             {
