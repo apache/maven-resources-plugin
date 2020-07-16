@@ -240,7 +240,7 @@ public class MavenProjectBuildStub
         }
     }
 
-    private void createFiles( String parent, String testparent )
+    private void createFiles( String parent, String testparent ) throws IOException
     {
         File currentFile;
 
@@ -278,15 +278,8 @@ public class MavenProjectBuildStub
 
             if ( !currentFile.exists() )
             {
-                try
-                {
-                    currentFile.createNewFile();
-                    populateFile( currentFile );
-                }
-                catch ( IOException io )
-                {
-                    //TODO: handle exception
-                }
+                currentFile.createNewFile();
+                populateFile( currentFile );
             }
         }
     }
@@ -300,8 +293,6 @@ public class MavenProjectBuildStub
             try ( FileOutputStream outputStream = new FileOutputStream( file ) )
             {
                 outputStream.write( data.getBytes() );
-                outputStream.flush();
-                outputStream.close();
             }
         }
     }
