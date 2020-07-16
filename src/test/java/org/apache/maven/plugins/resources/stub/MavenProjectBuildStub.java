@@ -291,23 +291,17 @@ public class MavenProjectBuildStub
         }
     }
 
-    private void populateFile( File file )
+    private void populateFile( File file ) throws IOException
     {
-        FileOutputStream outputStream;
         String data = dataMap.get( file.getName() );
 
         if ( ( data != null ) && file.exists() )
         {
-            try
+            try ( FileOutputStream outputStream = new FileOutputStream( file ) )
             {
-                outputStream = new FileOutputStream( file );
                 outputStream.write( data.getBytes() );
                 outputStream.flush();
                 outputStream.close();
-            }
-            catch ( IOException ex )
-            {
-                // TODO: handle exception here
             }
         }
     }
