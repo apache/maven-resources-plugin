@@ -1,0 +1,96 @@
+ ------
+ Filtering Properties Files
+ ------
+ Dennis Lundberg
+ ------
+ 2020-07-16
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html
+
+Filtering Properties Files
+
+ When filtering resources, special care has to be taken if you are filtering
+ properties files. If your filtered properties files include non-ascii
+ characters and your <<<project.build.sourceEncoding>>> is set to anything other
+ than ISO-8859-1 you might be affected and should continue reading.
+
+* What has <<<project.build.sourceEncoding>>> got to do with resources?
+
+ Maven Resources Plugin has, up until version 3.2.0, defaulted to use
+ <<<project.build.sourceEncoding>>> as the encoding when filtering resources,
+ unless you configure the <<<encoding>>> parameter of the plugin explicitly. So
+ unless you have configured the <<<encoding>>> parameter in Maven Resources
+ Plugin explicitly this is what you get.
+
+* Properties files handled by the <<<Properties>>> class
+
+ When the Properties class is used to read and write properties files they
+ require that the properties files use ISO-8859-1 encoding.
+ This is still the case for Java 11, as can be seen in the
+ {{{https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Properties.html}API documentation for the Properties class}}.
+ So, properties files that are used in this way needs to use ISO-8859-1
+ encoding.
+
+* Properties files used as <<<ResourceBundle>>>
+
+ When properties files are used as <<<ResourceBundle>>>s the encoding required
+ differs between versions of Java. Up to and including Java 8 these files are
+ required to use ISO-8859-1 encoding.
+
+ Starting with Java 9 the preferred encoding is UTF-8 for property resource
+ bundles. It might work with ISO-8859-1, but as you can see in the
+ {{{https://docs.oracle.com/javase/9/intl/internationalization-enhancements-jdk-9.htm#JSINT-GUID-5ED91AA9-B2E3-4E05-8E99-6A009D2B36AF}Internationalization Enhancements in JDK 9}}
+ documentation you should consider converting your property resource bundles
+ into UTF-8 encoding.
+
+* What do I need to do?
+
+ You need to do 2 things:
+
+ [[1]] Decide which encoding to use for properties files, based on how you use them
+   in your project.
+
+ [[1]] Explicitly configure Maven Resource Plugin accordingly using the
+   <<<propertiesEncoding>>> configuration parameter, that was introduced in
+   version 3.2.0. In most cases it would look like this:
+
++-----+
+<project>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${project.version}</version>
+        <configuration>
+          ...
+          <propertiesEncoding>ISO-8859-1</propertiesEncoding>
+          ...
+        </configuration>
+      </plugin>
+    </plugins>
+    ...
+  </build>
+  ...
+</project>
++-----+
