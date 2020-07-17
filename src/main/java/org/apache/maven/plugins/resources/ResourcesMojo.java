@@ -64,7 +64,7 @@ public class ResourcesMojo
 {
 
     /**
-     * The character encoding scheme to be applied when filtering resources.
+     * The character encoding to use when reading and writing filtered resources.
      */
     @Parameter( defaultValue = "${project.build.sourceEncoding}" )
     protected String encoding;
