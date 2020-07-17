@@ -37,7 +37,6 @@ import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.eclipse.aether.RepositorySystemSession;
 
 public class ResourcesMojoTest
@@ -691,18 +690,9 @@ public class ResourcesMojoTest
         throws IOException
     {
         assertTrue( FileUtils.fileExists( fileName ) );
-
-        BufferedReader reader = null;
-        try
+        try( BufferedReader reader = new BufferedReader( new FileReader( fileName ) ) )
         {
-            reader = new BufferedReader( new FileReader( fileName ) );
             assertEquals( data, reader.readLine() );
-            reader.close();
-            reader = null;
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
