@@ -72,6 +72,8 @@ public class ResourcesMojo
     /**
      * The character encoding to use when reading and writing filtered properties files.
      * If not specified, it will default to the value of the "encoding" parameter.
+     *
+     * @since 3.2.0
      */
     @Parameter
     protected String propertiesEncoding;

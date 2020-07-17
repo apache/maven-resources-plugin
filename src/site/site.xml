@@ -39,6 +39,8 @@ under the License.
             href="/examples/resource-directory.html"/>
       <item name="Filtering"
             href="/examples/filter.html"/>
+      <item name="Filtering properties files"
+            href="/examples/filtering-properties-files.html"/>
       <item name="Including and excluding files and directories"
             href="/examples/include-exclude.html"/>
       <item name="Escape Filtering"

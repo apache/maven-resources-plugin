@@ -29,7 +29,7 @@ under the License.
   </parent>
 
   <artifactId>maven-resources-plugin</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
+  <version>3.2.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Apache Maven Resources Plugin</name>
@@ -70,7 +70,7 @@ under the License.
 
   <properties>
     <mavenFilteringVersion>3.2.0-SNAPSHOT</mavenFilteringVersion>
-    <mavenVersion>3.0</mavenVersion>
+    <mavenVersion>3.1.0</mavenVersion>
     <javaVersion>7</javaVersion>
     <project.build.outputTimestamp>2020-04-07T21:04:00Z</project.build.outputTimestamp>
   </properties>
@@ -138,7 +138,7 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>2.1</version>
+      <version>3.1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
