@@ -312,14 +312,13 @@ public class ResourcesMojo
 
         if ( StringUtils.isBlank( encoding ) && isFilteringEnabled( getResources() ) )
         {
-            getLog().warn( "File encoding has not been set, using platform encoding; "
-                + ", i.e. build is platform dependent!" );
-            getLog().warn( "Please take a look into the FAQ: https://maven.apache.org/general.html#encoding-warning" );
+            getLog().warn( "File encoding has not been set, using platform encoding. "
+                + "Build is platform dependent!" );
+            getLog().warn( "See https://maven.apache.org/general.html#encoding-warning" );
         }
 
         try
         {
-
             List<String> combinedFilters = getCombinedFiltersList();
 
             MavenResourcesExecution mavenResourcesExecution =
