@@ -46,7 +46,6 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
-import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
@@ -313,7 +312,7 @@ public class ResourcesMojo
 
         if ( StringUtils.isBlank( encoding ) && isFilteringEnabled( getResources() ) )
         {
-            getLog().warn( "File encoding has not been set, using platform encoding " + ReaderFactory.FILE_ENCODING
+            getLog().warn( "File encoding has not been set, using platform encoding; "
                 + ", i.e. build is platform dependent!" );
             getLog().warn( "Please take a look into the FAQ: https://maven.apache.org/general.html#encoding-warning" );
         }
