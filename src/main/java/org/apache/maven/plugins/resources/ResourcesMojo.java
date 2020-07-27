@@ -27,6 +27,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -45,8 +46,6 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.codehaus.plexus.context.Context;
 import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
-import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
@@ -311,16 +310,16 @@ public class ResourcesMojo
             return;
         }
 
-        if ( StringUtils.isEmpty( encoding ) && isFilteringEnabled( getResources() ) )
+        if ( StringUtils.isBlank( encoding ) && isFilteringEnabled( getResources() ) )
         {
-            getLog().warn( "File encoding has not been set, using platform encoding " + ReaderFactory.FILE_ENCODING
-                + ", i.e. build is platform dependent!" );
-            getLog().warn( "Please take a look into the FAQ: https://maven.apache.org/general.html#encoding-warning" );
+            getLog().warn( "File encoding has not been set, using platform encoding "
+                + System.getProperty( "file.encoding" )
+                + ". Build is platform dependent!" );
+            getLog().warn( "See https://maven.apache.org/general.html#encoding-warning" );
         }
 
         try
         {
-
             List<String> combinedFilters = getCombinedFiltersList();
 
             MavenResourcesExecution mavenResourcesExecution =
