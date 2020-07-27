@@ -20,4 +20,5 @@ assert new File(basedir, 'target/classes/test.txt').exists();
 
 content = new File(basedir, 'target/classes/test.txt').text;
 assert content.contains( 'jdoe@example.com' );
+assert content.contains( 'orga' );
 return true;
