@@ -69,7 +69,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenFilteringVersion>3.2.0-SNAPSHOT</mavenFilteringVersion>
+    <mavenFilteringVersion>3.2.0</mavenFilteringVersion>
     <mavenVersion>3.1.0</mavenVersion>
     <javaVersion>7</javaVersion>
     <project.build.outputTimestamp>2020-04-07T21:04:00Z</project.build.outputTimestamp>
