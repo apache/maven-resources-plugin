@@ -69,7 +69,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenFilteringVersion>3.2.0</mavenFilteringVersion>
+    <mavenFilteringVersion>3.3.0-SNAPSHOT</mavenFilteringVersion>
     <mavenVersion>3.2.5</mavenVersion>
     <javaVersion>7</javaVersion>
     <project.build.outputTimestamp>2020-08-05T15:25:21Z</project.build.outputTimestamp>
@@ -119,7 +119,7 @@ under the License.
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
-      <version>0.3.5</version>
+      <version>0.3.0.M1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
