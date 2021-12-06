@@ -115,7 +115,7 @@ under the License.
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
-      <version>0.0.0.M2a</version>
+      <version>0.3.5</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
