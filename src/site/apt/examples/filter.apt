@@ -75,12 +75,14 @@ Hello ${name}
  However, if we add a <<<\<filtering\>>>> tag to our POM and set it to <<<true>>> like this:
 
 +-----+
+<project>
       ...
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
       ...
+</project>
 +-----+
 
  Our <<<target/classes/hello.txt>>> after calling
@@ -158,11 +160,13 @@ your.name = world
  and adding that to our POM
 
 +-----+
+<project>
     ...
     <filters>
       <filter>my-filter-values.properties</filter>
     </filters>
     ...
+</project>
 +-----+
 
   
