@@ -70,6 +70,7 @@ Project
  you can specify that directory by doing the following:
 
 +-----+
+<project>
    ...
    <resources>
      <resource>
@@ -77,11 +78,13 @@ Project
      </resource>
    </resources>
    ...
+</project>
 +-----+
 
  Furthermore, you can have several directories by adding multiple <<<\<resource\>>>> elements:
 
 +-----+
+<project>
    ...
    <resources>
      <resource>
@@ -95,4 +98,5 @@ Project
      </resource>
    </resources>
    ...
+</project>
 +-----+
