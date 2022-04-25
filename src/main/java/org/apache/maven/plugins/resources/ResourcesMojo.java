@@ -50,7 +50,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
  * to specify the resources to copy.
- *
+ * @author <a href="mailto:BELMOUJAHID.I@Gmail.Com>Imad BELMOUJAHID</a> @ImadBL
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @author Andreas Hoheneder
@@ -209,6 +209,14 @@ public class ResourcesMojo
     protected LinkedHashSet<String> delimiters;
 
     /**
+     * This parameter is used in particular for filters properties files with format json.
+     * if this parameter is not empty, we select all the parameters who are the nodes start with this parameter
+     * This helps us to add a ROOT node FOR EACH environment in a same JSON file
+     */
+    @Parameter
+    protected String rootNode;
+
+    /**
      * Use default delimiters in addition to custom delimiters, if any.
      *
      * @since 2.4
@@ -348,6 +356,9 @@ public class ResourcesMojo
 
             // Handle MRESOURCES-171
             mavenResourcesExecution.setPropertiesEncoding( propertiesEncoding );
+
+            // Set rootNode for new feature with json file ### MRESOURCES-284 ###
+            mavenResourcesExecution.setRootNode( rootNode );
 
             if ( nonFilteredFileExtensions != null )
             {

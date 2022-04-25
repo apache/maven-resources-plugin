@@ -25,11 +25,15 @@ import java.io.FileNotFoundException;
 import org.apache.maven.shared.filtering.PropertyUtils;
 import org.junit.Test;
 
+/**
+ * @author <a href="mailto:BELMOUJAHID.I@Gmail.Com>Imad BELMOUJAHID</a> @ImadBL
+ */
 public class PropertyUtilsExceptionTest
 {
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
+     * I added a null for this parameter (rootNode) because it is only used with json file @ImadBL
      *
      * @throws Exception
      */
@@ -37,6 +41,6 @@ public class PropertyUtilsExceptionTest
     public void loadPropertyFileShouldFailWithFileNotFoundException()
         throws Exception
     {
-        PropertyUtils.loadPropertyFile( new File( "NON_EXISTENT_FILE" ), true, true );
+        PropertyUtils.loadPropertyFile( new File( "NON_EXISTENT_FILE" ), true, true, null );
     }
 }

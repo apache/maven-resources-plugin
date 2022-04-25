@@ -24,6 +24,9 @@ import java.util.Properties;
 
 import org.apache.maven.shared.filtering.PropertyUtils;
 
+/**
+ * @author <a href="mailto:BELMOUJAHID.I@Gmail.Com>Imad BELMOUJAHID</a> @ImadBL
+ */
 public class BasicPropertyUtilsTest
     extends AbstractPropertyUtilsTest
 {
@@ -58,13 +61,14 @@ public class BasicPropertyUtilsTest
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
+     * I added a null for this parameter (rootNode) because it is only used with json file @ImadBL
      *
      * @throws Exception
      */
     public void testBasicLoadProperty_FF()
         throws Exception
     {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, false, false );
+        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, false, false, null );
 
         assertNotNull( prop );
         assertTrue( validateProperties( prop ) );
@@ -72,13 +76,14 @@ public class BasicPropertyUtilsTest
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
+     * I added a null for this parameter (rootNode) because it is only used with json file @ImadBL
      *
      * @throws Exception
      */
     public void testBasicLoadProperty_TF()
         throws Exception
     {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, false );
+        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, false, null );
 
         assertNotNull( prop );
         assertTrue( validateProperties( prop ) );
@@ -86,13 +91,14 @@ public class BasicPropertyUtilsTest
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
+     * I added a null for this parameter (rootNode) because it is only used with json file @ImadBL
      *
      * @throws Exception
      */
     public void testBasicLoadProperty_TT()
         throws Exception
     {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, true );
+        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, true, null );
 
         validationProp.putAll( System.getProperties() );
         assertNotNull( prop );
@@ -101,13 +107,14 @@ public class BasicPropertyUtilsTest
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
+     * I added a null for this parameter (rootNode) because it is only used with json file @ImadBL
      *
      * @throws Exception
      */
     public void testNonExistentProperty()
         throws Exception
     {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, true );
+        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, true, null );
 
         validationProp.putAll( System.getProperties() );
         assertNotNull( prop );
