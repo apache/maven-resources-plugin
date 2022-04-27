@@ -47,7 +47,7 @@ public class ItFilter
     public List<String> getDefaultNonFilteredFileExtensions()
     {
         //  no op
-        return Collections.<String>emptyList();
+        return Collections.emptyList();
     }
 
     /** 
@@ -68,7 +68,7 @@ public class ItFilter
         try
         {
             File f = new File( mavenResourcesExecution.getOutputDirectory(), "foo.txt" );
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             
             lines.add( "foo" );
             lines.add( "version="+mavenResourcesExecution.getMavenProject().getVersion() );

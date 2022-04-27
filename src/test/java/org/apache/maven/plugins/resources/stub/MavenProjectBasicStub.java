@@ -38,7 +38,6 @@ public class MavenProjectBasicStub
     protected String description;
 
     public MavenProjectBasicStub( String id )
-        throws Exception
     {
         properties = new Properties();
         identifier = id;

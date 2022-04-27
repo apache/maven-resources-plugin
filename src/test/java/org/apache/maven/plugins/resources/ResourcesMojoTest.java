@@ -346,8 +346,7 @@ public class ResourcesMojoTest
         MavenExecutionRequest request = new DefaultMavenExecutionRequest();
         request.setSystemProperties( System.getProperties() );
 
-        MavenSession mavenSession =
-            new MavenSession( (PlexusContainer) null, (RepositorySystemSession) null, request, null );
+        MavenSession mavenSession = new MavenSession( null, null, request, null );
         setVariableValueToObject( mojo, "session", mavenSession );
         mojo.execute();
 
@@ -357,14 +356,9 @@ public class ResourcesMojoTest
         assertTrue( userDir.exists() );
 
         Properties props = new Properties();
-        final FileInputStream inStream = new FileInputStream( new File( resourcesDir, "file4.txt" ) );
-        try
+        try ( FileInputStream inStream = new FileInputStream( new File( resourcesDir, "file4.txt" ) ) )
         {
             props.load( inStream );
-        }
-        finally
-        {
-            inStream.close();
         }
         File fileFromFiltering = new File( props.getProperty( "current-working-directory" ) );
 
@@ -455,7 +449,7 @@ public class ResourcesMojoTest
         MavenProjectResourcesStub project = new MavenProjectResourcesStub( "resourcePropertyFiles_Filtering" );
         List<Resource> resources = project.getBuild()
                                 .getResources();
-        LinkedList<String> filterList = new LinkedList<String>();
+        LinkedList<String> filterList = new LinkedList<>();
 
         assertNotNull( mojo );
 
@@ -491,7 +485,7 @@ public class ResourcesMojoTest
         MavenProjectResourcesStub project = new MavenProjectResourcesStub( "resourcePropertyFiles_Extra" );
         List<Resource> resources = project.getBuild()
                                 .getResources();
-        LinkedList<String> filterList = new LinkedList<String>();
+        LinkedList<String> filterList = new LinkedList<>();
 
         assertNotNull( mojo );
 
@@ -527,8 +521,8 @@ public class ResourcesMojoTest
         MavenProjectResourcesStub project = new MavenProjectResourcesStub( "resourcePropertyFiles_MainAndExtra" );
         List<Resource> resources = project.getBuild()
                                 .getResources();
-        LinkedList<String> filterList = new LinkedList<String>();
-        LinkedList<String> extraFilterList = new LinkedList<String>();
+        LinkedList<String> filterList = new LinkedList<>();
+        LinkedList<String> extraFilterList = new LinkedList<>();
 
         assertNotNull( mojo );
 
@@ -575,7 +569,7 @@ public class ResourcesMojoTest
             new MavenProjectResourcesStub( "resourcePropertyFiles_Filtering_TokensInFilters" );
         final List<Resource> resources = project.getBuild()
                                       .getResources();
-        final LinkedList<String> filterList = new LinkedList<String>();
+        final LinkedList<String> filterList = new LinkedList<>();
 
         assertNotNull( mojo );
 
