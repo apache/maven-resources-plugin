@@ -266,7 +266,7 @@ public class ResourcesMojo
     /**
      * @since 2.4
      */
-    private List<MavenResourcesFiltering> mavenFilteringComponents = new ArrayList<MavenResourcesFiltering>();
+    private final List<MavenResourcesFiltering> mavenFilteringComponents = new ArrayList<>();
 
     /**
      * stop searching endToken at the end of line
