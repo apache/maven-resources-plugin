@@ -45,7 +45,7 @@ public class MavenBuildTimestamp
      */
     public static final TimeZone DEFAULT_BUILD_TIME_ZONE = TimeZone.getTimeZone( "Etc/UTC" );
 
-    private String formattedTimestamp;
+    private final String formattedTimestamp;
 
     /**
      * Create an instance.
