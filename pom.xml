@@ -71,7 +71,7 @@ under the License.
   <properties>
     <mavenFilteringVersion>3.2.0</mavenFilteringVersion>
     <mavenVersion>3.1.0</mavenVersion>
-    <javaVersion>7</javaVersion>
+    <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2020-08-05T15:25:21Z</project.build.outputTimestamp>
   </properties>
 
@@ -126,13 +126,13 @@ under the License.
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.6</version>
+      <version>2.11.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.8.1</version>
+      <version>3.12.0</version>
       <scope>compile</scope>
     </dependency>
 
@@ -157,7 +157,7 @@ under the License.
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.3.0</version>
+      <version>3.4.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>

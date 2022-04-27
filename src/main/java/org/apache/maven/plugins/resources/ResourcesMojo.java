@@ -266,7 +266,7 @@ public class ResourcesMojo
     /**
      * @since 2.4
      */
-    private List<MavenResourcesFiltering> mavenFilteringComponents = new ArrayList<MavenResourcesFiltering>();
+    private List<MavenResourcesFiltering> mavenFilteringComponents = new ArrayList<>();
 
     /**
      * stop searching endToken at the end of line
@@ -324,7 +324,7 @@ public class ResourcesMojo
 
             MavenResourcesExecution mavenResourcesExecution =
                 new MavenResourcesExecution( getResources(), getOutputDirectory(), project, encoding, combinedFilters,
-                                             Collections.<String>emptyList(), session );
+                                             Collections.emptyList(), session );
 
             mavenResourcesExecution.setEscapeWindowsPaths( escapeWindowsPaths );
 
@@ -443,7 +443,7 @@ public class ResourcesMojo
         }
         else
         {
-            List<String> result = new ArrayList<String>();
+            List<String> result = new ArrayList<>();
 
             if ( useBuildFilters && buildFilters != null && !buildFilters.isEmpty() )
             {

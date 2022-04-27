@@ -63,9 +63,9 @@ public class MavenProjectBuildStub
         super( key );
 
         build = new Build();
-        fileList = new ArrayList<String>();
-        directoryList = new ArrayList<String>();
-        dataMap = new HashMap<String, String>();
+        fileList = new ArrayList<>();
+        directoryList = new ArrayList<>();
+        dataMap = new HashMap<>();
         setupBuild();
     }
 
