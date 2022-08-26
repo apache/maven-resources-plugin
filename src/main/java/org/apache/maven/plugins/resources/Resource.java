@@ -26,4 +26,10 @@ package org.apache.maven.plugins.resources;
 public class Resource extends org.apache.maven.model.Resource {
     // nothing to do here just a class prevent users adding an implementation attribute
     // in the mojo configuration
+
+    public Resource() {}
+
+    public Resource(org.apache.maven.api.model.Resource delegate) {
+        super(delegate);
+    }
 }

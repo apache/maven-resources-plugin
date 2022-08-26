@@ -25,6 +25,9 @@
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <configuration>
+<!--          <project implementation="org.apache.maven.api.plugin.testing.stubs.ProjectStub">-->
+<!--            <pomPath>${basedir}/src/test/resources/unit/resources-test/plugin-config.xml</pomPath>-->
+<!--          </project>-->
           <outputDirectory>/test-classes/unit/resources-test</outputDirectory>
           <encoding>UTF-8</encoding>
         </configuration>

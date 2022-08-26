@@ -18,14 +18,33 @@
  */
 package org.apache.maven.plugins.resources.stub;
 
-import java.io.File;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.nio.file.Paths;
 import java.util.Properties;
 
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
+import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
-public class MavenProjectBasicStub extends MavenProjectStub {
+public class MavenProjectBasicStub extends ProjectStub {
     protected String identifier;
 
     protected String testRootDir;
@@ -37,7 +56,8 @@ public class MavenProjectBasicStub extends MavenProjectStub {
     public MavenProjectBasicStub(String id) {
         properties = new Properties();
         identifier = id;
-        testRootDir = PlexusTestCase.getBasedir() + "/target/unit/test-dir/" + identifier;
+        testRootDir = PlexusTestCase.getBasedir() + "/target/test-classes/unit/test-dir/" + identifier;
+        setBasedir(Paths.get(testRootDir));
 
         if (!FileUtils.fileExists(testRootDir)) {
             FileUtils.mkdir(testRootDir);
@@ -58,12 +78,6 @@ public class MavenProjectBasicStub extends MavenProjectStub {
         } else {
             return description;
         }
-    }
-
-    public File getBasedir() {
-        // create an isolated environment
-        // see setupTestEnvironment for details
-        return new File(testRootDir);
     }
 
     public String getGroupId() {
