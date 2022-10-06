@@ -29,7 +29,7 @@
 Filtering
 
  Variables can be included in your resources. These variables, denoted by the
- <<<$\{...\}>>> delimiters, can come from the system properties, your project
+ <<<$\{...\}>>> or <<<@...@>>> delimiters, can come from the system properties, your project
  properties, from your filter resources and from the command line.
 
  For example, if we have a resource <<<src/main/resources/hello.txt>>> containing
