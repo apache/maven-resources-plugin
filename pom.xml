@@ -219,6 +219,13 @@ under the License.
                 <goals>
                   <goal>test-jar</goal>
                 </goals>
+                <configuration>
+                  <excludes><!-- exclude unused content: only itFilter Plexus component is used -->
+                    <exclude>unit/**/*</exclude><!-- non-reproducible content -->
+                    <exclude>org/apache/maven/plugins/resources/stub/*.class</exclude>
+                    <exclude>org/apache/maven/plugins/resources/*.class</exclude>
+                  </excludes>
+                </configuration>
               </execution>
             </executions>
           </plugin>
