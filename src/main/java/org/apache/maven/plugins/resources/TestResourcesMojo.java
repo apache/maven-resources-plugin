@@ -49,7 +49,7 @@ public class TestResourcesMojo
     /**
      * The list of resources we want to transfer.
      */
-    @Parameter( defaultValue = "${project.testResources}", required = true, readonly = false )
+    @Parameter( defaultValue = "${project.testResources}", required = true )
     private List<Resource> resources;
 
     /**
