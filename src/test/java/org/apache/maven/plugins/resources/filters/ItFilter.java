@@ -18,6 +18,9 @@
  */
 package org.apache.maven.plugins.resources.filters;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,14 +31,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
-import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * @author Olivier Lamy
  * @since 2.5
  * @version $Id$
  */
-@Component(role = org.apache.maven.shared.filtering.MavenResourcesFiltering.class, hint = "itFilter")
+@Singleton
+@Named("itFilter")
 public class ItFilter
     implements MavenResourcesFiltering
 {
