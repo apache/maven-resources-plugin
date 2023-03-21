@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,12 +41,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.context.ContextException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
@@ -58,8 +53,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
  */
 @Mojo( name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true )
 public class ResourcesMojo
-    extends AbstractMojo
-    implements Contextualizable
+        extends AbstractMojo
 {
 
     /**
@@ -98,8 +92,8 @@ public class ResourcesMojo
     /**
      * The list of additional filter properties files to be used along with System and project properties, which would
      * be used for the filtering.
-     * @see ResourcesMojo#filters
      *
+     * @see ResourcesMojo#filters
      * @since 2.4
      */
     @Parameter( defaultValue = "${project.build.filters}", readonly = true )
@@ -123,9 +117,9 @@ public class ResourcesMojo
     /**
      * If false, don't use the filters specified in the build/filters section of the POM when processing resources in
      * this mojo execution.
-     * @see ResourcesMojo#buildFilters 
-     * @see ResourcesMojo#filters
      *
+     * @see ResourcesMojo#buildFilters
+     * @see ResourcesMojo#filters
      * @since 2.4
      */
     @Parameter( defaultValue = "true" )
@@ -140,6 +134,12 @@ public class ResourcesMojo
     /**
      *
      */
+    @Component( role = MavenResourcesFiltering.class )
+    protected Map<String, MavenResourcesFiltering> mavenResourcesFilteringMap;
+
+    /**
+     *
+     */
     @Parameter( defaultValue = "${session}", readonly = true, required = true )
     protected MavenSession session;
 
@@ -147,6 +147,7 @@ public class ResourcesMojo
      * Expressions preceded with this string won't be interpolated. Anything else preceded with this string will be
      * passed through unchanged. For example {@code \${foo}} will be replaced with {@code ${foo}} but {@code \\${foo}}
      * will be replaced with {@code \\value of foo}, if this parameter has been set to the backslash.
+     *
      * @since 2.3
      */
     @Parameter
@@ -192,7 +193,7 @@ public class ResourcesMojo
      * <p>
      * So, the default filtering delimiters might be specified as:
      * </p>
-     * 
+     *
      * <pre>
      * &lt;delimiters&gt;
      *   &lt;delimiter&gt;${*}&lt;/delimiter&gt;
@@ -261,11 +262,6 @@ public class ResourcesMojo
     /**
      * @since 2.4
      */
-    private PlexusContainer plexusContainer;
-
-    /**
-     * @since 2.4
-     */
     private List<MavenResourcesFiltering> mavenFilteringComponents = new ArrayList<>();
 
     /**
@@ -278,7 +274,7 @@ public class ResourcesMojo
 
     /**
      * Support filtering of filenames folders etc.
-     * 
+     *
      * @since 3.0.0
      */
     @Parameter( defaultValue = "false" )
@@ -287,22 +283,17 @@ public class ResourcesMojo
     /**
      * You can skip the execution of the plugin if you need to. Its use is NOT RECOMMENDED, but quite convenient on
      * occasion.
-     * 
+     *
      * @since 3.0.0
      */
     @Parameter( property = "maven.resources.skip", defaultValue = "false" )
     private boolean skip;
 
-    /** {@inheritDoc} */
-    public void contextualize( Context context )
-        throws ContextException
-    {
-        plexusContainer = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void execute()
-        throws MojoExecutionException
+            throws MojoExecutionException
     {
         if ( isSkip() )
         {
@@ -313,8 +304,8 @@ public class ResourcesMojo
         if ( StringUtils.isBlank( encoding ) && isFilteringEnabled( getResources() ) )
         {
             getLog().warn( "File encoding has not been set, using platform encoding "
-                + System.getProperty( "file.encoding" )
-                + ". Build is platform dependent!" );
+                    + System.getProperty( "file.encoding" )
+                    + ". Build is platform dependent!" );
             getLog().warn( "See https://maven.apache.org/general.html#encoding-warning" );
         }
 
@@ -323,8 +314,9 @@ public class ResourcesMojo
             List<String> combinedFilters = getCombinedFiltersList();
 
             MavenResourcesExecution mavenResourcesExecution =
-                new MavenResourcesExecution( getResources(), getOutputDirectory(), project, encoding, combinedFilters,
-                                             Collections.emptyList(), session );
+                    new MavenResourcesExecution( getResources(), getOutputDirectory(), project, encoding,
+                            combinedFilters,
+                            Collections.emptyList(), session );
 
             mavenResourcesExecution.setEscapeWindowsPaths( escapeWindowsPaths );
 
@@ -371,10 +363,10 @@ public class ResourcesMojo
      * can't be found in the context which can be got from the maven core.<br/>
      * A solution could be to put those values into the context by Maven core so they are accessible everywhere. (I'm
      * not sure if this is a good idea). Better ideas are always welcome.
-     * 
-     * The problem at the moment is that maven core handles usage of properties and replacements in 
+     * <p>
+     * The problem at the moment is that maven core handles usage of properties and replacements in
      * the model, but does not the resource filtering which needed some of the properties.
-     * 
+     *
      * @return the new instance with those properties.
      */
     private Properties addSeveralSpecialProperties()
@@ -391,35 +383,36 @@ public class ResourcesMojo
     }
 
     /**
-     * @param mavenResourcesExecution {@link MavenResourcesExecution} 
-     * @throws MojoExecutionException in case of wrong lookup.
+     * @param mavenResourcesExecution {@link MavenResourcesExecution}
+     * @throws MojoExecutionException  in case of wrong lookup.
      * @throws MavenFilteringException in case of failure.
      * @since 2.5
      */
     protected void executeUserFilterComponents( MavenResourcesExecution mavenResourcesExecution )
-        throws MojoExecutionException, MavenFilteringException
+            throws MojoExecutionException, MavenFilteringException
     {
 
         if ( mavenFilteringHints != null )
         {
             for ( String hint : mavenFilteringHints )
             {
-                try
+                MavenResourcesFiltering userFilterComponent = mavenResourcesFilteringMap.get( hint );
+                if ( userFilterComponent != null )
                 {
-                    // CHECKSTYLE_OFF: LineLength
-                    mavenFilteringComponents.add( (MavenResourcesFiltering) plexusContainer.lookup( MavenResourcesFiltering.class.getName(),
-                                                                                                    hint ) );
-                    // CHECKSTYLE_ON: LineLength
+                    getLog().debug( "added user filter component with hint: " + hint );
+                    mavenFilteringComponents.add( userFilterComponent );
                 }
-                catch ( ComponentLookupException e )
+                else
                 {
-                    throw new MojoExecutionException( e.getMessage(), e );
+                    throw new MojoExecutionException(
+                            "User filter with hint `" + hint + "` requested, but not present. Discovered filters are: "
+                                    + mavenResourcesFilteringMap.keySet() );
                 }
             }
         }
         else
         {
-            getLog().debug( "no use filter components" );
+            getLog().debug( "no user filter components" );
         }
 
         if ( mavenFilteringComponents != null && !mavenFilteringComponents.isEmpty() )
