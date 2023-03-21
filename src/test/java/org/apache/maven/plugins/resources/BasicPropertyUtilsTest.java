@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,38 +16,33 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
 
 import java.io.File;
 import java.util.Properties;
 
 import org.apache.maven.shared.filtering.PropertyUtils;
 
-public class BasicPropertyUtilsTest
-    extends AbstractPropertyUtilsTest
-{
-    final static protected String validationFileName =
-        "/target/test-classes/unit/propertiesutils-test/basic_validation.properties";
+public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
+    protected static final String validationFileName =
+            "/target/test-classes/unit/propertiesutils-test/basic_validation.properties";
 
-    final static protected String propFileName = "/target/test-classes/unit/propertiesutils-test/basic.properties";
+    protected static final String propFileName = "/target/test-classes/unit/propertiesutils-test/basic.properties";
 
-    protected File getPropertyFile()
-    {
-        File propFile = new File( getBasedir(), propFileName );
+    protected File getPropertyFile() {
+        File propFile = new File(getBasedir(), propFileName);
 
-        if ( !propFile.exists() )
-        {
+        if (!propFile.exists()) {
             propFile = null;
         }
 
         return propFile;
     }
 
-    protected File getValidationFile()
-    {
-        File validationFile = new File( getBasedir(), validationFileName );
+    protected File getValidationFile() {
+        File validationFile = new File(getBasedir(), validationFileName);
 
-        if ( !validationFile.exists() )
-        {
+        if (!validationFile.exists()) {
             validationFile = null;
         }
 
@@ -61,13 +54,11 @@ public class BasicPropertyUtilsTest
      *
      * @throws Exception
      */
-    public void testBasicLoadProperty_FF()
-        throws Exception
-    {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, false, false );
+    public void testBasicLoadProperty_FF() throws Exception {
+        Properties prop = PropertyUtils.loadPropertyFile(propertyFile, false, false);
 
-        assertNotNull( prop );
-        assertTrue( validateProperties( prop ) );
+        assertNotNull(prop);
+        assertTrue(validateProperties(prop));
     }
 
     /**
@@ -75,13 +66,11 @@ public class BasicPropertyUtilsTest
      *
      * @throws Exception
      */
-    public void testBasicLoadProperty_TF()
-        throws Exception
-    {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, false );
+    public void testBasicLoadProperty_TF() throws Exception {
+        Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, false);
 
-        assertNotNull( prop );
-        assertTrue( validateProperties( prop ) );
+        assertNotNull(prop);
+        assertTrue(validateProperties(prop));
     }
 
     /**
@@ -89,14 +78,12 @@ public class BasicPropertyUtilsTest
      *
      * @throws Exception
      */
-    public void testBasicLoadProperty_TT()
-        throws Exception
-    {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, true );
+    public void testBasicLoadProperty_TT() throws Exception {
+        Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
-        validationProp.putAll( System.getProperties() );
-        assertNotNull( prop );
-        assertTrue( validateProperties( prop ) );
+        validationProp.putAll(System.getProperties());
+        assertNotNull(prop);
+        assertTrue(validateProperties(prop));
     }
 
     /**
@@ -104,14 +91,11 @@ public class BasicPropertyUtilsTest
      *
      * @throws Exception
      */
-    public void testNonExistentProperty()
-        throws Exception
-    {
-        Properties prop = PropertyUtils.loadPropertyFile( propertyFile, true, true );
+    public void testNonExistentProperty() throws Exception {
+        Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
-        validationProp.putAll( System.getProperties() );
-        assertNotNull( prop );
-        assertNull( prop.getProperty( "does_not_exist" ) );
+        validationProp.putAll(System.getProperties());
+        assertNotNull(prop);
+        assertNull(prop.getProperty("does_not_exist"));
     }
-
 }

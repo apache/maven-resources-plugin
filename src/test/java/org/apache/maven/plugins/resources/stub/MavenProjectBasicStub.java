@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources.stub;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.resources.stub;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources.stub;
 
 import java.io.File;
 import java.util.Properties;
@@ -26,9 +25,7 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
-public class MavenProjectBasicStub
-    extends MavenProjectStub
-{
+public class MavenProjectBasicStub extends MavenProjectStub {
     protected String identifier;
 
     protected String testRootDir;
@@ -37,74 +34,59 @@ public class MavenProjectBasicStub
 
     protected String description;
 
-    public MavenProjectBasicStub( String id )
-    {
+    public MavenProjectBasicStub(String id) {
         properties = new Properties();
         identifier = id;
         testRootDir = PlexusTestCase.getBasedir() + "/target/test-classes/unit/test-dir/" + identifier;
 
-        if ( !FileUtils.fileExists( testRootDir ) )
-        {
-            FileUtils.mkdir( testRootDir );
+        if (!FileUtils.fileExists(testRootDir)) {
+            FileUtils.mkdir(testRootDir);
         }
     }
 
-    public String getName()
-    {
+    public String getName() {
         return "Test Project " + identifier;
     }
 
-    public void setDescription( String desc )
-    {
+    public void setDescription(String desc) {
         description = desc;
     }
 
-    public String getDescription()
-    {
-        if ( description == null )
-        {
+    public String getDescription() {
+        if (description == null) {
             return "this is a test project";
-        }
-        else
-        {
+        } else {
             return description;
         }
     }
 
-    public File getBasedir()
-    {
+    public File getBasedir() {
         // create an isolated environment
         // see setupTestEnvironment for details
-        return new File( testRootDir );
+        return new File(testRootDir);
     }
 
-    public String getGroupId()
-    {
+    public String getGroupId() {
         return "org.apache.maven.plugin.test";
     }
 
-    public String getArtifactId()
-    {
+    public String getArtifactId() {
         return "maven-resource-plugin-test#" + identifier;
     }
 
-    public String getPackaging()
-    {
+    public String getPackaging() {
         return "org.apache.maven.plugin.test";
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return identifier;
     }
 
-    public void addProperty( String key, String value )
-    {
-        properties.put( key, value );
+    public void addProperty(String key, String value) {
+        properties.put(key, value);
     }
 
-    public Properties getProperties()
-    {
+    public Properties getProperties() {
         return properties;
     }
 }

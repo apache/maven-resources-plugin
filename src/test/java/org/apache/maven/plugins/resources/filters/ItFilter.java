@@ -39,50 +39,42 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  */
 @Singleton
 @Named("itFilter")
-public class ItFilter
-    implements MavenResourcesFiltering
-{
+public class ItFilter implements MavenResourcesFiltering {
 
-
-    /** 
+    /**
      * @see org.apache.maven.shared.filtering.MavenResourcesFiltering#getDefaultNonFilteredFileExtensions()
      */
-    public List<String> getDefaultNonFilteredFileExtensions()
-    {
+    public List<String> getDefaultNonFilteredFileExtensions() {
         //  no op
         return Collections.emptyList();
     }
 
-    /** 
+    /**
      * @see org.apache.maven.shared.filtering.MavenResourcesFiltering#filteredFileExtension(String, List)
      */
-    public boolean filteredFileExtension( String fileName, List<String> userNonFilteredFileExtensions )
-    {
+    public boolean filteredFileExtension(String fileName, List<String> userNonFilteredFileExtensions) {
         return false;
     }
 
-    /** 
+    /**
      * @see org.apache.maven.shared.filtering.MavenResourcesFiltering#filterResources(org.apache.maven.shared.filtering.MavenResourcesExecution)
      */
-    public void filterResources( MavenResourcesExecution mavenResourcesExecution )
-        throws MavenFilteringException
-    {
+    public void filterResources(MavenResourcesExecution mavenResourcesExecution) throws MavenFilteringException {
         System.out.println("ItFilter filterResources");
-        try
-        {
-            File f = new File( mavenResourcesExecution.getOutputDirectory(), "foo.txt" );
+        try {
+            File f = new File(mavenResourcesExecution.getOutputDirectory(), "foo.txt");
             List<String> lines = new ArrayList<>();
-            
-            lines.add( "foo" );
-            lines.add( "version="+mavenResourcesExecution.getMavenProject().getVersion() );
-            lines.add( "toto=" + mavenResourcesExecution.getMavenSession().getSystemProperties().getProperty( "toto" ) );
-            FileUtils.writeLines( f, lines );
-        }
-        catch ( IOException e )
-        {
-            throw new MavenFilteringException( e.getMessage(), e );
-        }
 
+            lines.add("foo");
+            lines.add("version=" + mavenResourcesExecution.getMavenProject().getVersion());
+            lines.add("toto="
+                    + mavenResourcesExecution
+                            .getMavenSession()
+                            .getSystemProperties()
+                            .getProperty("toto"));
+            FileUtils.writeLines(f, lines);
+        } catch (IOException e) {
+            throw new MavenFilteringException(e.getMessage(), e);
+        }
     }
-
 }

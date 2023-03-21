@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,9 +16,9 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -33,9 +31,7 @@ import org.codehaus.plexus.util.IOUtil;
 /**
  * Base class for propertyutils test case
  */
-public abstract class AbstractPropertyUtilsTest
-    extends AbstractMojoTestCase
-{
+public abstract class AbstractPropertyUtilsTest extends AbstractMojoTestCase {
     protected File propertyFile;
 
     protected File validationFile;
@@ -46,34 +42,29 @@ public abstract class AbstractPropertyUtilsTest
 
     protected abstract File getValidationFile();
 
-    protected void setUp()
-        throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
 
         // load data
         propertyFile = getPropertyFile();
-        assertNotNull( propertyFile );
+        assertNotNull(propertyFile);
 
         validationFile = getValidationFile();
-        assertNotNull( validationFile );
+        assertNotNull(validationFile);
 
-        loadValidationProperties( validationFile );
+        loadValidationProperties(validationFile);
     }
 
-    protected boolean validateProperties( Properties prop )
-    {
+    protected boolean validateProperties(Properties prop) {
         boolean bRetVal = false;
 
         Enumeration<?> propKeys = prop.keys();
         String key;
 
-        while ( propKeys.hasMoreElements() )
-        {
+        while (propKeys.hasMoreElements()) {
             key = (String) propKeys.nextElement();
-            bRetVal = prop.getProperty( key ).equals( validationProp.getProperty( key ) );
-            if ( !bRetVal )
-            {
+            bRetVal = prop.getProperty(key).equals(validationProp.getProperty(key));
+            if (!bRetVal) {
                 break;
             }
         }
@@ -87,25 +78,19 @@ public abstract class AbstractPropertyUtilsTest
      *
      * @param validationPropFile
      */
-    private void loadValidationProperties( File validationPropFile )
-    {
+    private void loadValidationProperties(File validationPropFile) {
         validationProp = new Properties();
         InputStream in = null;
 
-        try
-        {
-            in = Files.newInputStream( validationPropFile.toPath() );
-            validationProp.load( in );
+        try {
+            in = Files.newInputStream(validationPropFile.toPath());
+            validationProp.load(in);
             in.close();
             in = null;
-        }
-        catch ( IOException ex )
-        {
+        } catch (IOException ex) {
             // TODO: do error handling
-        }
-        finally
-        {
-            IOUtil.close( in );
+        } finally {
+            IOUtil.close(in);
         }
     }
 }

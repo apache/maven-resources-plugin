@@ -1,14 +1,3 @@
-package org.apache.maven.plugins.resources;
-
-import java.io.File;
-import java.util.Collections;
-
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.plugins.resources.ResourcesMojo;
-import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
-import org.codehaus.plexus.util.FileUtils;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,7 +7,7 @@ import org.codehaus.plexus.util.FileUtils;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -27,54 +16,53 @@ import org.codehaus.plexus.util.FileUtils;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
+
+import java.io.File;
+import java.util.Collections;
+
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author Olivier Lamy
  * @version $Id$
  */
-public class CopyResourcesMojoTest
-    extends AbstractMojoTestCase
-{
+public class CopyResourcesMojoTest extends AbstractMojoTestCase {
 
-    protected final static String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
+    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
 
-    File outputDirectory = new File( getBasedir(), "/target/copyResourcesTests" );
+    File outputDirectory = new File(getBasedir(), "/target/copyResourcesTests");
 
-    protected void setUp()
-        throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
-        if ( !outputDirectory.exists() )
-        {
+        if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
-        }
-        else
-        {
-            FileUtils.cleanDirectory( outputDirectory );
+        } else {
+            FileUtils.cleanDirectory(outputDirectory);
         }
     }
 
-    public void testCopyWithoutFiltering()
-        throws Exception
-    {
-        File testPom = new File( getBasedir(), defaultPomFilePath );
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo( "resources", testPom );
+    public void testCopyWithoutFiltering() throws Exception {
+        File testPom = new File(getBasedir(), defaultPomFilePath);
+        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
 
-        mojo.setOutputDirectory( outputDirectory );
+        mojo.setOutputDirectory(outputDirectory);
 
         Resource resource = new Resource();
-        resource.setDirectory( getBasedir() + "/src/test/unit-files/copy-resources-test/no-filter" );
-        resource.setFiltering( false );
+        resource.setDirectory(getBasedir() + "/src/test/unit-files/copy-resources-test/no-filter");
+        resource.setFiltering(false);
 
-        mojo.setResources( Collections.singletonList( resource ) );
+        mojo.setResources(Collections.singletonList(resource));
 
-        MavenProjectResourcesStub project = new MavenProjectResourcesStub( "CopyResourcesMojoTest" );
-        File targetFile =  new File( getBasedir(), "/target/copyResourcesTests" );
-        project.setBaseDir( targetFile );
-        setVariableValueToObject( mojo, "project", project );
+        MavenProjectResourcesStub project = new MavenProjectResourcesStub("CopyResourcesMojoTest");
+        File targetFile = new File(getBasedir(), "/target/copyResourcesTests");
+        project.setBaseDir(targetFile);
+        setVariableValueToObject(mojo, "project", project);
         mojo.execute();
 
-        assertTrue( new File( targetFile, "config.properties" ).exists() );
+        assertTrue(new File(targetFile, "config.properties").exists());
     }
-
 }

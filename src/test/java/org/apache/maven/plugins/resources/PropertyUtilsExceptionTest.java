@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,18 +24,15 @@ import java.io.FileNotFoundException;
 import org.apache.maven.shared.filtering.PropertyUtils;
 import org.junit.Test;
 
-public class PropertyUtilsExceptionTest
-{
+public class PropertyUtilsExceptionTest {
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
      *
      * @throws Exception
      */
-    @Test( expected = FileNotFoundException.class )
-    public void loadPropertyFileShouldFailWithFileNotFoundException()
-        throws Exception
-    {
-        PropertyUtils.loadPropertyFile( new File( "NON_EXISTENT_FILE" ), true, true );
+    @Test(expected = FileNotFoundException.class)
+    public void loadPropertyFileShouldFailWithFileNotFoundException() throws Exception {
+        PropertyUtils.loadPropertyFile(new File("NON_EXISTENT_FILE"), true, true);
     }
 }

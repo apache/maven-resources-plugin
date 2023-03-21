@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources.stub;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,108 +16,91 @@ package org.apache.maven.plugins.resources.stub;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources.stub;
 
 import java.io.File;
 
 import org.apache.maven.model.Resource;
 
-public class MavenProjectResourcesStub
-    extends MavenProjectBuildStub
-{
-    
+public class MavenProjectResourcesStub extends MavenProjectBuildStub {
+
     private File baseDir;
 
-    public MavenProjectResourcesStub( String id )
-        throws Exception
-    {
-        super( id );
+    public MavenProjectResourcesStub(String id) throws Exception {
+        super(id);
         setupResources();
         setupTestResources();
     }
 
-    public void addInclude( String pattern )
-    {
-        build.getResources().get( 0 ).addInclude( pattern );
+    public void addInclude(String pattern) {
+        build.getResources().get(0).addInclude(pattern);
     }
 
-    public void addExclude( String pattern )
-    {
-        build.getResources().get( 0 ).addExclude( pattern );
+    public void addExclude(String pattern) {
+        build.getResources().get(0).addExclude(pattern);
     }
 
-    public void addTestInclude( String pattern )
-    {
-        build.getTestResources().get( 0 ).addInclude( pattern );
+    public void addTestInclude(String pattern) {
+        build.getTestResources().get(0).addInclude(pattern);
     }
 
-    public void addTestExclude( String pattern )
-    {
-        build.getTestResources().get( 0 ).addExclude( pattern );
+    public void addTestExclude(String pattern) {
+        build.getTestResources().get(0).addExclude(pattern);
     }
 
-    public void setTargetPath( String path )
-    {
-        build.getResources().get( 0 ).setTargetPath( path );
+    public void setTargetPath(String path) {
+        build.getResources().get(0).setTargetPath(path);
     }
 
-    public void setTestTargetPath( String path )
-    {
-        build.getTestResources().get( 0 ).setTargetPath( path );
+    public void setTestTargetPath(String path) {
+        build.getTestResources().get(0).setTargetPath(path);
     }
 
-    public void setDirectory( String dir )
-    {
-        build.getResources().get( 0 ).setDirectory( dir );
+    public void setDirectory(String dir) {
+        build.getResources().get(0).setDirectory(dir);
     }
 
-    public void setTestDirectory( String dir )
-    {
-        build.getTestResources().get( 0 ).setDirectory( dir );
+    public void setTestDirectory(String dir) {
+        build.getTestResources().get(0).setDirectory(dir);
     }
 
-    public void setResourceFiltering( int nIndex, boolean filter )
-    {
-        if ( build.getResources().size() > nIndex )
-        {
-            build.getResources().get( nIndex ).setFiltering( filter );
+    public void setResourceFiltering(int nIndex, boolean filter) {
+        if (build.getResources().size() > nIndex) {
+            build.getResources().get(nIndex).setFiltering(filter);
         }
     }
 
-    private void setupResources()
-    {
+    private void setupResources() {
         Resource resource = new Resource();
 
         // see MavenProjectBasicStub for details
         // of getBasedir
 
         // setup default resources
-        resource.setDirectory( getBasedir().getPath() + "/src/main/resources" );
-        resource.setFiltering( false );
-        resource.setTargetPath( null );
-        build.addResource( resource );
+        resource.setDirectory(getBasedir().getPath() + "/src/main/resources");
+        resource.setFiltering(false);
+        resource.setTargetPath(null);
+        build.addResource(resource);
     }
 
-    private void setupTestResources()
-    {
+    private void setupTestResources() {
         Resource resource = new Resource();
 
         // see MavenProjectBasicStub for details
         // of getBasedir
 
         // setup default test resources
-        resource.setDirectory( getBasedir().getPath() + "/src/test/resources" );
-        resource.setFiltering( false );
-        resource.setTargetPath( null );
-        build.addTestResource( resource );
+        resource.setDirectory(getBasedir().getPath() + "/src/test/resources");
+        resource.setFiltering(false);
+        resource.setTargetPath(null);
+        build.addTestResource(resource);
     }
 
-    public File getBaseDir()
-    {
+    public File getBaseDir() {
         return baseDir == null ? super.getBasedir() : baseDir;
     }
 
-    public void setBaseDir( File baseDir )
-    {
+    public void setBaseDir(File baseDir) {
         this.baseDir = baseDir;
     }
 }
