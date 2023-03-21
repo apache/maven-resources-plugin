@@ -37,7 +37,7 @@ public class MavenProjectBasicStub extends MavenProjectStub {
     public MavenProjectBasicStub(String id) {
         properties = new Properties();
         identifier = id;
-        testRootDir = PlexusTestCase.getBasedir() + "/target/test-classes/unit/test-dir/" + identifier;
+        testRootDir = PlexusTestCase.getBasedir() + "/target/unit/test-dir/" + identifier;
 
         if (!FileUtils.fileExists(testRootDir)) {
             FileUtils.mkdir(testRootDir);
