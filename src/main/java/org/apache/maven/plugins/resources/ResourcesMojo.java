@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,15 +50,13 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  * @author Andreas Hoheneder
  * @author William Ferguson
  */
-@Mojo( name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true )
-public class ResourcesMojo
-        extends AbstractMojo
-{
+@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
+public class ResourcesMojo extends AbstractMojo {
 
     /**
      * The character encoding to use when reading and writing filtered resources.
      */
-    @Parameter( defaultValue = "${project.build.sourceEncoding}" )
+    @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
 
     /**
@@ -74,19 +71,19 @@ public class ResourcesMojo
     /**
      * The output directory into which to copy the resources.
      */
-    @Parameter( defaultValue = "${project.build.outputDirectory}", required = true )
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
     private File outputDirectory;
 
     /**
      * The list of resources we want to transfer.
      */
-    @Parameter( defaultValue = "${project.resources}", required = true )
+    @Parameter(defaultValue = "${project.resources}", required = true)
     private List<Resource> resources;
 
     /**
      *
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
     /**
@@ -96,7 +93,7 @@ public class ResourcesMojo
      * @see ResourcesMojo#filters
      * @since 2.4
      */
-    @Parameter( defaultValue = "${project.build.filters}", readonly = true )
+    @Parameter(defaultValue = "${project.build.filters}", readonly = true)
     protected List<String> buildFilters;
 
     /**
@@ -122,25 +119,25 @@ public class ResourcesMojo
      * @see ResourcesMojo#filters
      * @since 2.4
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     protected boolean useBuildFilters;
 
     /**
      *
      */
-    @Component( role = MavenResourcesFiltering.class, hint = "default" )
+    @Component(role = MavenResourcesFiltering.class, hint = "default")
     protected MavenResourcesFiltering mavenResourcesFiltering;
 
     /**
      *
      */
-    @Component( role = MavenResourcesFiltering.class )
+    @Component(role = MavenResourcesFiltering.class)
     protected Map<String, MavenResourcesFiltering> mavenResourcesFilteringMap;
 
     /**
      *
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
     /**
@@ -158,7 +155,7 @@ public class ResourcesMojo
      *
      * @since 2.3
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean overwrite;
 
     /**
@@ -166,7 +163,7 @@ public class ResourcesMojo
      *
      * @since 2.3
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     protected boolean includeEmptyDirs;
 
     /**
@@ -182,7 +179,7 @@ public class ResourcesMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     protected boolean escapeWindowsPaths;
 
     /**
@@ -214,7 +211,7 @@ public class ResourcesMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     protected boolean useDefaultDelimiters;
 
     /**
@@ -235,7 +232,7 @@ public class ResourcesMojo
      * <li>Mac: &#42;&#42;/.DS_Store</li>
      * <li>Serena Dimension: &#42;&#42;/.metadata, &#42;&#42;/.metadata/&#42;&#42;</li>
      * <li>Mercurial: &#42;&#42;/.hg, &#42;&#42;/.hg/&#42;&#42;</li>
-     * <li>GIT: &#42;&#42;/.git, &#42;&#42;/.gitignore, &#42;&#42;/.gitattributes, &#42;&#42;/.git/&#42;&#42;</li>
+     * <li>Git: &#42;&#42;/.git, &#42;&#42;/.git/&#42;&#42;</li>
      * <li>Bitkeeper: &#42;&#42;/BitKeeper, &#42;&#42;/BitKeeper/&#42;&#42;, &#42;&#42;/ChangeSet,
      * &#42;&#42;/ChangeSet/&#42;&#42;</li>
      * <li>Darcs: &#42;&#42;/_darcs, &#42;&#42;/_darcs/&#42;&#42;, &#42;&#42;/.darcsrepo,
@@ -244,7 +241,7 @@ public class ResourcesMojo
      *
      * @since 3.0.0
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     protected boolean addDefaultExcludes;
 
     /**
@@ -269,7 +266,7 @@ public class ResourcesMojo
      *
      * @since 2.5
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean supportMultiLineFiltering;
 
     /**
@@ -277,7 +274,7 @@ public class ResourcesMojo
      *
      * @since 3.0.0
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean fileNameFiltering;
 
     /**
@@ -286,72 +283,68 @@ public class ResourcesMojo
      *
      * @since 3.0.0
      */
-    @Parameter( property = "maven.resources.skip", defaultValue = "false" )
+    @Parameter(property = "maven.resources.skip", defaultValue = "false")
     private boolean skip;
 
     /**
      * {@inheritDoc}
      */
-    public void execute()
-            throws MojoExecutionException
-    {
-        if ( isSkip() )
-        {
-            getLog().info( "Skipping the execution." );
+    public void execute() throws MojoExecutionException {
+        if (isSkip()) {
+            getLog().info("Skipping the execution.");
             return;
         }
 
-        if ( StringUtils.isBlank( encoding ) && isFilteringEnabled( getResources() ) )
-        {
-            getLog().warn( "File encoding has not been set, using platform encoding "
-                    + System.getProperty( "file.encoding" )
-                    + ". Build is platform dependent!" );
-            getLog().warn( "See https://maven.apache.org/general.html#encoding-warning" );
+        if (StringUtils.isBlank(encoding) && isFilteringEnabled(getResources())) {
+            getLog().warn("File encoding has not been set, using platform encoding "
+                    + System.getProperty("file.encoding")
+                    + ". Build is platform dependent!");
+            getLog().warn("See https://maven.apache.org/general.html#encoding-warning");
         }
 
-        try
-        {
+        try {
             List<String> combinedFilters = getCombinedFiltersList();
 
-            MavenResourcesExecution mavenResourcesExecution =
-                    new MavenResourcesExecution( getResources(), getOutputDirectory(), project, encoding,
-                            combinedFilters,
-                            Collections.emptyList(), session );
+            MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
+                    getResources(),
+                    getOutputDirectory(),
+                    project,
+                    encoding,
+                    combinedFilters,
+                    Collections.emptyList(),
+                    session);
 
-            mavenResourcesExecution.setEscapeWindowsPaths( escapeWindowsPaths );
+            mavenResourcesExecution.setEscapeWindowsPaths(escapeWindowsPaths);
 
             // never include project build filters in this call, since we've already accounted for the POM build filters
             // above, in getCombinedFiltersList().
-            mavenResourcesExecution.setInjectProjectBuildFilters( false );
+            mavenResourcesExecution.setInjectProjectBuildFilters(false);
 
-            mavenResourcesExecution.setEscapeString( escapeString );
-            mavenResourcesExecution.setOverwrite( overwrite );
-            mavenResourcesExecution.setIncludeEmptyDirs( includeEmptyDirs );
-            mavenResourcesExecution.setSupportMultiLineFiltering( supportMultiLineFiltering );
-            mavenResourcesExecution.setFilterFilenames( fileNameFiltering );
-            mavenResourcesExecution.setAddDefaultExcludes( addDefaultExcludes );
+            mavenResourcesExecution.setEscapeString(escapeString);
+            mavenResourcesExecution.setOverwrite(overwrite);
+            mavenResourcesExecution.setIncludeEmptyDirs(includeEmptyDirs);
+            mavenResourcesExecution.setSupportMultiLineFiltering(supportMultiLineFiltering);
+            mavenResourcesExecution.setFilterFilenames(fileNameFiltering);
+            mavenResourcesExecution.setAddDefaultExcludes(addDefaultExcludes);
 
             // Handle subject of MRESOURCES-99
             Properties additionalProperties = addSeveralSpecialProperties();
-            mavenResourcesExecution.setAdditionalProperties( additionalProperties );
+            mavenResourcesExecution.setAdditionalProperties(additionalProperties);
 
             // if these are NOT set, just use the defaults, which are '${*}' and '@'.
-            mavenResourcesExecution.setDelimiters( delimiters, useDefaultDelimiters );
+            mavenResourcesExecution.setDelimiters(delimiters, useDefaultDelimiters);
 
             // Handle MRESOURCES-171
-            mavenResourcesExecution.setPropertiesEncoding( propertiesEncoding );
+            mavenResourcesExecution.setPropertiesEncoding(propertiesEncoding);
 
-            if ( nonFilteredFileExtensions != null )
-            {
-                mavenResourcesExecution.setNonFilteredFileExtensions( nonFilteredFileExtensions );
+            if (nonFilteredFileExtensions != null) {
+                mavenResourcesExecution.setNonFilteredFileExtensions(nonFilteredFileExtensions);
             }
-            mavenResourcesFiltering.filterResources( mavenResourcesExecution );
+            mavenResourcesFiltering.filterResources(mavenResourcesExecution);
 
-            executeUserFilterComponents( mavenResourcesExecution );
-        }
-        catch ( MavenFilteringException e )
-        {
-            throw new MojoExecutionException( e.getMessage(), e );
+            executeUserFilterComponents(mavenResourcesExecution);
+        } catch (MavenFilteringException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
         }
     }
 
@@ -369,14 +362,14 @@ public class ResourcesMojo
      *
      * @return the new instance with those properties.
      */
-    private Properties addSeveralSpecialProperties()
-    {
+    private Properties addSeveralSpecialProperties() {
         String timeStamp = new MavenBuildTimestamp().formattedTimestamp();
         Properties additionalProperties = new Properties();
-        additionalProperties.put( "maven.build.timestamp", timeStamp );
-        if ( project.getBasedir() != null )
-        {
-            additionalProperties.put( "project.baseUri", project.getBasedir().getAbsoluteFile().toURI().toString() );
+        additionalProperties.put("maven.build.timestamp", timeStamp);
+        if (project.getBasedir() != null) {
+            additionalProperties.put(
+                    "project.baseUri",
+                    project.getBasedir().getAbsoluteFile().toURI().toString());
         }
 
         return additionalProperties;
@@ -388,39 +381,29 @@ public class ResourcesMojo
      * @throws MavenFilteringException in case of failure.
      * @since 2.5
      */
-    protected void executeUserFilterComponents( MavenResourcesExecution mavenResourcesExecution )
-            throws MojoExecutionException, MavenFilteringException
-    {
+    protected void executeUserFilterComponents(MavenResourcesExecution mavenResourcesExecution)
+            throws MojoExecutionException, MavenFilteringException {
 
-        if ( mavenFilteringHints != null )
-        {
-            for ( String hint : mavenFilteringHints )
-            {
-                MavenResourcesFiltering userFilterComponent = mavenResourcesFilteringMap.get( hint );
-                if ( userFilterComponent != null )
-                {
-                    getLog().debug( "added user filter component with hint: " + hint );
-                    mavenFilteringComponents.add( userFilterComponent );
-                }
-                else
-                {
+        if (mavenFilteringHints != null) {
+            for (String hint : mavenFilteringHints) {
+                MavenResourcesFiltering userFilterComponent = mavenResourcesFilteringMap.get(hint);
+                if (userFilterComponent != null) {
+                    getLog().debug("added user filter component with hint: " + hint);
+                    mavenFilteringComponents.add(userFilterComponent);
+                } else {
                     throw new MojoExecutionException(
                             "User filter with hint `" + hint + "` requested, but not present. Discovered filters are: "
-                                    + mavenResourcesFilteringMap.keySet() );
+                                    + mavenResourcesFilteringMap.keySet());
                 }
             }
-        }
-        else
-        {
-            getLog().debug( "no user filter components" );
+        } else {
+            getLog().debug("no user filter components");
         }
 
-        if ( mavenFilteringComponents != null && !mavenFilteringComponents.isEmpty() )
-        {
-            getLog().debug( "execute user filters" );
-            for ( MavenResourcesFiltering filter : mavenFilteringComponents )
-            {
-                filter.filterResources( mavenResourcesExecution );
+        if (mavenFilteringComponents != null && !mavenFilteringComponents.isEmpty()) {
+            getLog().debug("execute user filters");
+            for (MavenResourcesFiltering filter : mavenFilteringComponents) {
+                filter.filterResources(mavenResourcesExecution);
             }
         }
     }
@@ -428,22 +411,17 @@ public class ResourcesMojo
     /**
      * @return The combined filters.
      */
-    protected List<String> getCombinedFiltersList()
-    {
-        if ( filters == null || filters.isEmpty() )
-        {
+    protected List<String> getCombinedFiltersList() {
+        if (filters == null || filters.isEmpty()) {
             return useBuildFilters ? buildFilters : null;
-        }
-        else
-        {
+        } else {
             List<String> result = new ArrayList<>();
 
-            if ( useBuildFilters && buildFilters != null && !buildFilters.isEmpty() )
-            {
-                result.addAll( buildFilters );
+            if (useBuildFilters && buildFilters != null && !buildFilters.isEmpty()) {
+                result.addAll(buildFilters);
             }
 
-            result.addAll( filters );
+            result.addAll(filters);
 
             return result;
         }
@@ -455,14 +433,10 @@ public class ResourcesMojo
      * @param theResources The set of resources to check for filtering, may be <code>null</code>.
      * @return <code>true</code> if at least one resource uses filtering, <code>false</code> otherwise.
      */
-    private boolean isFilteringEnabled( Collection<Resource> theResources )
-    {
-        if ( theResources != null )
-        {
-            for ( Resource resource : theResources )
-            {
-                if ( resource.isFiltering() )
-                {
+    private boolean isFilteringEnabled(Collection<Resource> theResources) {
+        if (theResources != null) {
+            for (Resource resource : theResources) {
+                if (resource.isFiltering()) {
                     return true;
                 }
             }
@@ -473,121 +447,105 @@ public class ResourcesMojo
     /**
      * @return {@link #resources}
      */
-    public List<Resource> getResources()
-    {
+    public List<Resource> getResources() {
         return resources;
     }
 
     /**
      * @param resources set {@link #resources}
      */
-    public void setResources( List<Resource> resources )
-    {
+    public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
 
     /**
      * @return {@link #outputDirectory}
      */
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
 
     /**
      * @param outputDirectory the output folder.
      */
-    public void setOutputDirectory( File outputDirectory )
-    {
+    public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
     /**
      * @return {@link #overwrite}
      */
-    public boolean isOverwrite()
-    {
+    public boolean isOverwrite() {
         return overwrite;
     }
 
     /**
      * @param overwrite true to overwrite false otherwise.
      */
-    public void setOverwrite( boolean overwrite )
-    {
+    public void setOverwrite(boolean overwrite) {
         this.overwrite = overwrite;
     }
 
     /**
      * @return {@link #includeEmptyDirs}
      */
-    public boolean isIncludeEmptyDirs()
-    {
+    public boolean isIncludeEmptyDirs() {
         return includeEmptyDirs;
     }
 
     /**
      * @param includeEmptyDirs true/false.
      */
-    public void setIncludeEmptyDirs( boolean includeEmptyDirs )
-    {
+    public void setIncludeEmptyDirs(boolean includeEmptyDirs) {
         this.includeEmptyDirs = includeEmptyDirs;
     }
 
     /**
      * @return {@link #filters}
      */
-    public List<String> getFilters()
-    {
+    public List<String> getFilters() {
         return filters;
     }
 
     /**
      * @param filters The filters to use.
      */
-    public void setFilters( List<String> filters )
-    {
+    public void setFilters(List<String> filters) {
         this.filters = filters;
     }
 
     /**
      * @return {@link #delimiters}
      */
-    public LinkedHashSet<String> getDelimiters()
-    {
+    public LinkedHashSet<String> getDelimiters() {
         return delimiters;
     }
 
     /**
      * @param delimiters The delimiters to use.
      */
-    public void setDelimiters( LinkedHashSet<String> delimiters )
-    {
+    public void setDelimiters(LinkedHashSet<String> delimiters) {
         this.delimiters = delimiters;
     }
 
     /**
      * @return {@link #useDefaultDelimiters}
      */
-    public boolean isUseDefaultDelimiters()
-    {
+    public boolean isUseDefaultDelimiters() {
         return useDefaultDelimiters;
     }
 
     /**
      * @param useDefaultDelimiters true to use {@code ${*}}
      */
-    public void setUseDefaultDelimiters( boolean useDefaultDelimiters )
-    {
+    public void setUseDefaultDelimiters(boolean useDefaultDelimiters) {
         this.useDefaultDelimiters = useDefaultDelimiters;
     }
 
     /**
      * @return {@link #skip}
      */
-    public boolean isSkip()
-    {
+    public boolean isSkip() {
         return skip;
     }
-
 }

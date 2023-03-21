@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
 
 import java.io.File;
 import java.util.Collections;
@@ -28,14 +27,10 @@ import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.codehaus.plexus.util.FileUtils;
 
-public class TestResourcesTest
-    extends AbstractMojoTestCase
-{
-    protected final static String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
+public class TestResourcesTest extends AbstractMojoTestCase {
+    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
 
-    protected void setUp()
-        throws Exception
-    {
+    protected void setUp() throws Exception {
         super.setUp();
     }
 
@@ -44,48 +39,45 @@ public class TestResourcesTest
      *
      * @throws Exception
      */
-    public void testHarnessEnvironment()
-        throws Exception
-    {
-        File testPom = new File( getBasedir(), defaultPomFilePath );
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo( "testResources", testPom );
+    public void testHarnessEnvironment() throws Exception {
+        File testPom = new File(getBasedir(), defaultPomFilePath);
+        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("testResources", testPom);
 
-        assertNotNull( mojo );
+        assertNotNull(mojo);
     }
 
     /**
      * @throws Exception
      */
-    public void testTestResourceDirectoryCreation()
-        throws Exception
-    {
-        File testPom = new File( getBasedir(), defaultPomFilePath );
-        TestResourcesMojo mojo = (TestResourcesMojo) lookupMojo( "testResources", testPom );
-        MavenProjectResourcesStub project = new MavenProjectResourcesStub( "testResourceDirectoryStructure" );
+    public void testTestResourceDirectoryCreation() throws Exception {
+        File testPom = new File(getBasedir(), defaultPomFilePath);
+        TestResourcesMojo mojo = (TestResourcesMojo) lookupMojo("testResources", testPom);
+        MavenProjectResourcesStub project = new MavenProjectResourcesStub("testResourceDirectoryStructure");
         List<Resource> resources = project.getBuild().getResources();
 
-        assertNotNull( mojo );
+        assertNotNull(mojo);
 
-        project.addFile( "file4.txt" );
-        project.addFile( "package/file3.nottest" );
-        project.addFile( "notpackage/file1.include" );
-        project.addFile( "package/test/file1.txt" );
-        project.addFile( "notpackage/test/file2.txt" );
+        project.addFile("file4.txt");
+        project.addFile("package/file3.nottest");
+        project.addFile("notpackage/file1.include");
+        project.addFile("package/test/file1.txt");
+        project.addFile("notpackage/test/file2.txt");
         project.setupBuildEnvironment();
 
-        setVariableValueToObject( mojo, "project", project );
-        setVariableValueToObject( mojo, "resources", resources );
-        setVariableValueToObject( mojo, "outputDirectory", new File( project.getBuild().getTestOutputDirectory() ) );
-        setVariableValueToObject( mojo, "buildFilters", Collections.emptyList() );
-        setVariableValueToObject( mojo, "useBuildFilters", Boolean.TRUE );
+        setVariableValueToObject(mojo, "project", project);
+        setVariableValueToObject(mojo, "resources", resources);
+        setVariableValueToObject(
+                mojo, "outputDirectory", new File(project.getBuild().getTestOutputDirectory()));
+        setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
+        setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
         String resorucesDir = project.getTestOutputDirectory();
 
-        assertTrue( FileUtils.fileExists( resorucesDir + "/file4.txt" ) );
-        assertTrue( FileUtils.fileExists( resorucesDir + "/package/file3.nottest" ) );
-        assertTrue( FileUtils.fileExists( resorucesDir + "/notpackage/file1.include" ) );
-        assertTrue( FileUtils.fileExists( resorucesDir + "/package/test" ) );
-        assertTrue( FileUtils.fileExists( resorucesDir + "/notpackage/test" ) );
+        assertTrue(FileUtils.fileExists(resorucesDir + "/file4.txt"));
+        assertTrue(FileUtils.fileExists(resorucesDir + "/package/file3.nottest"));
+        assertTrue(FileUtils.fileExists(resorucesDir + "/notpackage/file1.include"));
+        assertTrue(FileUtils.fileExists(resorucesDir + "/package/test"));
+        assertTrue(FileUtils.fileExists(resorucesDir + "/notpackage/test"));
     }
 }

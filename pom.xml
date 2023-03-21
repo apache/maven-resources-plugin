@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,14 +17,13 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>36</version>
+    <artifactId>maven-plugins</artifactId>
+    <version>39</version>
   </parent>
 
   <artifactId>maven-resources-plugin</artifactId>
@@ -33,15 +31,19 @@ under the License.
   <packaging>maven-plugin</packaging>
 
   <name>Apache Maven Resources Plugin</name>
-  <description>
-    The Resources Plugin handles the copying of project resources to the output
+  <description>The Resources Plugin handles the copying of project resources to the output
     directory. There are two different kinds of resources: main resources and test resources. The
     difference is that the main resources are the resources associated with the main
     source code while the test resources are associated with the test source code.
     Thus, this allows the separation of resources for the main source code and its
-    unit tests.
-  </description>
+    unit tests.</description>
   <inceptionYear>2001</inceptionYear>
+
+  <contributors>
+    <contributor>
+      <name>Graham Leggett</name>
+    </contributor>
+  </contributors>
 
   <prerequisites>
     <maven>${mavenVersion}</maven>
@@ -50,8 +52,8 @@ under the License.
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-resources-plugin.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-resources-plugin.git</developerConnection>
-    <url>https://github.com/apache/maven-resources-plugin/tree/${project.scm.tag}</url>
     <tag>HEAD</tag>
+    <url>https://github.com/apache/maven-resources-plugin/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
     <system>JIRA</system>
@@ -75,12 +77,6 @@ under the License.
     <project.build.outputTimestamp>2022-07-23T17:49:18Z</project.build.outputTimestamp>
   </properties>
 
-  <contributors>
-    <contributor>
-      <name>Graham Leggett</name>
-    </contributor>
-  </contributors>
-    
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -124,6 +120,11 @@ under the License.
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>3.5.1</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-filtering</artifactId>
       <version>${mavenFilteringVersion}</version>
@@ -161,19 +162,27 @@ under the License.
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>3.5.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.resolver</groupId>
       <artifactId>maven-resolver-api</artifactId>
       <version>1.6.3</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <configuration>
+          <excludes combine.children="append">
+            <!-- ITs and IT resources -->
+            <exclude>src/it/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <profiles>
     <profile>

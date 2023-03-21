@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,73 +16,64 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
+
+import java.io.File;
+import java.util.List;
 
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * Copy resources of the configured plugin attribute resources
- * 
+ *
  * @author Olivier Lamy
  * @since 2.3
  */
-@Mojo( name = "copy-resources", threadSafe = true )
-public class CopyResourcesMojo
-    extends ResourcesMojo
-{
-    
+@Mojo(name = "copy-resources", threadSafe = true)
+public class CopyResourcesMojo extends ResourcesMojo {
+
     /**
      * The output directory into which to copy the resources.
      */
-    @Parameter( required = true )
+    @Parameter(required = true)
     private File outputDirectory;
 
     /**
      * The list of resources we want to transfer. See the Maven Model for a
      * description of how to code the resources element.
      */
-    @Parameter( required = true )
+    @Parameter(required = true)
     private List<Resource> resources;
 
-
     /** {@inheritDoc} */
-    public File getOutputDirectory()
-    {
+    public File getOutputDirectory() {
         return outputDirectory;
     }
 
     /** {@inheritDoc} */
-    public void setOutputDirectory( File outputDirectory )
-    {
+    public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
     /** {@inheritDoc} */
-    public List<Resource> getResources()
-    {
+    public List<Resource> getResources() {
         return resources;
     }
 
     /** {@inheritDoc} */
-    public void setResources( List<Resource> resources )
-    {
+    public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
 
     /** {@inheritDoc} */
-    public List<String> getFilters()
-    {
+    public List<String> getFilters() {
         return filters;
     }
 
     /** {@inheritDoc} */
-    public void setFilters( List<String> filters )
-    {
+    public void setFilters(List<String> filters) {
         this.filters = filters;
-    }    
-
+    }
 }

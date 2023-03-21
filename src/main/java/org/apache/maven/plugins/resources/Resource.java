@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resources;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,15 +16,14 @@ package org.apache.maven.plugins.resources;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resources;
 
 /**
  * @author Olivier Lamy
  * @since 2.3
  *
  */
-public class Resource
-    extends org.apache.maven.model.Resource
-{
+public class Resource extends org.apache.maven.model.Resource {
     // nothing to do here just a class prevent users adding an implementation attribute
     // in the mojo configuration
 }
