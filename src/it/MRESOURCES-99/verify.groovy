@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Arrays;
 
-import org.codehaus.plexus.util.*;
-
 boolean result = true;
 
 File target = new File( basedir, "target" );
@@ -43,22 +41,13 @@ if ( !someResource.exists() || someResource.isDirectory() )
 
 Properties props = new Properties();
 
-FileInputStream fis = null;
-try
-{
-    fis = new FileInputStream( someResource );
+try (FileInputStream fis = new FileInputStream( someResource )) {
     props.load( fis );
-    fis.close();
-    fis = null;
 }
 catch ( IOException ex )
 {
   System.err.println( "Failure during reading the properties " + someResource.getAbsolutePath() );
   return false;
-}
-finally
-{
-    IOUtil.close( fis );
 }
 
 def keysWhichHaveToExist = [
