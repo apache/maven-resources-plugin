@@ -18,8 +18,6 @@
  */
 package org.apache.maven.plugins.resources;
 
-import javax.inject.Inject;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,18 +28,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.inject.Inject;
 import org.apache.maven.api.Project;
 import org.apache.maven.api.Session;
 import org.apache.maven.api.plugin.Log;
 import org.apache.maven.api.plugin.MojoException;
-import org.apache.maven.api.plugin.annotations.Component;
 import org.apache.maven.api.plugin.annotations.LifecyclePhase;
 import org.apache.maven.api.plugin.annotations.Mojo;
 import org.apache.maven.api.plugin.annotations.Parameter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+import org.apache.maven.shared.filtering.Resource;
 
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
@@ -52,7 +50,7 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  * @author Andreas Hoheneder
  * @author William Ferguson
  */
-@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true)
+@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, projectRequired = true)
 public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
 
     /**
@@ -85,7 +83,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     /**
      *
      */
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    @Inject
     protected Project project;
 
     /**
@@ -127,19 +125,19 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     /**
      *
      */
-    @Component(role = MavenResourcesFiltering.class, hint = "default")
+    @Inject
     protected MavenResourcesFiltering mavenResourcesFiltering;
 
     /**
      *
      */
-    @Component(role = MavenResourcesFiltering.class)
+    @Inject
     protected Map<String, MavenResourcesFiltering> mavenResourcesFilteringMap;
 
     /**
      *
      */
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    @Inject
     protected Session session;
 
     /**
@@ -300,7 +298,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
 
         if (resources == null) {
             resources = project.getBuild().getResources().stream()
-                    .map(Resource::new)
+                    .map(ResourceUtils::newResource)
                     .collect(Collectors.toList());
         }
 
@@ -308,7 +306,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     }
 
     protected void doExecute() throws MojoException {
-        if (StringUtils.isBlank(encoding) && isFilteringEnabled(getResources())) {
+        if ((encoding == null || encoding.isEmpty()) && isFilteringEnabled(getResources())) {
             getLog().warn("File encoding has not been set, using platform encoding "
                     + System.getProperty("file.encoding")
                     + ". Build is platform dependent!");

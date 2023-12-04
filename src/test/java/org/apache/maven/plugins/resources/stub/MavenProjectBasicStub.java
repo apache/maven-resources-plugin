@@ -41,7 +41,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusExtension;
 import org.codehaus.plexus.util.FileUtils;
 
 public class MavenProjectBasicStub extends ProjectStub {
@@ -56,7 +56,7 @@ public class MavenProjectBasicStub extends ProjectStub {
     public MavenProjectBasicStub(String id) {
         properties = new Properties();
         identifier = id;
-        testRootDir = PlexusTestCase.getBasedir() + "/target/test-classes/unit/test-dir/" + identifier;
+        testRootDir = PlexusExtension.getBasedir() + "/target/test-classes/unit/test-dir/" + identifier;
         setBasedir(Paths.get(testRootDir));
 
         if (!FileUtils.fileExists(testRootDir)) {

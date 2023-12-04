@@ -70,7 +70,7 @@ public class ItFilter implements MavenResourcesFiltering {
             lines.add("toto="
                     + mavenResourcesExecution
                             .getMavenSession()
-                            .getSystemProperties()
+                            .getUserProperties()
                             .get("toto"));
             Files.createDirectories(f.getParent());
             Files.write(f, lines);

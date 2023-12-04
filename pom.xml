@@ -23,7 +23,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-plugins</artifactId>
-    <version>39</version>
+    <version>41</version>
   </parent>
 
   <artifactId>maven-resources-plugin</artifactId>
@@ -72,7 +72,8 @@ under the License.
 
   <properties>
     <mavenFilteringVersion>4.0.0-SNAPSHOT</mavenFilteringVersion>
-    <mavenVersion>4.0.0-alpha-5</mavenVersion>
+    <mavenVersion>4.0.0-alpha-9-SNAPSHOT</mavenVersion>
+    <mavenPluginPluginVersion>3.10.3-SNAPSHOT</mavenPluginPluginVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2023-03-21T12:01:37Z</project.build.outputTimestamp>
   </properties>
@@ -86,26 +87,40 @@ under the License.
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-model</artifactId>
+      <artifactId>maven-api-model</artifactId>
       <version>${mavenVersion}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>jakarta.inject</groupId>
+      <artifactId>jakarta.inject-api</artifactId>
+      <version>2.0.1</version>
+    </dependency>
+
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-interpolation</artifactId>
       <version>1.26</version>
       <scope>runtime</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
-      <version>0.3.5</version>
+      <version>0.9.0.M2</version>
       <scope>provided</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.5.1</version>
+      <version>4.0.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-xml</artifactId>
+      <version>4.0.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -113,19 +128,13 @@ under the License.
       <artifactId>maven-filtering</artifactId>
       <version>${mavenFilteringVersion}</version>
     </dependency>
+
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.11.0</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.12.0</version>
-      <scope>compile</scope>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
@@ -135,7 +144,7 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>4.0.0-alpha-1</version>
+      <version>4.0.0-alpha-3-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -161,12 +170,12 @@ under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>${mavenPluginPluginVersion}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M8</version>
+        <version>3.2.1</version>
       </plugin>
     </plugins>
   </build>
@@ -180,7 +189,7 @@ under the License.
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-invoker-plugin</artifactId>
-              <version>3.5.0</version>
+              <version>3.6.0</version>
               <configuration>
                 <debug>true</debug>
                 <postBuildHookScript>verify</postBuildHookScript>

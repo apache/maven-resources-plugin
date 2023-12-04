@@ -26,6 +26,7 @@ import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.api.plugin.annotations.LifecyclePhase;
 import org.apache.maven.api.plugin.annotations.Mojo;
 import org.apache.maven.api.plugin.annotations.Parameter;
+import org.apache.maven.shared.filtering.Resource;
 
 /**
  * Copy resources for the test source code to the test output directory.
@@ -34,7 +35,7 @@ import org.apache.maven.api.plugin.annotations.Parameter;
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  */
-@Mojo(name = "testResources", defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES, requiresProject = true)
+@Mojo(name = "testResources", defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES, projectRequired = true)
 public class TestResourcesMojo extends ResourcesMojo {
     /**
      * The output directory into which to copy the resources.
@@ -67,7 +68,7 @@ public class TestResourcesMojo extends ResourcesMojo {
 
         if (resources == null) {
             resources = project.getBuild().getTestResources().stream()
-                    .map(Resource::new)
+                    .map(ResourceUtils::newResource)
                     .collect(Collectors.toList());
         }
 

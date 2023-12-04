@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.maven.api.plugin.annotations.Mojo;
 import org.apache.maven.api.plugin.annotations.Parameter;
+import org.apache.maven.shared.filtering.Resource;
 
 /**
  * Copy resources of the configured plugin attribute resources

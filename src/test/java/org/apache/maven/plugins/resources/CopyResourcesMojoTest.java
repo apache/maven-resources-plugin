@@ -26,11 +26,14 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 import com.google.inject.Provides;
-import org.apache.maven.api.Session;
+import org.apache.maven.api.Project;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
 import org.apache.maven.api.plugin.testing.stubs.SessionStub;
+import org.apache.maven.internal.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.shared.filtering.Resource;
 import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +87,14 @@ public class CopyResourcesMojoTest {
     @Provides
     @Singleton
     @SuppressWarnings("unused")
-    private Session getMockSession() {
+    private InternalSession getMockSession() {
         return SessionStub.getMockSession(LOCAL_REPO);
+    }
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private Project createProject() {
+        return new ProjectStub();
     }
 }

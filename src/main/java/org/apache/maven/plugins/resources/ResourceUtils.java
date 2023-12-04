@@ -18,18 +18,18 @@
  */
 package org.apache.maven.plugins.resources;
 
-/**
- * @author Olivier Lamy
- * @since 2.3
- *
- */
-public class Resource extends org.apache.maven.model.Resource {
-    // nothing to do here just a class prevent users adding an implementation attribute
-    // in the mojo configuration
+import org.apache.maven.shared.filtering.Resource;
 
-    public Resource() {}
+class ResourceUtils {
 
-    public Resource(org.apache.maven.api.model.Resource delegate) {
-        super(delegate);
+    static Resource newResource(org.apache.maven.api.model.Resource res) {
+        Resource resource = new Resource();
+        resource.setDirectory(res.getDirectory());
+        resource.setFiltering(res.isFiltering());
+        resource.setExcludes(res.getExcludes());
+        resource.setIncludes(res.getIncludes());
+        resource.setMergeId(res.getMergeId());
+        resource.setTargetPath(res.getTargetPath());
+        return resource;
     }
 }
