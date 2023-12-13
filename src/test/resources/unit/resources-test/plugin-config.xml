@@ -38,12 +38,12 @@
         <filtering>false</filtering>
         <directory>/test/resources/unit/test-dir</directory>
         <includes>
-          **/*.include
-          **/*.test
+          <include>**/*.include</include>
+          <include>**/*.test</include>
         </includes>
         <excludes>
-          **/**.exclude
-          **/*.nottest
+          <exclude>**/**.exclude</exclude>
+          <exclude>**/*.nottest</exclude>
         </excludes>
       </resource>
     </resources>
