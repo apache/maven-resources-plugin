@@ -72,7 +72,7 @@ under the License.
 
   <properties>
     <mavenFilteringVersion>4.0.0-SNAPSHOT</mavenFilteringVersion>
-    <mavenVersion>4.0.0-alpha-9</mavenVersion>
+    <mavenVersion>4.0.0-alpha-11-SNAPSHOT</mavenVersion>
     <mavenPluginPluginVersion>3.10.3-SNAPSHOT</mavenPluginPluginVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2023-03-21T12:01:37Z</project.build.outputTimestamp>
