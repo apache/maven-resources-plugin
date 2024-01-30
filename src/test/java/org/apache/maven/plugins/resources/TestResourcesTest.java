@@ -18,42 +18,49 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import org.apache.maven.api.Project;
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
+import org.apache.maven.api.plugin.testing.stubs.SessionStub;
+import org.apache.maven.internal.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.shared.filtering.Resource;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.Test;
 
-public class TestResourcesTest extends AbstractMojoTestCase {
-    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
+import static org.apache.maven.plugin.testing.ArtifactStubFactory.setVariableValueToObject;
+import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+@MojoTest
+public class TestResourcesTest {
+    private static final String CONFIG_XML = "classpath:/unit/resources-test/plugin-config.xml";
 
     /**
      * test mojo lookup, test harness should be working fine
-     *
-     * @throws Exception
      */
-    public void testHarnessEnvironment() throws Exception {
-        File testPom = new File(getBasedir(), defaultPomFilePath);
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("testResources", testPom);
-
+    @Test
+    @InjectMojo(goal = "testResources", pom = CONFIG_XML)
+    public void testHarnessEnvironment(TestResourcesMojo mojo) {
         assertNotNull(mojo);
     }
 
     /**
-     * @throws Exception
      */
-    public void testTestResourceDirectoryCreation() throws Exception {
-        File testPom = new File(getBasedir(), defaultPomFilePath);
-        TestResourcesMojo mojo = (TestResourcesMojo) lookupMojo("testResources", testPom);
+    @Test
+    @InjectMojo(goal = "testResources", pom = CONFIG_XML)
+    public void testTestResourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("testResourceDirectoryStructure");
-        List<Resource> resources = project.getBuild().getResources();
+        List<Resource> resources = getResources(project);
 
         assertNotNull(mojo);
 
@@ -67,7 +74,7 @@ public class TestResourcesTest extends AbstractMojoTestCase {
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", resources);
         setVariableValueToObject(
-                mojo, "outputDirectory", new File(project.getBuild().getTestOutputDirectory()));
+                mojo, "outputDirectory", Paths.get(project.getBuild().getTestOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
@@ -79,5 +86,27 @@ public class TestResourcesTest extends AbstractMojoTestCase {
         assertTrue(FileUtils.fileExists(resorucesDir + "/notpackage/file1.include"));
         assertTrue(FileUtils.fileExists(resorucesDir + "/package/test"));
         assertTrue(FileUtils.fileExists(resorucesDir + "/notpackage/test"));
+    }
+
+    private static final String LOCAL_REPO = getBasedir() + "/target/local-repo";
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private InternalSession getMockSession() {
+        return SessionStub.getMockSession(LOCAL_REPO);
+    }
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private Project createProject() {
+        return new ProjectStub();
+    }
+
+    private List<Resource> getResources(MavenProjectResourcesStub project) {
+        return project.getBuild().getResources().stream()
+                .map(ResourceUtils::newResource)
+                .collect(Collectors.toList());
     }
 }

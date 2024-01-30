@@ -18,37 +18,53 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import javax.inject.Singleton;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import com.google.inject.Provides;
+import org.apache.maven.api.Project;
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
+import org.apache.maven.api.plugin.testing.stubs.SessionStub;
+import org.apache.maven.internal.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.shared.filtering.Resource;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.apache.maven.api.plugin.testing.MojoExtension.setVariableValueToObject;
+import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Olivier Lamy
  * @version $Id$
  */
-public class CopyResourcesMojoTest extends AbstractMojoTestCase {
+@MojoTest
+public class CopyResourcesMojoTest {
 
     protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
 
-    File outputDirectory = new File(getBasedir(), "/target/copyResourcesTests");
+    Path outputDirectory = Paths.get(getBasedir(), "/target/copyResourcesTests");
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs();
+        if (!Files.exists(outputDirectory)) {
+            Files.createDirectories(outputDirectory);
         } else {
-            FileUtils.cleanDirectory(outputDirectory);
+            FileUtils.cleanDirectory(outputDirectory.toFile());
         }
     }
 
-    public void testCopyWithoutFiltering() throws Exception {
-        File testPom = new File(getBasedir(), defaultPomFilePath);
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
-
+    @Test
+    @InjectMojo(goal = "resources", pom = "classpath:/unit/resources-test/plugin-config.xml")
+    public void testCopyWithoutFiltering(ResourcesMojo mojo) throws Exception {
         mojo.setOutputDirectory(outputDirectory);
 
         Resource resource = new Resource();
@@ -58,11 +74,27 @@ public class CopyResourcesMojoTest extends AbstractMojoTestCase {
         mojo.setResources(Collections.singletonList(resource));
 
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("CopyResourcesMojoTest");
-        File targetFile = new File(getBasedir(), "/target/copyResourcesTests");
-        project.setBaseDir(targetFile);
+        Path targetFile = Paths.get(getBasedir(), "target/copyResourcesTests");
+        project.setBasedir(targetFile);
         setVariableValueToObject(mojo, "project", project);
         mojo.execute();
 
-        assertTrue(new File(targetFile, "config.properties").exists());
+        assertTrue(Files.exists(targetFile.resolve("config.properties")));
+    }
+
+    private static final String LOCAL_REPO = getBasedir() + "/target/local-repo";
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private InternalSession getMockSession() {
+        return SessionStub.getMockSession(LOCAL_REPO);
+    }
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private Project createProject() {
+        return new ProjectStub();
     }
 }

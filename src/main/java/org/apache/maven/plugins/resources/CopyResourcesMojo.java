@@ -18,12 +18,12 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.api.plugin.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Parameter;
+import org.apache.maven.shared.filtering.Resource;
 
 /**
  * Copy resources of the configured plugin attribute resources
@@ -31,14 +31,14 @@ import org.apache.maven.plugins.annotations.Parameter;
  * @author Olivier Lamy
  * @since 2.3
  */
-@Mojo(name = "copy-resources", threadSafe = true)
+@Mojo(name = "copy-resources")
 public class CopyResourcesMojo extends ResourcesMojo {
 
     /**
      * The output directory into which to copy the resources.
      */
     @Parameter(required = true)
-    private File outputDirectory;
+    private Path outputDirectory;
 
     /**
      * The list of resources we want to transfer. See the Maven Model for a
@@ -48,12 +48,12 @@ public class CopyResourcesMojo extends ResourcesMojo {
     private List<Resource> resources;
 
     /** {@inheritDoc} */
-    public File getOutputDirectory() {
+    public Path getOutputDirectory() {
         return outputDirectory;
     }
 
     /** {@inheritDoc} */
-    public void setOutputDirectory(File outputDirectory) {
+    public void setOutputDirectory(Path outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 

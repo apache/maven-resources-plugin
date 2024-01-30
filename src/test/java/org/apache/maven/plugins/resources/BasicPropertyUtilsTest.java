@@ -18,10 +18,18 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.maven.shared.filtering.PropertyUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
     protected static final String validationFileName =
@@ -29,20 +37,20 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
 
     protected static final String propFileName = "/target/test-classes/unit/propertiesutils-test/basic.properties";
 
-    protected File getPropertyFile() {
-        File propFile = new File(getBasedir(), propFileName);
+    protected Path getPropertyFile() {
+        Path propFile = Paths.get(getBasedir(), propFileName);
 
-        if (!propFile.exists()) {
+        if (!Files.exists(propFile)) {
             propFile = null;
         }
 
         return propFile;
     }
 
-    protected File getValidationFile() {
-        File validationFile = new File(getBasedir(), validationFileName);
+    protected Path getValidationFile() {
+        Path validationFile = Paths.get(getBasedir(), validationFileName);
 
-        if (!validationFile.exists()) {
+        if (!Files.exists(validationFile)) {
             validationFile = null;
         }
 
@@ -54,6 +62,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
+    @Test
     public void testBasicLoadProperty_FF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, false, false);
 
@@ -66,6 +75,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
+    @Test
     public void testBasicLoadProperty_TF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, false);
 
@@ -78,6 +88,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
+    @Test
     public void testBasicLoadProperty_TT() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
@@ -91,6 +102,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
+    @Test
     public void testNonExistentProperty() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
