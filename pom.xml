@@ -71,7 +71,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenFilteringVersion>3.3.1</mavenFilteringVersion>
+    <mavenFilteringVersion>3.3.2</mavenFilteringVersion>
     <mavenVersion>3.2.5</mavenVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2023-03-21T12:01:37Z</project.build.outputTimestamp>
