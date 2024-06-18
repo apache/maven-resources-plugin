@@ -19,80 +19,61 @@
 package org.apache.maven.plugins.resources;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
 /**
- * This class is duplicated from maven-model-builder from maven core. (See MRESOURCES-99).
+ * This class is duplicated from maven-api-impl from maven core. (See MRESOURCES-99).
  */
 public class MavenBuildTimestamp {
-    /**
-     * ISO 8601-compliant timestamp for machine readability
-     */
+    // ISO 8601-compliant timestamp for machine readability
     public static final String DEFAULT_BUILD_TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
-    /**
-     * The property name.
-     */
     public static final String BUILD_TIMESTAMP_FORMAT_PROPERTY = "maven.build.timestamp.format";
 
-    /**
-     * The default time zone {@code Etc/UTC}.
-     */
     public static final TimeZone DEFAULT_BUILD_TIME_ZONE = TimeZone.getTimeZone("Etc/UTC");
 
     private String formattedTimestamp;
 
-    /**
-     * Create an instance.
-     */
     public MavenBuildTimestamp() {
-        this(new Date());
+        this(Instant.now());
     }
 
-    /**
-     * @param time The time to use.
-     */
-    public MavenBuildTimestamp(Date time) {
+    public MavenBuildTimestamp(Instant time) {
         this(time, DEFAULT_BUILD_TIMESTAMP_FORMAT);
     }
 
+    public MavenBuildTimestamp(Instant time, Map<String, String> properties) {
+        this(time, properties != null ? properties.get(BUILD_TIMESTAMP_FORMAT_PROPERTY) : null);
+    }
+
     /**
-     * @param time The time to use.
-     * @param properties the properties which can be define. can be {@code null}
+     *
+     * @deprecated Use {@link #MavenBuildTimestamp(Instant, Map)} or extract the format and pass it
+     *             to {@link #MavenBuildTimestamp(Instant, String)} instead.
      */
-    public MavenBuildTimestamp(Date time, Properties properties) {
+    @Deprecated
+    public MavenBuildTimestamp(Instant time, Properties properties) {
         this(time, properties != null ? properties.getProperty(BUILD_TIMESTAMP_FORMAT_PROPERTY) : null);
     }
 
-    /**
-     * @param time The time to use.
-     * @param timestampFormat The format for {@link SimpleDateFormat}.
-     */
-    public MavenBuildTimestamp(Date time, String timestampFormat) {
-        SimpleDateFormat dateFormat;
-
+    public MavenBuildTimestamp(Instant time, String timestampFormat) {
         if (timestampFormat == null) {
-            dateFormat = new SimpleDateFormat(DEFAULT_BUILD_TIMESTAMP_FORMAT);
-        } else {
-            dateFormat = new SimpleDateFormat(timestampFormat);
+            timestampFormat = DEFAULT_BUILD_TIMESTAMP_FORMAT;
         }
-
+        if (time == null) {
+            time = Instant.now();
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat(timestampFormat);
         dateFormat.setCalendar(new GregorianCalendar());
         dateFormat.setTimeZone(DEFAULT_BUILD_TIME_ZONE);
-
-        if (time == null) {
-            formattedTimestamp = dateFormat.format(new Date());
-        } else {
-            formattedTimestamp = dateFormat.format(time);
-        }
+        formattedTimestamp = dateFormat.format(new Date(time.toEpochMilli()));
     }
 
-    /**
-     * @return The formatted time stamp.
-     */
     public String formattedTimestamp() {
         return formattedTimestamp;
     }

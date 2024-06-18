@@ -18,33 +18,33 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.codehaus.plexus.util.IOUtil;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Base class for propertyutils test case
  */
-public abstract class AbstractPropertyUtilsTest extends AbstractMojoTestCase {
-    protected File propertyFile;
+public abstract class AbstractPropertyUtilsTest {
+    protected Path propertyFile;
 
-    protected File validationFile;
+    protected Path validationFile;
 
     protected Properties validationProp;
 
-    protected abstract File getPropertyFile();
+    protected abstract Path getPropertyFile();
 
-    protected abstract File getValidationFile();
+    protected abstract Path getValidationFile();
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
-
         // load data
         propertyFile = getPropertyFile();
         assertNotNull(propertyFile);
@@ -78,19 +78,12 @@ public abstract class AbstractPropertyUtilsTest extends AbstractMojoTestCase {
      *
      * @param validationPropFile
      */
-    private void loadValidationProperties(File validationPropFile) {
+    private void loadValidationProperties(Path validationPropFile) {
         validationProp = new Properties();
-        InputStream in = null;
-
-        try {
-            in = Files.newInputStream(validationPropFile.toPath());
+        try (InputStream in = Files.newInputStream(validationPropFile)) {
             validationProp.load(in);
-            in.close();
-            in = null;
         } catch (IOException ex) {
             // TODO: do error handling
-        } finally {
-            IOUtil.close(in);
         }
     }
 }

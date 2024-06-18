@@ -18,7 +18,7 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,20 +26,21 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.api.Project;
+import org.apache.maven.api.ProjectScope;
+import org.apache.maven.api.Session;
+import org.apache.maven.api.di.Inject;
+import org.apache.maven.api.plugin.Log;
+import org.apache.maven.api.plugin.MojoException;
+import org.apache.maven.api.plugin.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Parameter;
+import org.apache.maven.api.services.ProjectManager;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+import org.apache.maven.shared.filtering.Resource;
 
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
@@ -50,8 +51,8 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  * @author Andreas Hoheneder
  * @author William Ferguson
  */
-@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
-public class ResourcesMojo extends AbstractMojo {
+@Mojo(name = "resources", defaultPhase = "process-resources", projectRequired = true)
+public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
 
     /**
      * The character encoding to use when reading and writing filtered resources.
@@ -72,19 +73,19 @@ public class ResourcesMojo extends AbstractMojo {
      * The output directory into which to copy the resources.
      */
     @Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
-    private File outputDirectory;
+    protected Path outputDirectory;
 
     /**
      * The list of resources we want to transfer.
      */
-    @Parameter(defaultValue = "${project.resources}", required = true, readonly = true)
+    @Parameter
     private List<Resource> resources;
 
     /**
      *
      */
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
-    protected MavenProject project;
+    @Inject
+    protected Project project;
 
     /**
      * The list of additional filter properties files to be used along with System and project properties, which would
@@ -125,20 +126,20 @@ public class ResourcesMojo extends AbstractMojo {
     /**
      *
      */
-    @Component(role = MavenResourcesFiltering.class, hint = "default")
+    @Inject
     protected MavenResourcesFiltering mavenResourcesFiltering;
 
     /**
      *
      */
-    @Component(role = MavenResourcesFiltering.class)
+    @Inject
     protected Map<String, MavenResourcesFiltering> mavenResourcesFilteringMap;
 
     /**
      *
      */
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
-    protected MavenSession session;
+    @Inject
+    protected Session session;
 
     /**
      * Expressions preceded with this string won't be interpolated. Anything else preceded with this string will be
@@ -286,16 +287,27 @@ public class ResourcesMojo extends AbstractMojo {
     @Parameter(property = "maven.resources.skip", defaultValue = "false")
     private boolean skip;
 
-    /**
-     * {@inheritDoc}
-     */
-    public void execute() throws MojoExecutionException {
+    @Inject
+    private Log logger;
+
+    /** {@inheritDoc} */
+    public void execute() throws MojoException {
         if (isSkip()) {
             getLog().info("Skipping the execution.");
             return;
         }
 
-        if (StringUtils.isBlank(encoding) && isFilteringEnabled(getResources())) {
+        if (resources == null) {
+            resources = session.getService(ProjectManager.class).getResources(project, ProjectScope.MAIN).stream()
+                    .map(ResourceUtils::newResource)
+                    .collect(Collectors.toList());
+        }
+
+        doExecute();
+    }
+
+    protected void doExecute() throws MojoException {
+        if ((encoding == null || encoding.isEmpty()) && isFilteringEnabled(getResources())) {
             getLog().warn("File encoding has not been set, using platform encoding "
                     + System.getProperty("file.encoding")
                     + ". Build is platform dependent!");
@@ -344,7 +356,7 @@ public class ResourcesMojo extends AbstractMojo {
 
             executeUserFilterComponents(mavenResourcesExecution);
         } catch (MavenFilteringException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoException(e.getMessage(), e);
         }
     }
 
@@ -366,23 +378,20 @@ public class ResourcesMojo extends AbstractMojo {
         String timeStamp = new MavenBuildTimestamp().formattedTimestamp();
         Properties additionalProperties = new Properties();
         additionalProperties.put("maven.build.timestamp", timeStamp);
-        if (project.getBasedir() != null) {
-            additionalProperties.put(
-                    "project.baseUri",
-                    project.getBasedir().getAbsoluteFile().toURI().toString());
-        }
-
+        additionalProperties.put(
+                "project.baseUri",
+                project.getBasedir().toAbsolutePath().toFile().toURI().toString());
         return additionalProperties;
     }
 
     /**
      * @param mavenResourcesExecution {@link MavenResourcesExecution}
-     * @throws MojoExecutionException  in case of wrong lookup.
+     * @throws MojoException  in case of wrong lookup.
      * @throws MavenFilteringException in case of failure.
      * @since 2.5
      */
     protected void executeUserFilterComponents(MavenResourcesExecution mavenResourcesExecution)
-            throws MojoExecutionException, MavenFilteringException {
+            throws MojoException, MavenFilteringException {
 
         if (mavenFilteringHints != null) {
             for (String hint : mavenFilteringHints) {
@@ -391,7 +400,7 @@ public class ResourcesMojo extends AbstractMojo {
                     getLog().debug("added user filter component with hint: " + hint);
                     mavenFilteringComponents.add(userFilterComponent);
                 } else {
-                    throw new MojoExecutionException(
+                    throw new MojoException(
                             "User filter with hint `" + hint + "` requested, but not present. Discovered filters are: "
                                     + mavenResourcesFilteringMap.keySet());
                 }
@@ -461,14 +470,14 @@ public class ResourcesMojo extends AbstractMojo {
     /**
      * @return {@link #outputDirectory}
      */
-    public File getOutputDirectory() {
+    public Path getOutputDirectory() {
         return outputDirectory;
     }
 
     /**
      * @param outputDirectory the output folder.
      */
-    public void setOutputDirectory(File outputDirectory) {
+    public void setOutputDirectory(Path outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
@@ -547,5 +556,9 @@ public class ResourcesMojo extends AbstractMojo {
      */
     public boolean isSkip() {
         return skip;
+    }
+
+    protected Log getLog() {
+        return logger;
     }
 }

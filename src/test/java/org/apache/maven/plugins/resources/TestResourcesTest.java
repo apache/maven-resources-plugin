@@ -18,44 +18,54 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.api.Project;
+import org.apache.maven.api.di.Provides;
+import org.apache.maven.api.di.Singleton;
+import org.apache.maven.api.plugin.testing.Basedir;
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.api.plugin.testing.stubs.SessionMock;
+import org.apache.maven.internal.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.shared.filtering.Resource;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.Test;
 
-public class TestResourcesTest extends AbstractMojoTestCase {
-    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
+import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
+import static org.apache.maven.api.plugin.testing.MojoExtension.setVariableValueToObject;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+@MojoTest
+public class TestResourcesTest {
+    private static final String CONFIG_XML = "classpath:/unit/resources-test/plugin-config.xml";
 
     /**
      * test mojo lookup, test harness should be working fine
-     *
-     * @throws Exception
      */
-    public void testHarnessEnvironment() throws Exception {
-        File testPom = new File(getBasedir(), defaultPomFilePath);
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("testResources", testPom);
-
+    @Test
+    @InjectMojo(goal = "testResources", pom = CONFIG_XML)
+    @Basedir
+    public void testHarnessEnvironment(TestResourcesMojo mojo) {
         assertNotNull(mojo);
     }
 
     /**
-     * @throws Exception
      */
-    public void testTestResourceDirectoryCreation() throws Exception {
-        File testPom = new File(getBasedir(), defaultPomFilePath);
-        TestResourcesMojo mojo = (TestResourcesMojo) lookupMojo("testResources", testPom);
-        MavenProjectResourcesStub project = new MavenProjectResourcesStub("testResourceDirectoryStructure");
-        List<Resource> resources = project.getBuild().getResources();
-
+    @Test
+    @InjectMojo(goal = "testResources", pom = CONFIG_XML)
+    @Basedir
+    public void testTestResourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
+
+        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
+
+        List<Resource> resources = getResources(project);
 
         project.addFile("file4.txt");
         project.addFile("package/file3.nottest");
@@ -67,17 +77,39 @@ public class TestResourcesTest extends AbstractMojoTestCase {
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", resources);
         setVariableValueToObject(
-                mojo, "outputDirectory", new File(project.getBuild().getTestOutputDirectory()));
+                mojo, "outputDirectory", Paths.get(project.getBuild().getTestOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resorucesDir = project.getTestOutputDirectory();
+        String resourcesDir = project.getTestOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resorucesDir + "/file4.txt"));
-        assertTrue(FileUtils.fileExists(resorucesDir + "/package/file3.nottest"));
-        assertTrue(FileUtils.fileExists(resorucesDir + "/notpackage/file1.include"));
-        assertTrue(FileUtils.fileExists(resorucesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resorucesDir + "/notpackage/test"));
+        assertTrue(FileUtils.fileExists(resourcesDir + "/file4.txt"));
+        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file3.nottest"));
+        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
+        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
+        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/test"));
+    }
+
+    private static final String LOCAL_REPO = "/target/local-repo";
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private static InternalSession getMockSession() {
+        return SessionMock.getMockSession(getBasedir() + LOCAL_REPO);
+    }
+
+    @Provides
+    @Singleton
+    @SuppressWarnings("unused")
+    private static Project createProject() throws Exception {
+        return new MavenProjectResourcesStub();
+    }
+
+    private List<Resource> getResources(MavenProjectResourcesStub project) {
+        return project.getBuild().getResources().stream()
+                .map(ResourceUtils::newResource)
+                .collect(Collectors.toList());
     }
 }
