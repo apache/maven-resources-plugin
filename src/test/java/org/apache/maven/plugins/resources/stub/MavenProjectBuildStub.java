@@ -18,18 +18,35 @@
  */
 package org.apache.maven.plugins.resources.stub;
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.maven.model.Build;
 import org.codehaus.plexus.util.FileUtils;
 
 public class MavenProjectBuildStub extends MavenProjectBasicStub {
-    protected Build build;
-
     protected String srcDirectory;
 
     protected String targetDirectory;
@@ -57,7 +74,6 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
     public MavenProjectBuildStub(String key) throws Exception {
         super(key);
 
-        build = new Build();
         fileList = new ArrayList<>();
         directoryList = new ArrayList<>();
         dataMap = new HashMap<>();
@@ -72,7 +88,7 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
 
     public void setOutputDirectory(String dir) {
         outputDirectory = buildDirectory + "/" + dir;
-        build.setOutputDirectory(outputDirectory);
+        setModel(getModel().withBuild(getModel().getBuild().withOutputDirectory(outputDirectory)));
     }
 
     public void addFile(String name) {
@@ -102,10 +118,6 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
 
     public String getTestResourcesDirectory() {
         return testResourcesDirectory;
-    }
-
-    public Build getBuild() {
-        return build;
     }
 
     /**
@@ -138,9 +150,12 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
         resourcesDirectory = srcDirectory + "/main/resources/";
         testResourcesDirectory = srcDirectory + "/test/resources/";
 
-        build.setDirectory(buildDirectory);
-        build.setOutputDirectory(outputDirectory);
-        build.setTestOutputDirectory(testOutputDirectory);
+        setModel(getModel()
+                .withBuild(org.apache.maven.api.model.Build.newBuilder()
+                        .directory(buildDirectory)
+                        .outputDirectory(outputDirectory)
+                        .testOutputDirectory(testOutputDirectory)
+                        .build()));
     }
 
     public void cleanBuildEnvironment() throws Exception {
@@ -186,67 +201,30 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
         }
     }
 
-    private void createDirectories(String parent, String testparent) {
-        File currentDirectory;
-
+    private void createDirectories(String parent, String testparent) throws IOException {
         for (String directory : directoryList) {
-            currentDirectory = new File(parent, "/" + directory);
-
-            if (!currentDirectory.exists()) {
-                currentDirectory.mkdirs();
-            }
-
-            // duplicate dir structure in test resources
-            currentDirectory = new File(testparent, "/" + directory);
-
-            if (!currentDirectory.exists()) {
-                currentDirectory.mkdirs();
-            }
+            Files.createDirectories(new File(parent, "/" + directory).toPath());
+            Files.createDirectories(new File(testparent, "/" + directory).toPath());
         }
     }
 
     private void createFiles(String parent, String testparent) throws IOException {
-        File currentFile;
-
         for (String file : fileList) {
-            currentFile = new File(parent, file);
-
-            // create the necessary parent directories
-            // before we create the files
-            if (!currentFile.getParentFile().exists()) {
-                currentFile.getParentFile().mkdirs();
-            }
-
-            if (!currentFile.exists()) {
-                try {
-                    currentFile.createNewFile();
-                    populateFile(currentFile);
-                } catch (IOException io) {
-                    // TODO: handle exception
-                }
-            }
-
-            // duplicate file in test resources
-            currentFile = new File(testparent, file);
-
-            if (!currentFile.getParentFile().exists()) {
-                currentFile.getParentFile().mkdirs();
-            }
-
-            if (!currentFile.exists()) {
-                currentFile.createNewFile();
-                populateFile(currentFile);
-            }
+            populateFile(new File(parent, file));
+            populateFile(new File(testparent, file));
         }
     }
 
     private void populateFile(File file) throws IOException {
+        Files.createDirectories(file.getParentFile().toPath());
         String data = dataMap.get(file.getName());
-
-        if ((data != null) && file.exists()) {
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            if (data != null) {
                 outputStream.write(data.getBytes());
             }
+        }
+        if (!file.exists()) {
+            throw new IOException("Unable to create file: " + file);
         }
     }
 }

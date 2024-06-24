@@ -25,7 +25,10 @@
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <configuration>
-          <outputDirectory>/test-classes/unit/resources-test</outputDirectory>
+<!--          <project implementation="org.apache.maven.api.plugin.testing.stubs.ProjectStub">-->
+<!--            <pomPath>${basedir}/src/test/resources/unit/resources-test/plugin-config.xml</pomPath>-->
+<!--          </project>-->
+<!--          <outputDirectory>/test-classes/unit/resources-test</outputDirectory>-->
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
@@ -35,12 +38,12 @@
         <filtering>false</filtering>
         <directory>/test/resources/unit/test-dir</directory>
         <includes>
-          **/*.include
-          **/*.test
+          <include>**/*.include</include>
+          <include>**/*.test</include>
         </includes>
         <excludes>
-          **/**.exclude
-          **/*.nottest
+          <exclude>**/**.exclude</exclude>
+          <exclude>**/*.nottest</exclude>
         </excludes>
       </resource>
     </resources>

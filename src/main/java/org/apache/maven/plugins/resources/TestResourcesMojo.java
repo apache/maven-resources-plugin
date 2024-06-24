@@ -18,14 +18,16 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.api.ProjectScope;
+import org.apache.maven.api.plugin.MojoException;
+import org.apache.maven.api.plugin.annotations.Mojo;
+import org.apache.maven.api.plugin.annotations.Parameter;
+import org.apache.maven.api.services.ProjectManager;
+import org.apache.maven.shared.filtering.Resource;
 
 /**
  * Copy resources for the test source code to the test output directory.
@@ -34,22 +36,18 @@ import org.apache.maven.plugins.annotations.Parameter;
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  */
-@Mojo(
-        name = "testResources",
-        defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES,
-        requiresProject = true,
-        threadSafe = true)
+@Mojo(name = "testResources", defaultPhase = "process-test-resources", projectRequired = true)
 public class TestResourcesMojo extends ResourcesMojo {
     /**
      * The output directory into which to copy the resources.
      */
     @Parameter(defaultValue = "${project.build.testOutputDirectory}", required = true)
-    private File outputDirectory;
+    private Path outputDirectory;
 
     /**
      * The list of resources we want to transfer.
      */
-    @Parameter(defaultValue = "${project.testResources}", required = true)
+    @Parameter
     private List<Resource> resources;
 
     /**
@@ -63,21 +61,28 @@ public class TestResourcesMojo extends ResourcesMojo {
     /**
      * {@inheritDoc}
      */
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoException {
         if (skip) {
             getLog().info("Not copying test resources");
-        } else {
-            super.execute();
+            return;
         }
+
+        if (resources == null) {
+            resources = session.getService(ProjectManager.class).getResources(project, ProjectScope.TEST).stream()
+                    .map(ResourceUtils::newResource)
+                    .collect(Collectors.toList());
+        }
+
+        super.doExecute();
     }
 
     /** {@inheritDoc} */
-    public File getOutputDirectory() {
+    public Path getOutputDirectory() {
         return outputDirectory;
     }
 
     /** {@inheritDoc} */
-    public void setOutputDirectory(File outputDirectory) {
+    public void setOutputDirectory(Path outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 

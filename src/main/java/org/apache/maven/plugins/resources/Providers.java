@@ -18,12 +18,16 @@
  */
 package org.apache.maven.plugins.resources;
 
-/**
- * @author Olivier Lamy
- * @since 2.3
- *
- */
-public class Resource extends org.apache.maven.model.Resource {
-    // nothing to do here just a class prevent users adding an implementation attribute
-    // in the mojo configuration
+import org.apache.maven.api.di.Named;
+import org.apache.maven.api.di.Provides;
+import org.sonatype.plexus.build.incremental.BuildContext;
+import org.sonatype.plexus.build.incremental.ThreadBuildContext;
+
+@Named
+class Providers {
+
+    @Provides
+    static BuildContext buildContext() {
+        return new ThreadBuildContext();
+    }
 }

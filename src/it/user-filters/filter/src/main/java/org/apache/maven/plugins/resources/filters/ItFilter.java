@@ -18,16 +18,15 @@
  */
 package org.apache.maven.plugins.resources.filters;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.maven.api.di.Named;
+import org.apache.maven.api.di.Singleton;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
@@ -62,7 +61,7 @@ public class ItFilter implements MavenResourcesFiltering {
     public void filterResources(MavenResourcesExecution mavenResourcesExecution) throws MavenFilteringException {
         System.out.println("ItFilter filterResources");
         try {
-            File f = new File(mavenResourcesExecution.getOutputDirectory(), "foo.txt");
+            Path f = mavenResourcesExecution.getOutputDirectory().resolve("foo.txt");
             List<String> lines = new ArrayList<>();
 
             lines.add("foo");
@@ -70,9 +69,10 @@ public class ItFilter implements MavenResourcesFiltering {
             lines.add("toto="
                     + mavenResourcesExecution
                             .getMavenSession()
-                            .getSystemProperties()
-                            .getProperty("toto"));
-            FileUtils.writeLines(f, lines);
+                            .getUserProperties()
+                            .get("toto"));
+            Files.createDirectories(f.getParent());
+            Files.write(f, lines);
         } catch (IOException e) {
             throw new MavenFilteringException(e.getMessage(), e);
         }

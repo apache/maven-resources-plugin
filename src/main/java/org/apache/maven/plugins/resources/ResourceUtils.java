@@ -18,23 +18,18 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
+import org.apache.maven.shared.filtering.Resource;
 
-import org.apache.maven.shared.filtering.PropertyUtils;
-import org.junit.jupiter.api.Test;
+class ResourceUtils {
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-public class PropertyUtilsExceptionTest {
-
-    /**
-     * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
-     */
-    @Test
-    public void loadPropertyFileShouldFailWithFileNotFoundException() {
-        assertThrows(
-                FileNotFoundException.class,
-                () -> PropertyUtils.loadPropertyFile(Paths.get("NON_EXISTENT_FILE"), true, true));
+    static Resource newResource(org.apache.maven.api.model.Resource res) {
+        Resource resource = new Resource();
+        resource.setDirectory(res.getDirectory());
+        resource.setFiltering(res.isFiltering());
+        resource.setExcludes(res.getExcludes());
+        resource.setIncludes(res.getIncludes());
+        resource.setMergeId(res.getMergeId());
+        resource.setTargetPath(res.getTargetPath());
+        return resource;
     }
 }

@@ -18,89 +18,142 @@
  */
 package org.apache.maven.plugins.resources.stub;
 
-import java.io.File;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
-import org.apache.maven.model.Resource;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.Function;
+
+import org.apache.maven.api.model.Build;
+import org.apache.maven.api.model.Resource;
+import org.apache.maven.api.plugin.testing.MojoExtension;
+import org.codehaus.plexus.util.FileUtils;
 
 public class MavenProjectResourcesStub extends MavenProjectBuildStub {
 
-    private File baseDir;
-
-    public MavenProjectResourcesStub(String id) throws Exception {
-        super(id);
+    public MavenProjectResourcesStub() throws Exception {
+        super(MojoExtension.getTestId());
         setupResources();
         setupTestResources();
+        Path outputDirectory = Paths.get(getOutputDirectory());
+        FileUtils.deleteDirectory(outputDirectory.toFile());
+        Files.createDirectories(outputDirectory);
     }
 
     public void addInclude(String pattern) {
-        build.getResources().get(0).addInclude(pattern);
+        withResource(r -> r.withIncludes(concat(r.getIncludes(), pattern)));
     }
 
     public void addExclude(String pattern) {
-        build.getResources().get(0).addExclude(pattern);
+        withResource(r -> r.withExcludes(concat(r.getExcludes(), pattern)));
     }
 
     public void addTestInclude(String pattern) {
-        build.getTestResources().get(0).addInclude(pattern);
+        withTestResource(r -> r.withIncludes(concat(r.getIncludes(), pattern)));
     }
 
     public void addTestExclude(String pattern) {
-        build.getTestResources().get(0).addExclude(pattern);
+        withTestResource(r -> r.withExcludes(concat(r.getExcludes(), pattern)));
     }
 
     public void setTargetPath(String path) {
-        build.getResources().get(0).setTargetPath(path);
+        withResource(r -> r.withTargetPath(path));
     }
 
     public void setTestTargetPath(String path) {
-        build.getTestResources().get(0).setTargetPath(path);
+        withTestResource(r -> r.withTargetPath(path));
     }
 
     public void setDirectory(String dir) {
-        build.getResources().get(0).setDirectory(dir);
+        withResource(r -> r.withDirectory(dir));
     }
 
     public void setTestDirectory(String dir) {
-        build.getTestResources().get(0).setDirectory(dir);
+        withTestResource(r -> r.withDirectory(dir));
     }
 
-    public void setResourceFiltering(int nIndex, boolean filter) {
-        if (build.getResources().size() > nIndex) {
-            build.getResources().get(nIndex).setFiltering(filter);
-        }
+    public void setResourceFiltering(boolean filter) {
+        withResource(r -> r.withFiltering(Boolean.toString(filter)));
+    }
+
+    private <T> List<T> concat(Collection<T> collection, T item) {
+        List<T> list = new ArrayList<>(collection);
+        list.add(item);
+        return list;
+    }
+
+    private void withResource(
+            Function<org.apache.maven.api.model.Resource, org.apache.maven.api.model.Resource> mapper) {
+        Build build = getModel().getBuild();
+        setModel(getModel()
+                .withBuild(build.withResources(Collections.singletonList(
+                        mapper.apply(build.getResources().get(0))))));
+    }
+
+    private void withTestResource(
+            Function<org.apache.maven.api.model.Resource, org.apache.maven.api.model.Resource> mapper) {
+        Build build = getModel().getBuild();
+        setModel(getModel()
+                .withBuild(build.withTestResources(Collections.singletonList(
+                        mapper.apply(build.getTestResources().get(0))))));
     }
 
     private void setupResources() {
-        Resource resource = new Resource();
-
         // see MavenProjectBasicStub for details
         // of getBasedir
 
         // setup default resources
-        resource.setDirectory(getBasedir().getPath() + "/src/main/resources");
-        resource.setFiltering(false);
-        resource.setTargetPath(null);
-        build.addResource(resource);
+        Resource resource = Resource.newBuilder()
+                .directory(testRootDir + "/src/main/resources")
+                .filtering(Boolean.toString(false))
+                .targetPath(null)
+                .build();
+        setModel(getModel()
+                .withBuild(getModel()
+                        .getBuild()
+                        .withResources(concat(getModel().getBuild().getResources(), resource))));
     }
 
     private void setupTestResources() {
-        Resource resource = new Resource();
-
         // see MavenProjectBasicStub for details
         // of getBasedir
 
         // setup default test resources
-        resource.setDirectory(getBasedir().getPath() + "/src/test/resources");
-        resource.setFiltering(false);
-        resource.setTargetPath(null);
-        build.addTestResource(resource);
+        Resource resource = Resource.newBuilder()
+                .directory(testRootDir + "/src/test/resources")
+                .filtering(Boolean.toString(false))
+                .targetPath(null)
+                .build();
+        setModel(getModel()
+                .withBuild(getModel()
+                        .getBuild()
+                        .withTestResources(concat(getModel().getBuild().getTestResources(), resource))));
     }
 
-    public File getBaseDir() {
-        return baseDir == null ? super.getBasedir() : baseDir;
+    public String getOutputDirectory() {
+        return getBuild().getOutputDirectory();
     }
 
-    public void setBaseDir(File baseDir) {
-        this.baseDir = baseDir;
+    public String getTestOutputDirectory() {
+        return getBuild().getTestOutputDirectory();
     }
 }
