@@ -18,37 +18,37 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.opennms</groupId>
-	<artifactId>resources-test</artifactId>
-	<name>OpenNMS Resources Test</name>
-	<version>1.0</version>
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/filtered</directory>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>@project.version@</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<escapeString>\</escapeString>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	<properties>
-		<escaped>this is escaped</escaped>
-		<escaped.at>this is escaped.at</escaped.at>
-		<foo>this is foo</foo>
-		<bar>this is bar</bar>
-	</properties>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opennms</groupId>
+  <artifactId>resources-test</artifactId>
+  <version>1.0</version>
+  <name>OpenNMS Resources Test</name>
+  <properties>
+    <escaped>this is escaped</escaped>
+    <escaped.at>this is escaped.at</escaped.at>
+    <foo>this is foo</foo>
+    <bar>this is bar</bar>
+  </properties>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/filtered</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>@project.version@</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <escapeString>\</escapeString>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -22,13 +21,13 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.plugins.maven-resources-plugin.its</groupId>
   <artifactId>MRESOURCES-104</artifactId>
-  <name>Bug Test</name>
   <version>0.0.1-SNAPSHOT</version>
+  <name>Bug Test</name>
   <build>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
         <filtering>true</filtering>
+        <directory>src/main/resources</directory>
       </resource>
     </resources>
     <plugins>

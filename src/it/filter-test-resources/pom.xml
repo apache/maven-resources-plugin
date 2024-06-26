@@ -17,34 +17,13 @@
   specific language governing permissions and limitations
   under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-resources-plugin-it-filter</artifactId>
-  <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-
-  <build>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <filtering>true</filtering>        
-      </testResource>
-    </testResources>
-    <filters>
-      <filter>src/test/filters/my.filter</filter>
-    </filters>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>@project.version@</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+  <packaging>jar</packaging>
 
   <!--
     Look at SomeResource.txt after being processed with filtering.
@@ -54,6 +33,26 @@
   <properties>
     <projectProperty>foo-projectProperty-bar</projectProperty>
   </properties>
+
+  <build>
+    <filters>
+      <filter>src/test/filters/my.filter</filter>
+    </filters>
+    <testResources>
+      <testResource>
+        <filtering>true</filtering>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>@project.version@</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
   <profiles>
     <profile>
