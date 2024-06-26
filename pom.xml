@@ -75,15 +75,27 @@ under the License.
     <mavenVersion>4.0.0-beta-3</mavenVersion>
     <javaVersion>17</javaVersion>
 
+    <guiceVersion>6.0.0</guiceVersion>
     <mavenFilteringVersion>4.0.0-SNAPSHOT</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-SNAPSHOT</mavenPluginPluginVersion>
     <mavenPluginTestingVersion>4.0.0-alpha-3-SNAPSHOT</mavenPluginTestingVersion>
+    <sisuVersion>0.9.0.M2</sisuVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
     <version.maven-invoker-plugin>3.7.0</version.maven-invoker-plugin>
     <version.maven-plugin-tools>${mavenPluginPluginVersion}</version.maven-plugin-tools>
 
     <project.build.outputTimestamp>2023-03-21T12:01:37Z</project.build.outputTimestamp>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>32.0.1-jre</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -120,6 +132,12 @@ under the License.
       <artifactId>plexus-build-api</artifactId>
       <version>${plexusBuildApiVersion}</version>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.plexus</artifactId>
+      <version>${sisuVersion}</version>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
@@ -147,7 +165,7 @@ under the License.
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
-      <version>6.0.0</version>
+      <version>${guiceVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
