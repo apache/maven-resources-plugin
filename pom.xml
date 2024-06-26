@@ -79,8 +79,9 @@ under the License.
     <mavenFilteringVersion>4.0.0-SNAPSHOT</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-SNAPSHOT</mavenPluginPluginVersion>
     <mavenPluginTestingVersion>4.0.0-alpha-3-SNAPSHOT</mavenPluginTestingVersion>
-    <sisuVersion>0.9.0.M2</sisuVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
+    <sisuVersion>0.9.0.M2</sisuVersion>
+    <slf4jVersion>2.0.13</slf4jVersion>
     <version.maven-invoker-plugin>3.7.0</version.maven-invoker-plugin>
     <version.maven-plugin-tools>${mavenPluginPluginVersion}</version.maven-plugin-tools>
 
@@ -119,6 +120,18 @@ under the License.
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-api-di</artifactId>
+      <version>${mavenVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-api-settings</artifactId>
+      <version>${mavenVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-api-xml</artifactId>
       <version>${mavenVersion}</version>
       <scope>provided</scope>
     </dependency>
@@ -173,6 +186,12 @@ under the License.
       <artifactId>plexus-utils</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4jVersion}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -207,10 +226,18 @@ under the License.
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
         <version>${mavenPluginPluginVersion}</version>
+        <configuration>
+          <links>
+            <link>https://maven.apache.org/shared/maven-filtering/apidocs/</link>
+          </links>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
       </plugin>
     </plugins>
   </build>
