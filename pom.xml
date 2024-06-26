@@ -75,7 +75,7 @@ under the License.
     <mavenVersion>4.0.0-beta-3</mavenVersion>
     <javaVersion>17</javaVersion>
 
-    <guiceVersion>6.0.0</guiceVersion>
+    <guiceVersion>7.0.0</guiceVersion>
     <mavenFilteringVersion>4.0.0-SNAPSHOT</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-SNAPSHOT</mavenPluginPluginVersion>
     <mavenPluginTestingVersion>4.0.0-alpha-3-SNAPSHOT</mavenPluginTestingVersion>
