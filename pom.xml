@@ -72,13 +72,13 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenVersion>4.0.0-beta-3</mavenVersion>
+    <mavenVersion>4.0.0-beta-4</mavenVersion>
     <javaVersion>17</javaVersion>
 
     <guiceVersion>6.0.0</guiceVersion>
     <mavenFilteringVersion>4.0.0-beta-1</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-beta-1</mavenPluginPluginVersion>
-    <mavenPluginTestingVersion>4.0.0-beta-1</mavenPluginTestingVersion>
+    <mavenPluginTestingVersion>4.0.0-beta-2-SNAPSHOT</mavenPluginTestingVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
     <sisuVersion>0.9.0.M2</sisuVersion>
     <slf4jVersion>2.0.13</slf4jVersion>
@@ -149,7 +149,6 @@ under the License.
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
       <version>${sisuVersion}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -237,6 +236,20 @@ under the License.
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <configuration>
+          <rules>
+            <enforceBytecodeVersion>
+              <maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
+              <excludes>
+                <exclude>org.jline:jline</exclude>
+              </excludes>
+            </enforceBytecodeVersion>
+          </rules>
         </configuration>
       </plugin>
     </plugins>
