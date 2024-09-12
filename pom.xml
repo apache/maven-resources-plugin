@@ -72,7 +72,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenVersion>4.0.0-beta-4</mavenVersion>
+    <mavenVersion>4.0.0-beta-5-SNAPSHOT</mavenVersion>
     <javaVersion>17</javaVersion>
 
     <guiceVersion>6.0.0</guiceVersion>
@@ -236,20 +236,6 @@ under the License.
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <configuration>
-          <rules>
-            <enforceBytecodeVersion>
-              <maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
-              <excludes>
-                <exclude>org.jline:jline</exclude>
-              </excludes>
-            </enforceBytecodeVersion>
-          </rules>
         </configuration>
       </plugin>
     </plugins>
