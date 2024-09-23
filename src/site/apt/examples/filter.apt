@@ -72,7 +72,7 @@ mvn resources:resources
 Hello ${name}
 +-----+
 
- However, if we add a <<<\<filtering\>>>> tag to our POM and set it to <<<true>>> like this:
+ However, if we add a <<<\<filtering\>>>> element to our POM and set it to <<<true>>> like this:
 
 +-----+
 <project>
