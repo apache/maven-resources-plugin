@@ -72,13 +72,13 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenVersion>4.0.0-beta-3</mavenVersion>
+    <mavenVersion>4.0.0-beta-5</mavenVersion>
     <javaVersion>17</javaVersion>
 
     <guiceVersion>6.0.0</guiceVersion>
     <mavenFilteringVersion>4.0.0-beta-1</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-beta-1</mavenPluginPluginVersion>
-    <mavenPluginTestingVersion>4.0.0-beta-1</mavenPluginTestingVersion>
+    <mavenPluginTestingVersion>4.0.0-beta-2</mavenPluginTestingVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
     <sisuVersion>0.9.0.M2</sisuVersion>
     <slf4jVersion>2.0.13</slf4jVersion>
@@ -149,7 +149,6 @@ under the License.
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
       <version>${sisuVersion}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
