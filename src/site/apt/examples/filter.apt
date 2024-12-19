@@ -32,7 +32,7 @@ Filtering
  <<<$\{...\}>>> or <<<@...@>>> delimiters, can come from the system properties, your project
  properties, from your filter resources and from the command line.
 
- For example, if we have a resource <<<src/main/resources/hello.txt>>> containing
+ For example, if you have a resource <<<src/main/resources/hello.txt>>> containing
 
 +-----+
 Hello ${name}
@@ -72,7 +72,7 @@ mvn resources:resources
 Hello ${name}
 +-----+
 
- However, if we add a <<<\<filtering\>>>> element to our POM and set it to <<<true>>> like this:
+ However, if you add a <<<\<filtering\>>>> element to our POM and set it to <<<true>>> like this:
 
 +-----+
 <project>
@@ -85,7 +85,7 @@ Hello ${name}
 </project>
 +-----+
 
- Our <<<target/classes/hello.txt>>> after calling
+ Your <<<target/classes/hello.txt>>> after calling
 
 +-----+
 mvn resources:resources
@@ -100,9 +100,9 @@ Hello My Resources Plugin Practice Project
  That's because the name variable was replaced by the value of the project's
  name (which was specified in the POM).
 
- Moreover, we can also assign values through the command line using the "-D"
- option. For example, to change the value for the variable <<<name>>> to "world", we can
- simply invoke this command:
+ Moreover, you can also assign values through the command line using the "-D"
+ option. For example, to change the value for the variable <<<name>>> to "world", 
+ invoke this command:
 
 +-----+
 mvn resources:resources -Dname="world"
@@ -114,10 +114,10 @@ mvn resources:resources -Dname="world"
 Hello world
 +-----+
 
- Furthermore, we are not limited to use pre-defined project variables. We can
- specify our own variables and their values in the <<<\<properties\>>>> element. For
- example, if we want to change the variable from "name" to "your.name", we can
- do so by adding a <<<\<your.name\>>>> element within the <<<\<properties\>>>> element.
+ Furthermore, you are not limited to pre-defined project variables. You can
+ specify your own variables and their values in the <<<\<properties\>>>> element. For
+ example, if you want to change the variable from "name" to "your.name", 
+ add a <<<\<your.name\>>>> element within the <<<\<properties\>>>> element.
 
 +-----+
 <project>
@@ -150,7 +150,7 @@ Hello world
 </project>
 +-----+
 
- For example, we can separate "your.name" from the POM by specifying a filter file
+ For example, you can separate "your.name" from the POM by specifying a filter file
  <<<my-filter-values.properties>>> containing:
 
 +-----+
@@ -172,8 +172,8 @@ your.name = world
   
   <<Warning:>> Do not filter files with binary content like images! This will most likely result in corrupt output. 
 
-  If you have both text files and binary files as resources it is recommended to have two separated
-  folders. One folder <<<src/main/resources>>> (default) for the resources which are not filtered and 
+  If you have both text files and binary files as resources, it is recommended to have two separated
+  folders: one folder <<<src/main/resources>>> (default) for the resources which are not filtered and 
   another folder <<<src/main/resources-filtered>>> for the resources which are filtered.
 
 +-----+
@@ -197,7 +197,7 @@ your.name = world
   Now you can put those files into <<<src/main/resources>>> which should not filtered and the other files
   into <<<src/main/resources-filtered>>>.
   
-  As already mentioned filtering binary files like images,pdf`s  etc. could result in corrupted output.
+  As already mentioned, filtering binary files like images, pdf`s, etc. can result in corrupted output.
   To prevent such problems you can {{{./binaries-filtering.html}configure file extensions}}
-  which will not being filtered. 
+  which will not be filtered. 
 
