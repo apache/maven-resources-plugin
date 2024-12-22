@@ -28,48 +28,28 @@
 
 Custom resources filters
 
- With version 2.5 you are now able to build your own custom resources filter(s).
- 
- Your custom resources filter classes must implements 
+ You can build your own custom resources filters.
+ Custom resource filter classes implement
  {{{/shared/maven-filtering/apidocs/org/apache/maven/shared/filtering/MavenResourcesFiltering.html}org.apache.maven.shared.filtering.MavenResourcesFiltering}}.
  
 * Custom Resources Filter Implementation
 
- Your custom resources filter classes must be marked as a Plexus Component. Below a sample with a roleHint itFilter.
+Custom resource filter classes must be marked as a component with 
+the javax.inject.Named annotation, and are usually also singletons.
+Below is an example named "itFilter"
 
 +-----+
-
-/**
- * @plexus.component role="org.apache.maven.shared.filtering.MavenResourcesFiltering" 
- *                   role-hint="itFilter"
- */
+@Singleton
+@Named("itFilter")
 public class ItFilter
     implements MavenResourcesFiltering
-
-+-----+ 
-
- Then you must activate in your build the mojo which will scan javadoc annotations to transform thoses to plexus component metadata.
- 
-+-----+
-
-  <plugin>
-    <groupId>org.codehaus.plexus</groupId>
-    <artifactId>plexus-component-metadata</artifactId>
-    <version>1.7.1</version>
-    <executions>
-      <execution>
-        <goals>
-          <goal>generate-metadata</goal>
-        </goals>
-      </execution>
-    </executions>
-  </plugin>
 
 +-----+ 
  
 * Dependency declaration 
  
- Your classes must be available in the maven-resources-plugin classpath, this can be done with adding your artifact to the plugin dependencies. 
+Your classes must be available in the maven-resources-plugin classpath.
+This can be done by adding your artifact to the plugin dependencies. 
  
 +-----+
 <project>
@@ -100,7 +80,7 @@ public class ItFilter
  
 * Use of your Custom Resource Filter with the maven-resources-plugin
 
- You must now declare you custom filter in the plugin. mavenFilteringHint must respect same syntax as your Plexus Component roleHint.
+You must now declare the custom filter in the plugin. 
  
 +-----+
   <plugin>
@@ -118,4 +98,4 @@ public class ItFilter
  </plugin>
 +-----+ 
   
- And that's it !
+ And that's it!
