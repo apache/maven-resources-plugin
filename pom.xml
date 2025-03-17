@@ -72,7 +72,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenVersion>4.0.0-rc-2</mavenVersion>
+    <mavenVersion>4.0.0-rc-3</mavenVersion>
     <javaVersion>17</javaVersion>
 
     <guiceVersion>6.0.0</guiceVersion>
