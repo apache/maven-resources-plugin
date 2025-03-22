@@ -35,7 +35,8 @@ import org.apache.maven.shared.filtering.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import static org.apache.maven.api.plugin.testing.MojoExtension.*;
+import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
+import static org.apache.maven.api.plugin.testing.MojoExtension.getPluginBasedir;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**

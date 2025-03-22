@@ -40,7 +40,10 @@ package org.apache.maven.plugins.resources.stub;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 import org.apache.maven.api.model.Build;

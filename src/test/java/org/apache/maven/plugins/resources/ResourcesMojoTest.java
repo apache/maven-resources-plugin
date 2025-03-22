@@ -102,7 +102,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceDirectoryStructure_RelativePath(ResourcesMojo mojo) throws Exception {
+    public void testResourceDirectoryStructureRelativePath(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -297,7 +297,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceSystemProperties_Filtering(ResourcesMojo mojo) throws Exception {
+    public void testResourceSystemPropertiesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -338,7 +338,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceProjectProperties_Filtering(ResourcesMojo mojo) throws Exception {
+    public void testResourceProjectPropertiesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -367,7 +367,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testProjectProperty_Filtering_PropertyDestination(ResourcesMojo mojo) throws Exception {
+    public void testProjectPropertyFilteringPropertyDestination(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -399,7 +399,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFiles_Filtering(ResourcesMojo mojo) throws Exception {
+    public void testPropertyFilesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -431,7 +431,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFiles_Extra(ResourcesMojo mojo) throws Exception {
+    public void testPropertyFilesExtra(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -463,7 +463,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFiles_MainAndExtra(ResourcesMojo mojo) throws Exception {
+    public void testPropertyFilesMainAndExtra(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -506,7 +506,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFiles_Filtering_TokensInFilters(ResourcesMojo mojo) throws Exception {
+    public void testPropertyFilesFilteringTokensInFilters(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;

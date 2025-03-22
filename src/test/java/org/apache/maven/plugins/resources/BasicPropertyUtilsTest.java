@@ -34,13 +34,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MojoTest
 public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
-    protected static final String validationFileName =
+    protected static final String VALIDATION_FILE_NAME =
             "target/test-classes/unit/propertiesutils-test/basic_validation.properties";
 
-    protected static final String propFileName = "target/test-classes/unit/propertiesutils-test/basic.properties";
+    protected static final String PROP_FILE_NAME = "target/test-classes/unit/propertiesutils-test/basic.properties";
 
     protected Path getPropertyFile() {
-        Path propFile = Paths.get(getBasedir(), propFileName);
+        Path propFile = Paths.get(getBasedir(), PROP_FILE_NAME);
 
         if (!Files.exists(propFile)) {
             propFile = null;
@@ -50,7 +50,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
     }
 
     protected Path getValidationFile() {
-        Path validationFile = Paths.get(getBasedir(), validationFileName);
+        Path validationFile = Paths.get(getBasedir(), VALIDATION_FILE_NAME);
 
         if (!Files.exists(validationFile)) {
             validationFile = null;
@@ -65,7 +65,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testBasicLoadProperty_FF() throws Exception {
+    public void testBasicLoadPropertyFF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, false, false);
 
         assertNotNull(prop);
@@ -78,7 +78,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testBasicLoadProperty_TF() throws Exception {
+    public void testBasicLoadPropertyTF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, false);
 
         assertNotNull(prop);
@@ -91,7 +91,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testBasicLoadProperty_TT() throws Exception {
+    public void testBasicLoadPropertyTT() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
         validationProp.putAll(System.getProperties());
