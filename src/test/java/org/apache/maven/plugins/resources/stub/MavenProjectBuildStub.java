@@ -121,13 +121,8 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
     }
 
     /**
-     * returns true if the path is relative
-     * and false if absolute
-     * also returns false if it is relative to
-     * the parent
-     *
-     * @param path
-     * @return
+     * {@return true if the path is relative and false if absolute}.
+     * Also returns false if it is relative to the parent.
      */
     private boolean isValidPath(String path) {
         boolean bRetVal = true;

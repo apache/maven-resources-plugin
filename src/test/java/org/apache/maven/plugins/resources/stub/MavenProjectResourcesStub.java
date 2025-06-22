@@ -152,10 +152,12 @@ public class MavenProjectResourcesStub extends MavenProjectBuildStub {
                         .withTestResources(concat(getModel().getBuild().getTestResources(), resource))));
     }
 
+    @Override
     public String getOutputDirectory() {
         return getBuild().getOutputDirectory();
     }
 
+    @Override
     public String getTestOutputDirectory() {
         return getBuild().getTestOutputDirectory();
     }

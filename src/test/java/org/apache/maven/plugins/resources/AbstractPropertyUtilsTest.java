@@ -30,7 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Base class for propertyutils test case
+ * Base class for {@code PropertyUtils} test case.
  */
 public abstract class AbstractPropertyUtilsTest {
     protected Path propertyFile;
@@ -73,10 +73,7 @@ public abstract class AbstractPropertyUtilsTest {
     }
 
     /**
-     * load the property file for cross checking the
-     * values in the processed property file
-     *
-     * @param validationPropFile
+     * Loads the property file for cross checking the values in the processed property file.
      */
     private void loadValidationProperties(Path validationPropFile) {
         validationProp = new Properties();

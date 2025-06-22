@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import org.apache.maven.api.Project;
 import org.apache.maven.api.di.Provides;
@@ -37,7 +36,7 @@ import org.apache.maven.api.plugin.testing.Basedir;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
-import org.apache.maven.internal.impl.InternalSession;
+import org.apache.maven.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.shared.filtering.Resource;
 import org.junit.jupiter.api.Test;
@@ -55,7 +54,7 @@ public class ResourcesMojoTest {
     private static final String CONFIG_XML = "classpath:/unit/resources-test/plugin-config.xml";
 
     /**
-     * test mojo lookup, test harness should be working fine
+     * Tests mojo lookup, test harness should be working fine.
      */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
@@ -64,8 +63,6 @@ public class ResourcesMojoTest {
         assertNotNull(mojo);
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -97,8 +94,6 @@ public class ResourcesMojoTest {
         assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/test")));
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -131,8 +126,6 @@ public class ResourcesMojoTest {
         assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/test")));
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -158,8 +151,6 @@ public class ResourcesMojoTest {
         assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -207,8 +198,6 @@ public class ResourcesMojoTest {
         assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/nottest/file.txt")));
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -257,8 +246,6 @@ public class ResourcesMojoTest {
         assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/nottest/file.txt")));
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -292,8 +279,6 @@ public class ResourcesMojoTest {
         assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/notpackage/test")));
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -333,8 +318,6 @@ public class ResourcesMojoTest {
         assertEquals(userDir.toAbsolutePath(), fileFromFiltering.toAbsolutePath());
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -362,8 +345,6 @@ public class ResourcesMojoTest {
         assertContent(resourcesDir + "/file4.txt", checkString);
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -394,8 +375,6 @@ public class ResourcesMojoTest {
         assertContent(resourcesDir + "/file4.properties", checkString);
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -426,8 +405,6 @@ public class ResourcesMojoTest {
         assertContent(resourcesDir + "/file4.properties", checkString);
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -458,8 +435,6 @@ public class ResourcesMojoTest {
         assertContent(resourcesDir + "/extra.properties", checkString);
     }
 
-    /**
-     */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
@@ -501,7 +476,6 @@ public class ResourcesMojoTest {
     /**
      * Validates that a Filter token containing a project property will be resolved before the Filter is applied to the
      * resources.
-     *
      */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
@@ -631,9 +605,21 @@ public class ResourcesMojoTest {
         return new MavenProjectResourcesStub();
     }
 
-    private List<Resource> getResources(MavenProjectResourcesStub project) {
+    static List<Resource> getResources(MavenProjectResourcesStub project) {
         return project.getBuild().getResources().stream()
-                .map(ResourceUtils::newResource)
-                .collect(Collectors.toList());
+                .map(ResourcesMojoTest::newResource)
+                .toList();
+    }
+
+    // TODO: temporary method before upgrade to new API.
+    private static Resource newResource(org.apache.maven.api.model.Resource res) {
+        Resource resource = new Resource();
+        resource.setDirectory(res.getDirectory());
+        resource.setFiltering(res.isFiltering());
+        resource.setExcludes(res.getExcludes());
+        resource.setIncludes(res.getIncludes());
+        resource.setMergeId(res.getMergeId());
+        resource.setTargetPath(res.getTargetPath());
+        return resource;
     }
 }
