@@ -23,9 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,7 +36,7 @@ import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
 import org.apache.maven.impl.InternalSession;
-import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.plugins.resources.stub.MavenProjectSourcesStub;
 import org.apache.maven.shared.filtering.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +54,8 @@ public class ResourcesMojoTest {
 
     /**
      * Tests mojo lookup, test harness should be working fine.
+     *
+     * @param  mojo  the <abbr>MOJO</abbr> to test
      */
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
@@ -67,63 +68,51 @@ public class ResourcesMojoTest {
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
     public void testResourceDirectoryStructure(ResourcesMojo mojo) throws Exception {
-        assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file4.txt");
-        project.addFile("package/file3.nottest");
-        project.addFile("notpackage/file1.include");
-        project.addFile("package/test/file1.txt");
-        project.addFile("notpackage/test/file2.txt");
-        project.setupBuildEnvironment();
-
-        setVariableValueToObject(mojo, "project", project);
-        setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
-        setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
-        setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
-        mojo.execute();
-
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file3.nottest")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/test")));
+        testResourceDirectoryStructure(mojo, false);
     }
 
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
     public void testResourceDirectoryStructureRelativePath(ResourcesMojo mojo) throws Exception {
+        testResourceDirectoryStructure(mojo, true);
+    }
+
+    /**
+     * Code shared by {@code testResourceDirectoryStructure(…)}
+     * and {@code testResourceDirectoryStructureRelativePath(…)}.
+     * Those two tests are almost identical.
+     */
+    private static void testResourceDirectoryStructure(ResourcesMojo mojo, boolean relative) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.setOutputDirectory("../relative_dir");
-        project.addFile("file4.txt");
-        project.addFile("package/file3.nottest");
-        project.addFile("notpackage/file1.include");
-        project.addFile("package/test/file1.txt");
-        project.addFile("notpackage/test/file2.txt");
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        if (relative) {
+            project.setOutputDirectory("../relative_dir");
+        }
+        Path packageDir = Path.of("package");
+        Path notpackageDir = Path.of("notpackage");
+        project.addFile(Path.of("file4.txt"));
+        project.addFile(packageDir.resolve("file3.nottest"));
+        project.addFile(notpackageDir.resolve("file1.include"));
+        project.addFile(packageDir.resolve("test").resolve("file1.txt"));
+        project.addFile(notpackageDir.resolve("test").resolve("file2.txt"));
         project.setupBuildEnvironment();
 
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file3.nottest")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/test")));
+        Path outputDirectory = project.getOutputDirectory();
+        packageDir = outputDirectory.resolve("package");
+        notpackageDir = outputDirectory.resolve("notpackage");
+        assertTrue(Files.exists(outputDirectory.resolve("file4.txt")));
+        assertTrue(Files.exists(packageDir.resolve("file3.nottest")));
+        assertTrue(Files.exists(notpackageDir.resolve("file1.include")));
+        assertTrue(Files.exists(packageDir.resolve("test")));
+        assertTrue(Files.exists(notpackageDir.resolve("test")));
     }
 
     @Test
@@ -131,119 +120,83 @@ public class ResourcesMojoTest {
     @Basedir
     public void testResourceEncoding(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file4.txt");
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        project.addFile(Path.of("file4.txt"));
         project.setResourceFiltering(true);
         project.setupBuildEnvironment();
 
         setVariableValueToObject(mojo, "encoding", "UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
+        Path outputDirectory = project.getOutputDirectory();
+        assertTrue(Files.exists(outputDirectory.resolve("file4.txt")));
     }
 
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
     public void testResourceInclude(ResourcesMojo mojo) throws Exception {
-        assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file1.include");
-        project.addFile("file2.exclude");
-        project.addFile("file3.nottest");
-        project.addFile("file4.txt");
-        project.addFile("package/file1.include");
-        project.addFile("package/file2.exclude");
-        project.addFile("package/file3.nottest");
-        project.addFile("package/file4.txt");
-        project.addFile("notpackage/file1.include");
-        project.addFile("notpackage/file2.exclude");
-        project.addFile("notpackage/file3.nottest");
-        project.addFile("notpackage/file4.txt");
-        project.addFile("package/test/file1.txt");
-        project.addFile("package/nottest/file2.txt");
-        project.addFile("notpackage/test/file1.txt");
-        project.addFile("notpackage/nottest/file.txt");
-        project.setupBuildEnvironment();
-
-        project.addInclude("*.include");
-        project.addInclude("**/test");
-        project.addInclude("**/test/file*");
-        project.addInclude("**/package/*.include");
-
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
-        setVariableValueToObject(mojo, "project", project);
-        setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
-        setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
-        mojo.execute();
-
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/nottest/file.txt")));
+        testResourceIncludeOrExclude(mojo, false);
     }
 
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
     public void testResourceExclude(ResourcesMojo mojo) throws Exception {
+        testResourceIncludeOrExclude(mojo, true);
+    }
+
+    /**
+     * Code shared by {@code testResourceInclude(…)} and {@code testResourceExclude(…)}.
+     * Those two tests are almost identical.
+     */
+    private static void testResourceIncludeOrExclude(ResourcesMojo mojo, boolean exclude) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file1.include");
-        project.addFile("file2.exclude");
-        project.addFile("file3.nottest");
-        project.addFile("file4.txt");
-        project.addFile("package/file1.include");
-        project.addFile("package/file2.exclude");
-        project.addFile("package/file3.nottest");
-        project.addFile("package/file4.txt");
-        project.addFile("notpackage/file1.include");
-        project.addFile("notpackage/file2.exclude");
-        project.addFile("notpackage/file3.nottest");
-        project.addFile("notpackage/file4.txt");
-        project.addFile("package/test/file1.txt");
-        project.addFile("package/nottest/file2.txt");
-        project.addFile("notpackage/test/file1.txt");
-        project.addFile("notpackage/nottest/file.txt");
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        Path packageDir = Path.of("package");
+        Path notpackageDir = Path.of("notpackage");
+        project.addFile(Path.of("file1.include"));
+        project.addFile(Path.of("file2.exclude"));
+        project.addFile(Path.of("file3.nottest"));
+        project.addFile(Path.of("file4.txt"));
+        project.addFile(packageDir.resolve("file1.include"));
+        project.addFile(packageDir.resolve("file2.exclude"));
+        project.addFile(packageDir.resolve("file3.nottest"));
+        project.addFile(packageDir.resolve("file4.txt"));
+        project.addFile(notpackageDir.resolve("file1.include"));
+        project.addFile(notpackageDir.resolve("file2.exclude"));
+        project.addFile(notpackageDir.resolve("file3.nottest"));
+        project.addFile(notpackageDir.resolve("file4.txt"));
+        project.addFile(packageDir.resolve("test").resolve("file1.txt"));
+        project.addFile(packageDir.resolve("nottest").resolve("file2.txt"));
+        project.addFile(notpackageDir.resolve("test").resolve("file1.txt"));
+        project.addFile(notpackageDir.resolve("nottest").resolve("file.txt"));
         project.setupBuildEnvironment();
-
-        project.addExclude("**/*.exclude");
-        project.addExclude("**/nottest*");
-        project.addExclude("**/notest");
-        project.addExclude("**/notpackage*");
-        project.addExclude("**/notpackage*/**");
-
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        if (exclude) {
+            project.addExcludes("**/*.exclude", "**/nottest*", "**/notest", "**/notpackage*", "**/notpackage*/**");
+        } else {
+            project.addIncludes("*.include", "**/test", "**/test/file*", "**/package/*.include");
+        }
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/nottest/file.txt")));
+        Path outputDirectory = project.getOutputDirectory();
+        packageDir = outputDirectory.resolve("package");
+        notpackageDir = outputDirectory.resolve("notpackage");
+        assertTrue(Files.exists(packageDir.resolve("test")));
+        assertTrue(Files.exists(outputDirectory.resolve("file1.include")));
+        assertTrue(Files.exists(packageDir.resolve("file1.include")));
+        assertFalse(Files.exists(notpackageDir.resolve("file1.include")));
+        assertFalse(Files.exists(notpackageDir.resolve("nottest").resolve("file.txt")));
     }
 
     @Test
@@ -251,32 +204,28 @@ public class ResourcesMojoTest {
     @Basedir
     public void testResourceTargetPath(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
+        final var project = (MavenProjectSourcesStub) mojo.project;
         project.setTargetPath("org/apache/maven/plugin/test");
-
-        project.addFile("file4.txt");
-        project.addFile("package/file3.nottest");
-        project.addFile("notpackage/file1.include");
-        project.addFile("package/test/file1.txt");
-        project.addFile("notpackage/test/file2.txt");
+        project.addFile(Path.of("file4.txt"));
+        project.addFile(Path.of("package", "file3.nottest"));
+        project.addFile(Path.of("notpackage", "file1.include"));
+        project.addFile(Path.of("package", "test", "file1.txt"));
+        project.addFile(Path.of("notpackage", "test", "file2.txt"));
         project.setupBuildEnvironment();
 
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/file4.txt")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/package/file3.nottest")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/notpackage/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/notpackage/test")));
+        Path outputDirectory = project.getOutputDirectory();
+        assertTrue(Files.exists(outputDirectory.resolve("org/apache/maven/plugin/test/file4.txt")));
+        assertTrue(Files.exists(outputDirectory.resolve("org/apache/maven/plugin/test/package/file3.nottest")));
+        assertTrue(Files.exists(outputDirectory.resolve("org/apache/maven/plugin/test/notpackage/file1.include")));
+        assertTrue(Files.exists(outputDirectory.resolve("org/apache/maven/plugin/test/package/test")));
+        assertTrue(Files.exists(outputDirectory.resolve("org/apache/maven/plugin/test/notpackage/test")));
     }
 
     @Test
@@ -284,36 +233,31 @@ public class ResourcesMojoTest {
     @Basedir
     public void testResourceSystemPropertiesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file4.txt", "current-working-directory = ${user.dir}");
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        project.addFile(Path.of("file4.txt"), "current-working-directory = ${user.dir}");
         project.setResourceFiltering(true);
         project.setupBuildEnvironment();
 
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.TRUE);
 
         mojo.session.getSystemProperties().put("user.dir", System.getProperty("user.dir"));
-
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
-
-        Path userDir = Paths.get(System.getProperty("user.dir"));
+        Path outputDirectory = project.getOutputDirectory();
+        Path userDir = Path.of(System.getProperty("user.dir"));
         assertTrue(Files.exists(userDir));
 
         Properties props = new Properties();
-        try (InputStream inStream = Files.newInputStream(Paths.get(resourcesDir, "file4.txt"))) {
+        try (InputStream inStream = Files.newInputStream(outputDirectory.resolve("file4.txt"))) {
             props.load(inStream);
         }
-        Path fileFromFiltering = Paths.get(props.getProperty("current-working-directory"));
-
+        Path fileFromFiltering = Path.of(props.getProperty("current-working-directory"));
         assertTrue(Files.exists(fileFromFiltering), fileFromFiltering.toAbsolutePath() + " does not exist.");
         assertEquals(userDir.toAbsolutePath(), fileFromFiltering.toAbsolutePath());
     }
@@ -323,10 +267,8 @@ public class ResourcesMojoTest {
     @Basedir
     public void testResourceProjectPropertiesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file4.txt", "current working directory = ${user.dir}");
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        project.addFile(Path.of("file4.txt"), "current working directory = ${user.dir}");
         project.setResourceFiltering(true);
         project.addProperty("user.dir", "FPJ kami!!!");
         project.setupBuildEnvironment();
@@ -334,15 +276,14 @@ public class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
+        Path outputDirectory = project.getOutputDirectory();
         String checkString = "current working directory = FPJ kami!!!";
-
-        assertContent(resourcesDir + "/file4.txt", checkString);
+        assertContent(outputDirectory.resolve("file4.txt"), checkString);
     }
 
     @Test
@@ -350,10 +291,8 @@ public class ResourcesMojoTest {
     @Basedir
     public void testProjectPropertyFilteringPropertyDestination(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        project.addFile("file4.properties", "current working directory=${description}");
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        project.addFile(Path.of("file4.properties"), "current working directory=${description}");
         project.setResourceFiltering(true);
         project.setupBuildEnvironment();
 
@@ -363,16 +302,15 @@ public class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
+        Path outputDirectory = project.getOutputDirectory();
         String checkString = "current working directory=c:\\\\org\\\\apache\\\\test";
-
-        assertContent(resourcesDir + "/file4.properties", checkString);
+        assertContent(outputDirectory.resolve("file4.properties"), checkString);
     }
 
     @Test
@@ -380,29 +318,27 @@ public class ResourcesMojoTest {
     @Basedir
     public void testPropertyFilesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        final var filterList = new ArrayList<String>();
 
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        LinkedList<String> filterList = new LinkedList<>();
-
-        project.addFile("file4.properties", "current working directory=${dir}");
-        project.addFile("filter.properties", "dir:testdir");
+        project.addFile(Path.of("file4.properties"), "current working directory=${dir}");
+        project.addFile(Path.of("filter.properties"), "dir:testdir");
         project.setResourceFiltering(true);
         project.setupBuildEnvironment();
-        filterList.add(project.getResourcesDirectory() + "filter.properties");
+        filterList.add(
+                project.getResourcesDirectory().resolve("filter.properties").toString());
 
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", filterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
+        Path outputDirectory = project.getOutputDirectory();
         String checkString = "current working directory=testdir";
-
-        assertContent(resourcesDir + "/file4.properties", checkString);
+        assertContent(outputDirectory.resolve("file4.properties"), checkString);
     }
 
     @Test
@@ -410,29 +346,27 @@ public class ResourcesMojoTest {
     @Basedir
     public void testPropertyFilesExtra(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        final var filterList = new ArrayList<String>();
 
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        LinkedList<String> filterList = new LinkedList<>();
-
-        project.addFile("extra.properties", "current working directory=${dir}");
-        project.addFile("filter.properties", "dir:testdir");
+        project.addFile(Path.of("extra.properties"), "current working directory=${dir}");
+        project.addFile(Path.of("filter.properties"), "dir:testdir");
         project.setResourceFiltering(true);
         project.setupBuildEnvironment();
-        filterList.add(project.getResourcesDirectory() + "filter.properties");
+        filterList.add(
+                project.getResourcesDirectory().resolve("filter.properties").toString());
 
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "filters", filterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
+        Path outputDirectory = project.getOutputDirectory();
         String checkString = "current working directory=testdir";
-
-        assertContent(resourcesDir + "/extra.properties", checkString);
+        assertContent(outputDirectory.resolve("extra.properties"), checkString);
     }
 
     @Test
@@ -440,37 +374,38 @@ public class ResourcesMojoTest {
     @Basedir
     public void testPropertyFilesMainAndExtra(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        final var filterList = new ArrayList<String>();
+        final var extraFilterList = new ArrayList<String>();
 
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        LinkedList<String> filterList = new LinkedList<>();
-        LinkedList<String> extraFilterList = new LinkedList<>();
-
-        project.addFile("main-extra.properties", "current working directory=${dir}; old working directory=${dir2}");
-        project.addFile("filter.properties", "dir:testdir");
-        project.addFile("extra-filter.properties", "dir2:testdir2");
+        project.addFile(
+                Path.of("main-extra.properties"), "current working directory=${dir}; old working directory=${dir2}");
+        project.addFile(Path.of("filter.properties"), "dir:testdir");
+        project.addFile(Path.of("extra-filter.properties"), "dir2:testdir2");
         project.setResourceFiltering(true);
 
         project.cleanBuildEnvironment();
         project.setupBuildEnvironment();
 
-        filterList.add(project.getResourcesDirectory() + "filter.properties");
-        extraFilterList.add(project.getResourcesDirectory() + "extra-filter.properties");
+        filterList.add(
+                project.getResourcesDirectory().resolve("filter.properties").toString());
+        extraFilterList.add(project.getResourcesDirectory()
+                .resolve("extra-filter.properties")
+                .toString());
 
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", filterList);
         setVariableValueToObject(mojo, "filters", extraFilterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
+        Path outputDirectory = project.getOutputDirectory();
         String checkString = "current working directory=testdir; old working directory=testdir2";
-
-        Path file = Paths.get(resourcesDir, "main-extra.properties");
-        assertContent(file.toAbsolutePath().toString(), checkString);
+        Path file = outputDirectory.resolve("main-extra.properties");
+        assertContent(file, checkString);
     }
 
     /**
@@ -482,30 +417,28 @@ public class ResourcesMojoTest {
     @Basedir
     public void testPropertyFilesFilteringTokensInFilters(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
+        final var project = (MavenProjectSourcesStub) mojo.project;
+        final var filterList = new ArrayList<String>();
 
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
-        LinkedList<String> filterList = new LinkedList<>();
-
-        project.addFile("file4.properties", "current working directory=${filter.token}");
-        project.addFile("filter.properties", "filter.token=${pom-property}");
+        project.addFile(Path.of("file4.properties"), "current working directory=${filter.token}");
+        project.addFile(Path.of("filter.properties"), "filter.token=${pom-property}");
         project.setResourceFiltering(true);
         project.addProperty("pom-property", "foobar");
         project.setupBuildEnvironment();
-        filterList.add(project.getResourcesDirectory() + "filter.properties");
+        filterList.add(
+                project.getResourcesDirectory().resolve("filter.properties").toString());
 
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", filterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
-        final String resourcesDir = project.getOutputDirectory();
 
+        final Path outputDirectory = project.getOutputDirectory();
         final String checkString = "current working directory=foobar";
-
-        assertContent(resourcesDir + "/file4.properties", checkString);
+        assertContent(outputDirectory.resolve("file4.properties"), checkString);
     }
 
     @Test
@@ -513,34 +446,27 @@ public class ResourcesMojoTest {
     @Basedir
     public void testWindowsPathEscapingDisabled(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
+        final var project = (MavenProjectSourcesStub) mojo.project;
         project.addProperty("basePath", "C:\\Users\\Administrator");
         project.addProperty("docsPath", "${basePath}\\Documents");
-
-        project.addFile("path-listing.txt", "base path is ${basePath}\ndocuments path is ${docsPath}");
+        project.addFile(Path.of("path-listing.txt"), "base path is ${basePath}\ndocuments path is ${docsPath}");
         project.setResourceFiltering(true);
-
         project.cleanBuildEnvironment();
         project.setupBuildEnvironment();
 
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.FALSE);
 
         mojo.execute();
-
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir, "path-listing.txt").toAbsolutePath()));
-
+        Path outputDirectory = project.getOutputDirectory();
+        assertTrue(Files.exists(outputDirectory.resolve("path-listing.txt").toAbsolutePath()));
         assertEquals(
                 "base path is C:\\Users\\Administrator\ndocuments path is C:\\Users\\Administrator\\Documents",
-                new String(Files.readAllBytes(Paths.get(resourcesDir, "path-listing.txt"))));
+                new String(Files.readAllBytes(outputDirectory.resolve("path-listing.txt"))));
     }
 
     @Test
@@ -548,43 +474,35 @@ public class ResourcesMojoTest {
     @Basedir
     public void testWindowsPathEscapingEnabled(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
+        final var project = (MavenProjectSourcesStub) mojo.project;
         project.addProperty("basePath", "C:\\Users\\Administrator");
         project.addProperty("docsPath", "${basePath}\\Documents");
-
-        project.addFile("path-listing.txt", "base path is ${basePath}\ndocuments path is ${docsPath}");
+        project.addFile(Path.of("path-listing.txt"), "base path is ${basePath}\ndocuments path is ${docsPath}");
         project.setResourceFiltering(true);
-
         project.cleanBuildEnvironment();
         project.setupBuildEnvironment();
 
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
-
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.TRUE);
-
         mojo.execute();
 
-        String resourcesDir = project.getOutputDirectory();
-
-        assertTrue(Files.exists(Paths.get(resourcesDir, "path-listing.txt").toAbsolutePath()));
-
+        Path outputDirectory = project.getOutputDirectory();
+        assertTrue(Files.exists(outputDirectory.resolve("path-listing.txt").toAbsolutePath()));
         assertEquals(
                 "base path is C:\\\\Users\\\\Administrator\ndocuments path is C:\\\\Users\\\\Administrator\\\\Documents",
-                new String(Files.readAllBytes(Paths.get(resourcesDir, "path-listing.txt"))));
+                new String(Files.readAllBytes(outputDirectory.resolve("path-listing.txt"))));
     }
 
     /**
      * Ensures the file exists and its first line equals the given data.
      */
-    private void assertContent(String fileName, String data) throws IOException {
-        assertTrue(Files.exists(Paths.get(fileName)));
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
+    private void assertContent(Path fileName, String data) throws IOException {
+        assertTrue(Files.exists(fileName));
+        try (BufferedReader reader = Files.newBufferedReader(fileName)) {
             assertEquals(data, reader.readLine());
         }
     }
@@ -602,24 +520,10 @@ public class ResourcesMojoTest {
     @Singleton
     @SuppressWarnings("unused")
     private static Project createProject() throws Exception {
-        return new MavenProjectResourcesStub();
+        return new MavenProjectSourcesStub();
     }
 
-    static List<Resource> getResources(MavenProjectResourcesStub project) {
-        return project.getBuild().getResources().stream()
-                .map(ResourcesMojoTest::newResource)
-                .toList();
-    }
-
-    // TODO: temporary method before upgrade to new API.
-    private static Resource newResource(org.apache.maven.api.model.Resource res) {
-        Resource resource = new Resource();
-        resource.setDirectory(res.getDirectory());
-        resource.setFiltering(res.isFiltering());
-        resource.setExcludes(res.getExcludes());
-        resource.setIncludes(res.getIncludes());
-        resource.setMergeId(res.getMergeId());
-        resource.setTargetPath(res.getTargetPath());
-        return resource;
+    private static List<Resource> getResources(MavenProjectSourcesStub project) {
+        return project.getResources("main");
     }
 }

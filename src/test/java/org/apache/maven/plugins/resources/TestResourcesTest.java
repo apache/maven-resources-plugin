@@ -18,7 +18,8 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,9 +31,8 @@ import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
 import org.apache.maven.impl.InternalSession;
-import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.plugins.resources.stub.MavenProjectSourcesStub;
 import org.apache.maven.shared.filtering.Resource;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
@@ -46,6 +46,8 @@ public class TestResourcesTest {
 
     /**
      * Tests mojo lookup, test harness should be working fine.
+     *
+     * @param  mojo  the <abbr>MOJO</abbr> to test
      */
     @Test
     @InjectMojo(goal = "testResources", pom = CONFIG_XML)
@@ -59,33 +61,30 @@ public class TestResourcesTest {
     @Basedir
     public void testTestResourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
-
-        MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
-
+        final var project = (MavenProjectSourcesStub) mojo.project;
         List<Resource> resources = getResources(project);
-
-        project.addFile("file4.txt");
-        project.addFile("package/file3.nottest");
-        project.addFile("notpackage/file1.include");
-        project.addFile("package/test/file1.txt");
-        project.addFile("notpackage/test/file2.txt");
+        project.addFile(Path.of("file4.txt"));
+        project.addFile(Path.of("package", "file3.nottest"));
+        project.addFile(Path.of("notpackage", "file1.include"));
+        project.addFile(Path.of("package", "test", "file1.txt"));
+        project.addFile(Path.of("notpackage", "test", "file2.txt"));
         project.setupBuildEnvironment();
 
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", resources);
-        setVariableValueToObject(
-                mojo, "outputDirectory", Paths.get(project.getBuild().getTestOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", project.getTestOutputDirectory());
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
-        String resourcesDir = project.getTestOutputDirectory();
-
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file4.txt"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file3.nottest"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/test"));
+        Path outputDirectory = project.getTestOutputDirectory();
+        Path packageDir = outputDirectory.resolve("package");
+        Path notpackageDir = outputDirectory.resolve("notpackage");
+        assertTrue(Files.exists(outputDirectory.resolve("file4.txt")));
+        assertTrue(Files.exists(packageDir.resolve("file3.nottest")));
+        assertTrue(Files.exists(notpackageDir.resolve("file1.include")));
+        assertTrue(Files.exists(packageDir.resolve("test")));
+        assertTrue(Files.exists(notpackageDir.resolve("test")));
     }
 
     private static final String LOCAL_REPO = "/target/local-repo";
@@ -101,10 +100,10 @@ public class TestResourcesTest {
     @Singleton
     @SuppressWarnings("unused")
     private static Project createProject() throws Exception {
-        return new MavenProjectResourcesStub();
+        return new MavenProjectSourcesStub();
     }
 
-    private static List<Resource> getResources(MavenProjectResourcesStub project) {
-        return ResourcesMojoTest.getResources(project);
+    private static List<Resource> getResources(MavenProjectSourcesStub project) {
+        return project.getResources("test");
     }
 }

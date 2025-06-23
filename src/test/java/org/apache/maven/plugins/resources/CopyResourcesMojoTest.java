@@ -30,7 +30,7 @@ import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
 import org.apache.maven.impl.InternalSession;
-import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.plugins.resources.stub.MavenProjectSourcesStub;
 import org.apache.maven.shared.filtering.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -41,7 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Olivier Lamy
- * @version $Id$
  */
 @MojoTest
 public class CopyResourcesMojoTest {
@@ -74,6 +73,6 @@ public class CopyResourcesMojoTest {
     @Singleton
     @SuppressWarnings("unused")
     private static Project createProject(ExtensionContext context) throws Exception {
-        return new MavenProjectResourcesStub();
+        return new MavenProjectSourcesStub();
     }
 }
