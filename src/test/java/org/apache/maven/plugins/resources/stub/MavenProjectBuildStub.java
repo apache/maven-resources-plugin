@@ -37,193 +37,165 @@ package org.apache.maven.plugins.resources.stub;
  * under the License.
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.maven.api.model.Build;
+import org.apache.maven.api.plugin.testing.MojoExtension;
+import org.apache.maven.api.plugin.testing.stubs.ProjectStub;
 
-public class MavenProjectBuildStub extends MavenProjectBasicStub {
-    protected String srcDirectory;
+public class MavenProjectBuildStub extends ProjectStub {
+    protected final Path testRootDir;
 
-    protected String targetDirectory;
+    private final Path buildDirectory;
 
-    protected String buildDirectory;
+    protected Path outputDirectory;
 
-    protected String outputDirectory;
+    private final Path testOutputDirectory;
 
-    protected String testOutputDirectory;
+    private final Path resourcesDirectory;
 
-    protected String resourcesDirectory;
+    private final Path testResourcesDirectory;
 
-    protected String testResourcesDirectory;
+    private final ArrayList<Path> fileList;
 
-    protected String targetResourceDirectory;
+    private final ArrayList<Path> directoryList;
 
-    protected String targetTestResourcesDirectory;
+    private final HashMap<Path, String> dataMap;
 
-    protected ArrayList<String> fileList;
-
-    protected ArrayList<String> directoryList;
-
-    protected HashMap<String, String> dataMap;
-
-    public MavenProjectBuildStub(String key) throws Exception {
-        super(key);
-
+    protected MavenProjectBuildStub(final String identifier) throws Exception {
+        testRootDir = Path.of(MojoExtension.getBasedir(), "target", "test-classes", "unit", "test-dir", identifier);
+        final Path srcDirectory = testRootDir.resolve("src");
+        buildDirectory = testRootDir.resolve("target");
+        outputDirectory = buildDirectory.resolve("classes");
+        testOutputDirectory = buildDirectory.resolve("test-classes");
+        resourcesDirectory = srcDirectory.resolve("main").resolve("resources");
+        testResourcesDirectory = srcDirectory.resolve("test").resolve("resources");
         fileList = new ArrayList<>();
         directoryList = new ArrayList<>();
         dataMap = new HashMap<>();
-        setupBuild();
-    }
 
-    public void addDirectory(String name) {
-        if (isValidPath(name)) {
-            directoryList.add(name);
-        }
+        setBasedir(testRootDir);
+        Files.createDirectories(testRootDir);
+        setName("Test Project " + identifier);
+        setGroupId("org.apache.maven.plugin.test");
+        setArtifactId("maven-resource-plugin-test#" + identifier);
+        setVersion(identifier);
+        setPackaging("org.apache.maven.plugin.test");
+        setDescription("this is a test project");
+        setModel(getModel()
+                .withBuild(Build.newBuilder()
+                        .directory(buildDirectory.toString())
+                        .outputDirectory(outputDirectory.toString())
+                        .testOutputDirectory(testOutputDirectory.toString())
+                        .build()));
     }
 
     public void setOutputDirectory(String dir) {
-        outputDirectory = buildDirectory + "/" + dir;
-        setModel(getModel().withBuild(getModel().getBuild().withOutputDirectory(outputDirectory)));
+        outputDirectory = buildDirectory.resolve(dir);
+        setModel(getModel().withBuild(getModel().getBuild().withOutputDirectory(outputDirectory.toString())));
     }
 
-    public void addFile(String name) {
-        if (isValidPath(name)) {
+    public void addFile(Path name) {
+        if (isValidPath(name.toString())) {
             fileList.add(name);
         }
     }
 
-    public void addFile(String name, String data) {
-        File fileName = new File(name);
-
+    public void addFile(Path name, String data) {
         addFile(name);
-        dataMap.put(fileName.getName(), data);
+        dataMap.put(name.getFileName(), data);
     }
 
-    public String getOutputDirectory() {
+    public Path getOutputDirectory() {
         return outputDirectory;
     }
 
-    public String getTestOutputDirectory() {
+    public Path getTestOutputDirectory() {
         return testOutputDirectory;
     }
 
-    public String getResourcesDirectory() {
+    public Path getResourcesDirectory() {
         return resourcesDirectory;
     }
 
-    public String getTestResourcesDirectory() {
+    public Path getTestResourcesDirectory() {
         return testResourcesDirectory;
     }
 
     /**
-     * returns true if the path is relative
-     * and false if absolute
-     * also returns false if it is relative to
-     * the parent
-     *
-     * @param path
-     * @return
+     * {@return true if the path is relative and false if absolute}.
+     * Also returns false if it is relative to the parent.
      */
     private boolean isValidPath(String path) {
-        boolean bRetVal = true;
-
-        if (path.startsWith("c:") || path.startsWith("..") || path.startsWith("/") || path.startsWith("\\")) {
-            bRetVal = false;
-        }
-
-        return bRetVal;
-    }
-
-    private void setupBuild() {
-        // check getBasedir method for the exact path
-        // we need to recreate the dir structure in
-        // an isolated environment
-        srcDirectory = testRootDir + "/src";
-        buildDirectory = testRootDir + "/target";
-        outputDirectory = buildDirectory + "/classes";
-        testOutputDirectory = buildDirectory + "/test-classes";
-        resourcesDirectory = srcDirectory + "/main/resources/";
-        testResourcesDirectory = srcDirectory + "/test/resources/";
-
-        setModel(getModel()
-                .withBuild(org.apache.maven.api.model.Build.newBuilder()
-                        .directory(buildDirectory)
-                        .outputDirectory(outputDirectory)
-                        .testOutputDirectory(testOutputDirectory)
-                        .build()));
+        return !(path.startsWith("c:") || path.startsWith("..") || path.startsWith("/") || path.startsWith("\\"));
     }
 
     public void cleanBuildEnvironment() throws Exception {
-        if (FileUtils.fileExists(resourcesDirectory)) {
-            FileUtils.deleteDirectory(resourcesDirectory);
-        }
+        deleteDirectory(resourcesDirectory);
+        deleteDirectory(testResourcesDirectory);
+        deleteDirectory(outputDirectory);
+        deleteDirectory(testOutputDirectory);
+    }
 
-        if (FileUtils.fileExists(testResourcesDirectory)) {
-            FileUtils.deleteDirectory(testResourcesDirectory);
-        }
+    protected static void deleteDirectory(final Path path) throws IOException {
+        if (Files.exists(path)) {
+            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
 
-        if (FileUtils.fileExists(outputDirectory)) {
-            FileUtils.deleteDirectory(outputDirectory);
-        }
-
-        if (FileUtils.fileExists(testOutputDirectory)) {
-            FileUtils.deleteDirectory(testOutputDirectory);
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    if (exc != null) {
+                        throw exc;
+                    }
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
         }
     }
 
-    public void setupBuildEnvironment() throws Exception {
-        // populate dummy resources and dummy test resources
-
+    /**
+     * Populates dummy resources and dummy test resources.
+     *
+     * @throws IOException if a directory or a file cannot be created.
+     */
+    public void setupBuildEnvironment() throws IOException {
         // setup src dir
-        if (!FileUtils.fileExists(resourcesDirectory)) {
-            FileUtils.mkdir(resourcesDirectory);
+        for (Path directory : directoryList) {
+            Files.createDirectories(resourcesDirectory.resolve(directory));
+            Files.createDirectories(testResourcesDirectory.resolve(directory));
         }
-
-        if (!FileUtils.fileExists(testResourcesDirectory)) {
-            FileUtils.mkdir(testResourcesDirectory);
+        for (Path file : fileList) {
+            populateFile(resourcesDirectory.resolve(file));
+            populateFile(testResourcesDirectory.resolve(file));
         }
-
-        createDirectories(resourcesDirectory, testResourcesDirectory);
-        createFiles(resourcesDirectory, testResourcesDirectory);
 
         // setup target dir
-        if (!FileUtils.fileExists(outputDirectory)) {
-            FileUtils.mkdir(outputDirectory);
-        }
-
-        if (!FileUtils.fileExists(testOutputDirectory)) {
-            FileUtils.mkdir(testOutputDirectory);
-        }
+        Files.createDirectories(outputDirectory);
+        Files.createDirectories(testOutputDirectory);
     }
 
-    private void createDirectories(String parent, String testparent) throws IOException {
-        for (String directory : directoryList) {
-            Files.createDirectories(new File(parent, "/" + directory).toPath());
-            Files.createDirectories(new File(testparent, "/" + directory).toPath());
-        }
-    }
-
-    private void createFiles(String parent, String testparent) throws IOException {
-        for (String file : fileList) {
-            populateFile(new File(parent, file));
-            populateFile(new File(testparent, file));
-        }
-    }
-
-    private void populateFile(File file) throws IOException {
-        Files.createDirectories(file.getParentFile().toPath());
-        String data = dataMap.get(file.getName());
-        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+    private void populateFile(Path file) throws IOException {
+        Files.createDirectories(file.getParent());
+        String data = dataMap.get(file.getFileName());
+        try (OutputStream outputStream = Files.newOutputStream(file)) {
             if (data != null) {
                 outputStream.write(data.getBytes());
             }
         }
-        if (!file.exists()) {
+        if (!Files.exists(file)) {
             throw new IOException("Unable to create file: " + file);
         }
     }

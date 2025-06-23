@@ -48,31 +48,37 @@ public class CopyResourcesMojo extends ResourcesMojo {
     private List<Resource> resources;
 
     /** {@inheritDoc} */
+    @Override
     public Path getOutputDirectory() {
         return outputDirectory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setOutputDirectory(Path outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Resource> getResources() {
         return resources;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<String> getFilters() {
         return filters;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setFilters(List<String> filters) {
         this.filters = filters;
     }

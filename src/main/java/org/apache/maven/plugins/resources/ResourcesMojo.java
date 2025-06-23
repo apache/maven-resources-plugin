@@ -19,6 +19,7 @@
 package org.apache.maven.plugins.resources;
 
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,11 +27,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
+import org.apache.maven.api.Language;
 import org.apache.maven.api.Project;
 import org.apache.maven.api.ProjectScope;
 import org.apache.maven.api.Session;
+import org.apache.maven.api.SourceRoot;
 import org.apache.maven.api.di.Inject;
 import org.apache.maven.api.plugin.Log;
 import org.apache.maven.api.plugin.MojoException;
@@ -43,8 +45,8 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
 import org.apache.maven.shared.filtering.Resource;
 
 /**
- * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
- * to specify the resources to copy.
+ * Copy resources for the main source code to the main output directory.
+ * Always uses the {@code project.build.resources} element to specify the resources to copy.
  *
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -98,15 +100,14 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected List<String> buildFilters;
 
     /**
-     * <p>
      * The list of extra filter properties files to be used along with System properties, project properties, and filter
      * properties files specified in the POM build/filters section, which should be used for the filtering during the
-     * current mojo execution.</p>
+     * current mojo execution.
      * <p>
      * Normally, these will be configured from a plugin's execution section, to provide a different set of filters for a
      * particular execution. For instance, starting in Maven 2.2.0, you have the option of configuring executions with
-     * the id's <code>default-resources</code> and <code>default-testResources</code> to supply different configurations
-     * for the two different types of resources. By supplying <code>extraFilters</code> configurations, you can separate
+     * the id's {@code default-resources} and {@code default-testResources} to supply different configurations
+     * for the two different types of resources. By supplying {@code extraFilters} configurations, you can separate
      * which filters are used for which type of resource.</p>
      */
     @Parameter
@@ -136,7 +137,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected Map<String, MavenResourcesFiltering> mavenResourcesFilteringMap;
 
     /**
-     *
+     * The session to install / deploy / resolve artifacts and dependencies.
      */
     @Inject
     protected Session session;
@@ -168,7 +169,8 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected boolean includeEmptyDirs;
 
     /**
-     * Additional file extensions to not apply filtering (already defined are : jpg, jpeg, gif, bmp, png)
+     * Additional file extensions to not apply filtering.
+     * Already defined are: jpg, jpeg, gif, bmp, png.
      *
      * @since 2.3
      */
@@ -184,10 +186,9 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected boolean escapeWindowsPaths;
 
     /**
-     * <p>
      * Set of delimiters for expressions to filter within the resources. These delimiters are specified in the form
      * {@code beginToken*endToken}. If no {@code *} is given, the delimiter is assumed to be the same for start and end.
-     * </p>
+     *
      * <p>
      * So, the default filtering delimiters might be specified as:
      * </p>
@@ -216,6 +217,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected boolean useDefaultDelimiters;
 
     /**
+     * Whether to excludes a default set of files such as {@code .gitignore}.
      * By default files like {@code .gitignore}, {@code .cvsignore} etc. are excluded which means they will not being
      * copied. If you need them for a particular reason you can do that by settings this to {@code false}. This means
      * all files like the following will be copied.
@@ -246,11 +248,9 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected boolean addDefaultExcludes;
 
     /**
-     * <p>
      * List of plexus components hint which implements
      * {@link MavenResourcesFiltering#filterResources(MavenResourcesExecution)}. They will be executed after the
      * resources copying/filtering.
-     * </p>
      *
      * @since 2.4
      */
@@ -263,7 +263,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     private List<MavenResourcesFiltering> mavenFilteringComponents = new ArrayList<>();
 
     /**
-     * stop searching endToken at the end of line
+     * Stop searching endToken at the end of line.
      *
      * @since 2.5
      */
@@ -291,19 +291,38 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     private Log logger;
 
     /** {@inheritDoc} */
+    @Override
     public void execute() throws MojoException {
         if (isSkip()) {
             getLog().info("Skipping the execution.");
             return;
         }
-
         if (resources == null) {
-            resources = session.getService(ProjectManager.class).getResources(project, ProjectScope.MAIN).stream()
-                    .map(ResourceUtils::newResource)
-                    .collect(Collectors.toList());
+            resources = session.getService(ProjectManager.class)
+                    .getEnabledSourceRoots(project, ProjectScope.MAIN, Language.RESOURCES)
+                    .map(ResourcesMojo::newResource)
+                    .toList();
         }
-
         doExecute();
+    }
+
+    static Resource newResource(SourceRoot res) {
+        Resource resource = new Resource();
+        resource.setDirectory(res.directory().toString());
+        resource.setFiltering(res.stringFiltering());
+        resource.setExcludes(toStrings(res.excludes()));
+        resource.setIncludes(toStrings(res.includes()));
+        res.targetPath().ifPresent((p) -> resource.setTargetPath(p.toString()));
+        return resource;
+    }
+
+    /**
+     * Returns the raw patterns of the given path matchers.
+     * This implementation relies on the fact that {@code DefaultSourceRoot} wraps {@link PathMatcher}
+     * instances in a custom class with the {@link PathMatcher#toString()} method overridden.
+     */
+    private static List<String> toStrings(List<PathMatcher> matchers) {
+        return matchers.stream().map(PathMatcher::toString).toList();
     }
 
     protected void doExecute() throws MojoException {
@@ -315,14 +334,12 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         }
 
         try {
-            List<String> combinedFilters = getCombinedFiltersList();
-
             MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
                     getResources(),
                     getOutputDirectory(),
                     project,
                     encoding,
-                    combinedFilters,
+                    getCombinedFiltersList(),
                     Collections.emptyList(),
                     session);
 
@@ -361,7 +378,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     }
 
     /**
-     * This solves https://issues.apache.org/jira/browse/MRESOURCES-99.<br/>
+     * This solves https://issues.apache.org/jira/browse/MRESOURCES-99.
      * BUT:<br/>
      * This should be done different than defining those properties a second time, cause they have already being defined
      * in Maven Model Builder (package org.apache.maven.model.interpolation) via BuildTimestampValueSource. But those
@@ -426,7 +443,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         } else {
             List<String> result = new ArrayList<>();
 
-            if (useBuildFilters && buildFilters != null && !buildFilters.isEmpty()) {
+            if (useBuildFilters && buildFilters != null) {
                 result.addAll(buildFilters);
             }
 
