@@ -20,8 +20,8 @@ package org.apache.maven.plugins.resources;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.apache.maven.api.Language;
 import org.apache.maven.api.ProjectScope;
 import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.api.plugin.annotations.Mojo;
@@ -66,13 +66,12 @@ public class TestResourcesMojo extends ResourcesMojo {
             getLog().info("Not copying test resources");
             return;
         }
-
         if (resources == null) {
-            resources = session.getService(ProjectManager.class).getResources(project, ProjectScope.TEST).stream()
-                    .map(ResourceUtils::newResource)
-                    .collect(Collectors.toList());
+            resources = session.getService(ProjectManager.class)
+                    .getEnabledSourceRoots(project, ProjectScope.TEST, Language.RESOURCES)
+                    .map(ResourcesMojo::newResource)
+                    .toList();
         }
-
         super.doExecute();
     }
 
