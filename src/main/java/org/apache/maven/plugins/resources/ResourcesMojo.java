@@ -26,11 +26,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
+import org.apache.maven.api.Language;
 import org.apache.maven.api.Project;
 import org.apache.maven.api.ProjectScope;
 import org.apache.maven.api.Session;
+import org.apache.maven.api.SourceRoot;
 import org.apache.maven.api.di.Inject;
 import org.apache.maven.api.plugin.Log;
 import org.apache.maven.api.plugin.MojoException;
@@ -296,14 +297,23 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
             getLog().info("Skipping the execution.");
             return;
         }
-
         if (resources == null) {
-            resources = session.getService(ProjectManager.class).getResources(project, ProjectScope.MAIN).stream()
-                    .map(ResourceUtils::newResource)
-                    .collect(Collectors.toList());
+            resources = session.getService(ProjectManager.class)
+                    .getEnabledSourceRoots(project, ProjectScope.MAIN, Language.RESOURCES)
+                    .map(ResourcesMojo::newResource)
+                    .toList();
         }
-
         doExecute();
+    }
+
+    static Resource newResource(SourceRoot res) {
+        Resource resource = new Resource();
+        resource.setDirectory(res.directory().toString());
+        resource.setFiltering(res.stringFiltering());
+        resource.setExcludes(res.excludes());
+        resource.setIncludes(res.includes());
+        res.targetPath().ifPresent((p) -> resource.setTargetPath(p.toString()));
+        return resource;
     }
 
     protected void doExecute() throws MojoException {
@@ -315,14 +325,12 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         }
 
         try {
-            List<String> combinedFilters = getCombinedFiltersList();
-
             MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(
                     getResources(),
                     getOutputDirectory(),
                     project,
                     encoding,
-                    combinedFilters,
+                    getCombinedFiltersList(),
                     Collections.emptyList(),
                     session);
 
@@ -426,7 +434,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         } else {
             List<String> result = new ArrayList<>();
 
-            if (useBuildFilters && buildFilters != null && !buildFilters.isEmpty()) {
+            if (useBuildFilters && buildFilters != null) {
                 result.addAll(buildFilters);
             }
 

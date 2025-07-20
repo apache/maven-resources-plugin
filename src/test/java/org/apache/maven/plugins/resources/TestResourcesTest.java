@@ -21,7 +21,6 @@ package org.apache.maven.plugins.resources;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.maven.api.Project;
 import org.apache.maven.api.di.Provides;
@@ -30,7 +29,7 @@ import org.apache.maven.api.plugin.testing.Basedir;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
-import org.apache.maven.internal.impl.InternalSession;
+import org.apache.maven.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.shared.filtering.Resource;
 import org.codehaus.plexus.util.FileUtils;
@@ -107,9 +106,7 @@ public class TestResourcesTest {
         return new MavenProjectResourcesStub();
     }
 
-    private List<Resource> getResources(MavenProjectResourcesStub project) {
-        return project.getBuild().getResources().stream()
-                .map(ResourceUtils::newResource)
-                .collect(Collectors.toList());
+    private static List<Resource> getResources(MavenProjectResourcesStub project) {
+        return ResourcesMojoTest.getResources(project);
     }
 }
