@@ -80,7 +80,7 @@ under the License.
     <mavenPluginPluginVersion>4.0.0-beta-2</mavenPluginPluginVersion>
     <mavenPluginTestingVersion>4.0.0-beta-4</mavenPluginTestingVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
-    <sisuVersion>0.9.0.M3</sisuVersion>
+    <sisuVersion>0.9.0.M4</sisuVersion>
     <slf4jVersion>2.0.13</slf4jVersion>
     <version.maven-invoker-plugin>3.7.0</version.maven-invoker-plugin>
     <version.maven-plugin-tools>${mavenPluginPluginVersion}</version.maven-plugin-tools>
