@@ -42,14 +42,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class FilterTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class FilterTest {
     private String basedir;
 
     private Properties properties;
 
-    protected void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         basedir = System.getProperty("basedir");
 
         properties = new Properties();
@@ -61,15 +66,18 @@ public class FilterTest extends TestCase {
         properties.load(new FileInputStream(testPropertiesFile));
     }
 
-    public void testSystemPropertyInterpolation() throws IOException {
-        assertEquals("System property", System.getProperty("java.version"), properties.getProperty("system.property"));
+    @Test
+    void testSystemPropertyInterpolation() throws IOException {
+        assertEquals(System.getProperty("java.version"), properties.getProperty("system.property"), "System property");
     }
 
-    public void testCommandLineParameterInterpolation() throws IOException {
-        assertEquals("CLI Parameter", "CLI", properties.getProperty("cli.param"));
+    @Test
+    void testCommandLineParameterInterpolation() throws IOException {
+        assertEquals("CLI", properties.getProperty("cli.param"), "CLI Parameter");
     }
 
-    public void testPomPropertyInterpolation() throws IOException {
-        assertEquals("Pom Property", "foo", properties.getProperty("pom.property"));
+    @Test
+    void testPomPropertyInterpolation() throws IOException {
+        assertEquals("foo", properties.getProperty("pom.property"), "Pom Property");
     }
 }
