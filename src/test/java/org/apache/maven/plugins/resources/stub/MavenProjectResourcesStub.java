@@ -46,10 +46,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.api.model.Build;
 import org.apache.maven.api.model.Resource;
 import org.apache.maven.api.plugin.testing.MojoExtension;
-import org.codehaus.plexus.util.FileUtils;
 
 public class MavenProjectResourcesStub extends MavenProjectBuildStub {
 
