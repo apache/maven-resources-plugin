@@ -159,19 +159,19 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
     }
 
     public void cleanBuildEnvironment() throws Exception {
-        if (FileUtils.fileExists(resourcesDirectory)) {
+        if (new File(resourcesDirectory).exists()) {
             FileUtils.deleteDirectory(resourcesDirectory);
         }
 
-        if (FileUtils.fileExists(testResourcesDirectory)) {
+        if (new File(testResourcesDirectory).exists()) {
             FileUtils.deleteDirectory(testResourcesDirectory);
         }
 
-        if (FileUtils.fileExists(outputDirectory)) {
+        if (new File(outputDirectory).exists()) {
             FileUtils.deleteDirectory(outputDirectory);
         }
 
-        if (FileUtils.fileExists(testOutputDirectory)) {
+        if (new File(testOutputDirectory).exists()) {
             FileUtils.deleteDirectory(testOutputDirectory);
         }
     }
@@ -180,11 +180,11 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
         // populate dummy resources and dummy test resources
 
         // setup src dir
-        if (!FileUtils.fileExists(resourcesDirectory)) {
+        if (!new File(resourcesDirectory).exists()) {
             FileUtils.mkdir(resourcesDirectory);
         }
 
-        if (!FileUtils.fileExists(testResourcesDirectory)) {
+        if (!new File(testResourcesDirectory).exists()) {
             FileUtils.mkdir(testResourcesDirectory);
         }
 
@@ -192,11 +192,11 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
         createFiles(resourcesDirectory, testResourcesDirectory);
 
         // setup target dir
-        if (!FileUtils.fileExists(outputDirectory)) {
+        if (!new File(outputDirectory).exists()) {
             FileUtils.mkdir(outputDirectory);
         }
 
-        if (!FileUtils.fileExists(testOutputDirectory)) {
+        if (!new File(testOutputDirectory).exists()) {
             FileUtils.mkdir(testOutputDirectory);
         }
     }
