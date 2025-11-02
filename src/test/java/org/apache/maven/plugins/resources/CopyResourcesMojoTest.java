@@ -44,12 +44,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @version $Id$
  */
 @MojoTest
-public class CopyResourcesMojoTest {
+class CopyResourcesMojoTest {
 
     @Test
     @InjectMojo(goal = "resources", pom = "classpath:/unit/resources-test/plugin-config.xml")
     @Basedir
-    public void testCopyWithoutFiltering(ResourcesMojo mojo) throws Exception {
+    void copyWithoutFiltering(ResourcesMojo mojo) throws Exception {
         Resource resource = new Resource();
         resource.setDirectory(getPluginBasedir() + "/src/test/unit-files/copy-resources-test/no-filter");
         resource.setFiltering(false);

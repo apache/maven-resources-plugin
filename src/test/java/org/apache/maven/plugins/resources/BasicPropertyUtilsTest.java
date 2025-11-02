@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MojoTest
-public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
+class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
     protected static final String VALIDATION_FILE_NAME =
             "target/test-classes/unit/propertiesutils-test/basic_validation.properties";
 
@@ -65,7 +65,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testBasicLoadPropertyFF() throws Exception {
+    void basicLoadPropertyFF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, false, false);
 
         assertNotNull(prop);
@@ -78,7 +78,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testBasicLoadPropertyTF() throws Exception {
+    void basicLoadPropertyTF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, false);
 
         assertNotNull(prop);
@@ -91,7 +91,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testBasicLoadPropertyTT() throws Exception {
+    void basicLoadPropertyTT() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
         validationProp.putAll(System.getProperties());
@@ -105,7 +105,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      * @throws Exception
      */
     @Test
-    public void testNonExistentProperty() throws Exception {
+    void nonExistentProperty() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
         validationProp.putAll(System.getProperties());
