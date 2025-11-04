@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MojoTest
-public class ResourcesMojoTest {
+class ResourcesMojoTest {
 
     private static final String CONFIG_XML = "classpath:/unit/resources-test/plugin-config.xml";
 
@@ -59,7 +59,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testHarnessEnvironment(ResourcesMojo mojo) {
+    void harnessEnvironment(ResourcesMojo mojo) {
         assertNotNull(mojo);
     }
 
@@ -68,7 +68,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceDirectoryStructure(ResourcesMojo mojo) throws Exception {
+    void resourceDirectoryStructure(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -101,7 +101,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceDirectoryStructureRelativePath(ResourcesMojo mojo) throws Exception {
+    void resourceDirectoryStructureRelativePath(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -135,7 +135,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceEncoding(ResourcesMojo mojo) throws Exception {
+    void resourceEncoding(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -162,7 +162,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceInclude(ResourcesMojo mojo) throws Exception {
+    void resourceInclude(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -211,7 +211,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceExclude(ResourcesMojo mojo) throws Exception {
+    void resourceExclude(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -261,7 +261,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceTargetPath(ResourcesMojo mojo) throws Exception {
+    void resourceTargetPath(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -296,7 +296,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceSystemPropertiesFiltering(ResourcesMojo mojo) throws Exception {
+    void resourceSystemPropertiesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -337,7 +337,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testResourceProjectPropertiesFiltering(ResourcesMojo mojo) throws Exception {
+    void resourceProjectPropertiesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -366,7 +366,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testProjectPropertyFilteringPropertyDestination(ResourcesMojo mojo) throws Exception {
+    void projectPropertyFilteringPropertyDestination(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -398,7 +398,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFilesFiltering(ResourcesMojo mojo) throws Exception {
+    void propertyFilesFiltering(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -430,7 +430,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFilesExtra(ResourcesMojo mojo) throws Exception {
+    void propertyFilesExtra(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -462,7 +462,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFilesMainAndExtra(ResourcesMojo mojo) throws Exception {
+    void propertyFilesMainAndExtra(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -505,7 +505,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testPropertyFilesFilteringTokensInFilters(ResourcesMojo mojo) throws Exception {
+    void propertyFilesFilteringTokensInFilters(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -536,7 +536,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testWindowsPathEscapingDisabled(ResourcesMojo mojo) throws Exception {
+    void windowsPathEscapingDisabled(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
@@ -571,7 +571,7 @@ public class ResourcesMojoTest {
     @Test
     @InjectMojo(goal = "resources", pom = CONFIG_XML)
     @Basedir
-    public void testWindowsPathEscapingEnabled(ResourcesMojo mojo) throws Exception {
+    void windowsPathEscapingEnabled(ResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;

@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MojoTest
-public class TestResourcesTest {
+class TestResourcesTest {
     private static final String CONFIG_XML = "classpath:/unit/resources-test/plugin-config.xml";
 
     /**
@@ -50,7 +50,7 @@ public class TestResourcesTest {
     @Test
     @InjectMojo(goal = "testResources", pom = CONFIG_XML)
     @Basedir
-    public void testHarnessEnvironment(TestResourcesMojo mojo) {
+    void harnessEnvironment(TestResourcesMojo mojo) {
         assertNotNull(mojo);
     }
 
@@ -59,7 +59,7 @@ public class TestResourcesTest {
     @Test
     @InjectMojo(goal = "testResources", pom = CONFIG_XML)
     @Basedir
-    public void testTestResourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
+    void testResourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;

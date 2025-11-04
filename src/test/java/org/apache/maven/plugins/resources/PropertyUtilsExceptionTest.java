@@ -26,13 +26,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PropertyUtilsExceptionTest {
+class PropertyUtilsExceptionTest {
 
     /**
      * load property test case can be adjusted by modifying the basic.properties and basic_validation properties
      */
     @Test
-    public void loadPropertyFileShouldFailWithFileNotFoundException() {
+    void loadPropertyFileShouldFailWithFileNotFoundException() {
         assertThrows(
                 FileNotFoundException.class,
                 () -> PropertyUtils.loadPropertyFile(Paths.get("NON_EXISTENT_FILE"), true, true));
