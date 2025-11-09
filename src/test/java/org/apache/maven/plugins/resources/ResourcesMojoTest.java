@@ -37,7 +37,7 @@ import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.codehaus.plexus.util.FileUtils;
 
 public class ResourcesMojoTest extends AbstractMojoTestCase {
-    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
+    private final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
 
     /**
      * test mojo lookup, test harness should be working fine
@@ -89,7 +89,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testResourceDirectoryStructure_RelativePath() throws Exception {
+    public void testResourceDirectoryStructureRelativePath() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("resourceDirectoryStructure_RelativePath");
@@ -294,7 +294,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testResourceSystemProperties_Filtering() throws Exception {
+    public void testResourceSystemPropertiesFiltering() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("resourceSystemProperties_Filtering");
@@ -340,7 +340,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testResourceProjectProperties_Filtering() throws Exception {
+    public void testResourceProjectPropertiesFiltering() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("resourceProjectProperties_Filtering");
@@ -371,7 +371,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testProjectProperty_Filtering_PropertyDestination() throws Exception {
+    public void testProjectPropertyFilteringPropertyDestination() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project =
@@ -406,7 +406,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testPropertyFiles_Filtering() throws Exception {
+    public void testPropertyFilesFiltering() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("resourcePropertyFiles_Filtering");
@@ -439,7 +439,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testPropertyFiles_Extra() throws Exception {
+    public void testPropertyFilesExtra() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("resourcePropertyFiles_Extra");
@@ -472,7 +472,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
     /**
      * @throws Exception
      */
-    public void testPropertyFiles_MainAndExtra() throws Exception {
+    public void testPropertyFilesMainAndExtra() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("resourcePropertyFiles_MainAndExtra");
@@ -516,7 +516,7 @@ public class ResourcesMojoTest extends AbstractMojoTestCase {
      *
      * @throws Exception
      */
-    public void testPropertyFiles_Filtering_TokensInFilters() throws Exception {
+    public void testPropertyFilesFilteringTokensInFilters() throws Exception {
         final File testPom = new File(getBasedir(), defaultPomFilePath);
         final ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
         final MavenProjectResourcesStub project =

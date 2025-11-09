@@ -28,7 +28,7 @@ import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.codehaus.plexus.util.FileUtils;
 
 public class TestResourcesTest extends AbstractMojoTestCase {
-    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
+    private final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
 
     protected void setUp() throws Exception {
         super.setUp();

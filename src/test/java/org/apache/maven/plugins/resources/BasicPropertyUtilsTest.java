@@ -24,13 +24,9 @@ import java.util.Properties;
 import org.apache.maven.shared.filtering.PropertyUtils;
 
 public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
-    protected static final String validationFileName =
-            "/target/test-classes/unit/propertiesutils-test/basic_validation.properties";
-
-    protected static final String propFileName = "/target/test-classes/unit/propertiesutils-test/basic.properties";
 
     protected File getPropertyFile() {
-        File propFile = new File(getBasedir(), propFileName);
+        File propFile = new File(getBasedir(), "/target/test-classes/unit/propertiesutils-test/basic.properties");
 
         if (!propFile.exists()) {
             propFile = null;
@@ -40,7 +36,8 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
     }
 
     protected File getValidationFile() {
-        File validationFile = new File(getBasedir(), validationFileName);
+        File validationFile =
+                new File(getBasedir(), "/target/test-classes/unit/propertiesutils-test/basic_validation.properties");
 
         if (!validationFile.exists()) {
             validationFile = null;
@@ -54,7 +51,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
-    public void testBasicLoadProperty_FF() throws Exception {
+    public void testBasicLoadPropertyFF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, false, false);
 
         assertNotNull(prop);
@@ -66,7 +63,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
-    public void testBasicLoadProperty_TF() throws Exception {
+    public void testBasicLoadPropertyTF() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, false);
 
         assertNotNull(prop);
@@ -78,7 +75,7 @@ public class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
      *
      * @throws Exception
      */
-    public void testBasicLoadProperty_TT() throws Exception {
+    public void testBasicLoadPropertyTT() throws Exception {
         Properties prop = PropertyUtils.loadPropertyFile(propertyFile, true, true);
 
         validationProp.putAll(System.getProperties());

@@ -32,8 +32,6 @@ import org.codehaus.plexus.util.FileUtils;
  */
 public class CopyResourcesMojoTest extends AbstractMojoTestCase {
 
-    protected static final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
-
     File outputDirectory = new File(getBasedir(), "/target/copyResourcesTests");
 
     protected void setUp() throws Exception {
@@ -46,7 +44,7 @@ public class CopyResourcesMojoTest extends AbstractMojoTestCase {
     }
 
     public void testCopyWithoutFiltering() throws Exception {
-        File testPom = new File(getBasedir(), defaultPomFilePath);
+        File testPom = new File(getBasedir(), "/target/test-classes/unit/resources-test/plugin-config.xml");
         ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
 
         mojo.setOutputDirectory(outputDirectory);
