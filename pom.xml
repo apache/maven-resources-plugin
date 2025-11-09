@@ -150,7 +150,11 @@ under the License.
       <artifactId>org.eclipse.sisu.plexus</artifactId>
       <version>${sisuVersion}</version>
     </dependency>
-
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.21.0</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
