@@ -120,13 +120,7 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
      * @return
      */
     private boolean isValidPath(String path) {
-        boolean bRetVal = true;
-
-        if (path.startsWith("c:") || path.startsWith("..") || path.startsWith("/") || path.startsWith("\\")) {
-            bRetVal = false;
-        }
-
-        return bRetVal;
+        return !path.startsWith("c:") && !path.startsWith("..") && !path.startsWith("/") && !path.startsWith("\\");
     }
 
     private void setupBuild() {

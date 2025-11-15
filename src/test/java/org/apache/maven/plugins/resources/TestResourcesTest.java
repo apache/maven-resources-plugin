@@ -30,28 +30,19 @@ import org.codehaus.plexus.util.FileUtils;
 public class TestResourcesTest extends AbstractMojoTestCase {
     private final String defaultPomFilePath = "/target/test-classes/unit/resources-test/plugin-config.xml";
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
     /**
      * test mojo lookup, test harness should be working fine
-     *
-     * @throws Exception
      */
     public void testHarnessEnvironment() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("testResources", testPom);
+        ResourcesMojo mojo = lookupMojo("testResources", testPom);
 
         assertNotNull(mojo);
     }
 
-    /**
-     * @throws Exception
-     */
     public void testTestResourceDirectoryCreation() throws Exception {
         File testPom = new File(getBasedir(), defaultPomFilePath);
-        TestResourcesMojo mojo = (TestResourcesMojo) lookupMojo("testResources", testPom);
+        TestResourcesMojo mojo = lookupMojo("testResources", testPom);
         MavenProjectResourcesStub project = new MavenProjectResourcesStub("testResourceDirectoryStructure");
         List<Resource> resources = project.getBuild().getResources();
 

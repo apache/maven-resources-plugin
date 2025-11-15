@@ -27,10 +27,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+
+import static org.apache.commons.io.FileUtils.writeLines;
 
 /**
  * @author Olivier Lamy
@@ -72,7 +73,7 @@ public class ItFilter implements MavenResourcesFiltering {
                             .getMavenSession()
                             .getSystemProperties()
                             .getProperty("toto"));
-            FileUtils.writeLines(f, lines);
+            writeLines(f, lines);
         } catch (IOException e) {
             throw new MavenFilteringException(e.getMessage(), e);
         }

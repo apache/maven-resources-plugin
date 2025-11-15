@@ -34,11 +34,7 @@ import org.apache.maven.plugins.annotations.Parameter;
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  */
-@Mojo(
-        name = "testResources",
-        defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES,
-        requiresProject = true,
-        threadSafe = true)
+@Mojo(name = "testResources", defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES, threadSafe = true)
 public class TestResourcesMojo extends ResourcesMojo {
     /**
      * The output directory into which to copy the resources.

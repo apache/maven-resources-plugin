@@ -46,7 +46,7 @@ under the License.
   </contributors>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>3.6.3</maven>
   </prerequisites>
 
   <scm>
@@ -72,7 +72,7 @@ under the License.
 
   <properties>
     <mavenFilteringVersion>3.4.0</mavenFilteringVersion>
-    <mavenVersion>3.2.5</mavenVersion>
+    <mavenVersion>3.9.11</mavenVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2023-03-21T12:01:37Z</project.build.outputTimestamp>
 
@@ -99,37 +99,19 @@ under the License.
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-settings</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
       <version>${version.maven-plugin-tools}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-interpolation</artifactId>
-      <version>1.29</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
-      <version>0.3.5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-xml</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -147,14 +129,6 @@ under the License.
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.19.0</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-compat</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
@@ -173,6 +147,11 @@ under the License.
       <artifactId>maven-resolver-api</artifactId>
       <version>1.6.3</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

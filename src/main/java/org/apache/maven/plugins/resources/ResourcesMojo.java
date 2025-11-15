@@ -18,7 +18,10 @@
  */
 package org.apache.maven.plugins.resources;
 
+import javax.inject.Inject;
+
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +35,6 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -50,7 +52,7 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  * @author Andreas Hoheneder
  * @author William Ferguson
  */
-@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
+@Mojo(name = "resources", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, threadSafe = true)
 public class ResourcesMojo extends AbstractMojo {
 
     /**
@@ -125,13 +127,13 @@ public class ResourcesMojo extends AbstractMojo {
     /**
      *
      */
-    @Component(role = MavenResourcesFiltering.class, hint = "default")
+    @Inject
     protected MavenResourcesFiltering mavenResourcesFiltering;
 
     /**
      *
      */
-    @Component(role = MavenResourcesFiltering.class)
+    @Inject
     protected Map<String, MavenResourcesFiltering> mavenResourcesFilteringMap;
 
     /**
@@ -297,7 +299,7 @@ public class ResourcesMojo extends AbstractMojo {
 
         if (StringUtils.isBlank(encoding) && isFilteringEnabled(getResources())) {
             getLog().warn("File encoding has not been set, using platform encoding "
-                    + System.getProperty("file.encoding")
+                    + Charset.defaultCharset().displayName()
                     + ". Build is platform dependent!");
             getLog().warn("See https://maven.apache.org/general.html#encoding-warning");
         }
