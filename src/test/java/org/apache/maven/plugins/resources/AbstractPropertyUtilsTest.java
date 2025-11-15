@@ -26,7 +26,6 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.codehaus.plexus.util.IOUtil;
 
 /**
  * Base class for propertyutils test case
@@ -78,19 +77,10 @@ public abstract class AbstractPropertyUtilsTest extends AbstractMojoTestCase {
      *
      * @param validationPropFile
      */
-    private void loadValidationProperties(File validationPropFile) {
+    private void loadValidationProperties(File validationPropFile) throws IOException {
         validationProp = new Properties();
-        InputStream in = null;
-
-        try {
-            in = Files.newInputStream(validationPropFile.toPath());
+        try (InputStream in = Files.newInputStream(validationPropFile.toPath())) {
             validationProp.load(in);
-            in.close();
-            in = null;
-        } catch (IOException ex) {
-            // TODO: do error handling
-        } finally {
-            IOUtil.close(in);
         }
     }
 }
