@@ -18,49 +18,83 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.io.File;
-import java.util.Collections;
+import javax.inject.Inject;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Properties;
+
+import org.apache.maven.api.plugin.testing.Basedir;
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoParameter;
+import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.model.Resource;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.maven.project.MavenProject;
+import org.junit.jupiter.api.Test;
+
+import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Olivier Lamy
  * @version $Id$
  */
-public class CopyResourcesMojoTest extends AbstractMojoTestCase {
+@MojoTest
+class CopyResourcesMojoTest {
 
-    File outputDirectory = new File(getBasedir(), "/target/copyResourcesTests");
+    @Inject
+    private MavenProject project;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs();
-        } else {
-            FileUtils.cleanDirectory(outputDirectory);
-        }
-    }
+    @Test
+    @InjectMojo(goal = "copy-resources")
+    @Basedir("/unit/copy-resources-test")
+    @MojoParameter(name = "outputDirectory", value = "${basedir}/filtered-resources")
+    void copyWithoutFiltering(CopyResourcesMojo mojo) throws Exception {
+        addResources(mojo, false);
 
-    public void testCopyWithoutFiltering() throws Exception {
-        File testPom = new File(getBasedir(), "/target/test-classes/unit/resources-test/plugin-config.xml");
-        ResourcesMojo mojo = (ResourcesMojo) lookupMojo("resources", testPom);
-
-        mojo.setOutputDirectory(outputDirectory);
-
-        Resource resource = new Resource();
-        resource.setDirectory(getBasedir() + "/src/test/unit-files/copy-resources-test/no-filter");
-        resource.setFiltering(false);
-
-        mojo.setResources(Collections.singletonList(resource));
-
-        MavenProjectResourcesStub project = new MavenProjectResourcesStub("CopyResourcesMojoTest");
-        File targetFile = new File(getBasedir(), "/target/copyResourcesTests");
-        project.setBaseDir(targetFile);
-        setVariableValueToObject(mojo, "project", project);
         mojo.execute();
 
-        assertTrue(new File(targetFile, "config.properties").exists());
+        Properties properties = getResultProperties();
+
+        assertEquals("zorglub", properties.getProperty("config"));
+        assertEquals("${project.version}", properties.getProperty("project.version"));
+    }
+
+    @Test
+    @InjectMojo(goal = "copy-resources")
+    @Basedir("/unit/copy-resources-test")
+    @MojoParameter(name = "outputDirectory", value = "${basedir}/filtered-resources")
+    void copyWithFiltering(CopyResourcesMojo mojo) throws Exception {
+
+        addResources(mojo, true);
+        when(project.getVersion()).thenReturn("1.2.3-SNAPSHOT");
+
+        mojo.execute();
+
+        Properties properties = getResultProperties();
+
+        assertEquals("zorglub", properties.getProperty("config"));
+        assertEquals("1.2.3-SNAPSHOT", properties.getProperty("project.version"));
+    }
+
+    private Properties getResultProperties() throws IOException {
+        Properties properties = new Properties();
+        Path result = new File(getBasedir(), "filtered-resources/config.properties").toPath();
+        try (InputStream in = Files.newInputStream(result)) {
+            properties.load(in);
+        }
+        return properties;
+    }
+
+    private void addResources(CopyResourcesMojo mojo, boolean filtered) {
+        Resource resource = new Resource();
+        resource.setDirectory(getBasedir() + "/resources");
+        resource.setFiltering(filtered);
+        mojo.setResources(Collections.singletonList(resource));
     }
 }
