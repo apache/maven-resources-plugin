@@ -72,7 +72,7 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenVersion>4.0.0-rc-4</mavenVersion>
+    <mavenVersion>4.0.0-rc-5</mavenVersion>
     <javaVersion>17</javaVersion>
 
     <guiceVersion>6.0.0</guiceVersion>
@@ -87,6 +87,7 @@ under the License.
 
     <project.build.outputTimestamp>2024-06-26T08:24:00Z</project.build.outputTimestamp>
     <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
+    <version.palantirJavaFormat>2.81.0</version.palantirJavaFormat>
   </properties>
 
   <dependencyManagement>
