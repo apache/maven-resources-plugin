@@ -59,7 +59,7 @@ class TestResourcesTest {
     @Test
     @InjectMojo(goal = "testResources", pom = CONFIG_XML)
     @Basedir
-    void testResourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
+    void resourceDirectoryCreation(TestResourcesMojo mojo) throws Exception {
         assertNotNull(mojo);
 
         MavenProjectResourcesStub project = (MavenProjectResourcesStub) mojo.project;
