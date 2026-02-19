@@ -165,7 +165,8 @@ public class ResourcesMojo extends AbstractMojo {
 
     /**
      * The strategy to use for change detection. Supported values are "content" (default), "timestamp", "combined"
-     * and "always" (equivalent of {@link #overwrite set to {@code true}}).
+     * and "always" (equivalent of {@link #overwrite set to {@code true}}). If this parameter is specified,
+     * it will override the value of {@link #overwrite}.
      *
      * Strategies and their behavior are as follows:
      * <ul>
