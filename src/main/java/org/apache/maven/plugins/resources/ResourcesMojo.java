@@ -39,6 +39,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.filtering.ChangeDetection;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
@@ -156,9 +157,30 @@ public class ResourcesMojo extends AbstractMojo {
      * Overwrite existing files even if the destination files are newer.
      *
      * @since 2.3
+     * @deprecated Use {@link #changeDetection} instead.
      */
+    @Deprecated
     @Parameter(defaultValue = "false")
     private boolean overwrite;
+
+    /**
+     * The strategy to use for change detection. Supported values are "content" (default), "timestamp", "combined"
+     * and "always" (equivalent of {@link #overwrite set to {@code true}}).
+     *
+     * Strategies and their behavior are as follows:
+     * <ul>
+     *     <li><strong>content</strong>: This is the default strategy since version 3.4.0. Overwrites existing target file only if content differs.</li>
+     *     <li><strong>timestamp</strong>: This was the default strategy before version 3.4.0. Overwrites existing target file only if timestamp is older that source file timestamp.</li>
+     *     <li><strong>combined</strong>: Combines the two strategies above; if timestamp is older and if content differs, file will be overwritten.</li>
+     *     <li><strong>always</strong>: Always overwrites the target file. Equivalent of {@code overwrite=true}.</li>
+     * </ul>
+     *
+     * Note: default value of this parameter is handled programmatically (as "content") for programmatic detection reasons.
+     *
+     * @since 3.5.0
+     */
+    @Parameter
+    private String changeDetection;
 
     /**
      * Copy any empty directories included in the Resources.
@@ -323,7 +345,7 @@ public class ResourcesMojo extends AbstractMojo {
             mavenResourcesExecution.setInjectProjectBuildFilters(false);
 
             mavenResourcesExecution.setEscapeString(escapeString);
-            mavenResourcesExecution.setOverwrite(overwrite);
+            mavenResourcesExecution.setChangeDetection(getChangeDetection());
             mavenResourcesExecution.setIncludeEmptyDirs(includeEmptyDirs);
             mavenResourcesExecution.setSupportMultiLineFiltering(supportMultiLineFiltering);
             mavenResourcesExecution.setFilterFilenames(fileNameFiltering);
@@ -347,6 +369,27 @@ public class ResourcesMojo extends AbstractMojo {
             executeUserFilterComponents(mavenResourcesExecution);
         } catch (MavenFilteringException e) {
             throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
+
+    private ChangeDetection getChangeDetection() {
+        if (changeDetection != null) {
+            switch (changeDetection) {
+                case "content":
+                    return ChangeDetection.CONTENT;
+                case "timestamp":
+                    return ChangeDetection.TIMESTAMP;
+                case "combined":
+                    return ChangeDetection.COMBINED;
+                case "always":
+                    return ChangeDetection.ALWAYS;
+                default:
+                    throw new IllegalArgumentException("Invalid value for changeDetection: " + changeDetection);
+            }
+        } else if (overwrite) {
+            return ChangeDetection.ALWAYS;
+        } else {
+            return ChangeDetection.CONTENT;
         }
     }
 

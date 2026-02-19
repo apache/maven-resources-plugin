@@ -71,10 +71,11 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenFilteringVersion>3.4.0</mavenFilteringVersion>
+    <mavenFilteringVersion>3.4.1-SNAPSHOT</mavenFilteringVersion>
     <mavenVersion>3.9.12</mavenVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2025-11-22T21:31:20Z</project.build.outputTimestamp>
+    <version.plexus-utils>3.6.0</version.plexus-utils>
 
     <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
   </properties>
