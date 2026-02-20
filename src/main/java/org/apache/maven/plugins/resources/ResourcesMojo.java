@@ -164,14 +164,13 @@ public class ResourcesMojo extends AbstractMojo {
     private boolean overwrite;
 
     /**
-     * The strategy to use for change detection. Supported values are "content" (default), "timestamp", "combined"
-     * and "always" (equivalent of {@link #overwrite set to {@code true}}). If this parameter is specified,
+     * The strategy to use for change detection. Supported values are listed below. If this parameter is configured,
      * it will override the value of {@link #overwrite}.
      *
      * Strategies and their behavior are as follows:
      * <ul>
      *     <li><strong>content</strong>: This is the default strategy since version 3.4.0. Overwrites existing target file only if content differs.</li>
-     *     <li><strong>timestamp</strong>: This was the default strategy before version 3.4.0. Overwrites existing target file only if timestamp is older that source file timestamp.</li>
+     *     <li><strong>timestamp</strong>: This was the default strategy before version 3.4.0. Overwrites existing target file only if target timestamp is older than source timestamp.</li>
      *     <li><strong>timestamp+content</strong>: Combines the two strategies above; if timestamp is older and if content differs, existing target file will be overwritten.</li>
      *     <li><strong>always</strong>: Always overwrites existing target file. Equivalent of {@code overwrite=true}.</li>
      *     <li><strong>never</strong>: Never overwrites existing target file.</li>
