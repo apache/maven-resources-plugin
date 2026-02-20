@@ -172,8 +172,9 @@ public class ResourcesMojo extends AbstractMojo {
      * <ul>
      *     <li><strong>content</strong>: This is the default strategy since version 3.4.0. Overwrites existing target file only if content differs.</li>
      *     <li><strong>timestamp</strong>: This was the default strategy before version 3.4.0. Overwrites existing target file only if timestamp is older that source file timestamp.</li>
-     *     <li><strong>timestamp+content</strong>: Combines the two strategies above; if timestamp is older and if content differs, file will be overwritten.</li>
-     *     <li><strong>always</strong>: Always overwrites the target file. Equivalent of {@code overwrite=true}.</li>
+     *     <li><strong>timestamp+content</strong>: Combines the two strategies above; if timestamp is older and if content differs, existing target file will be overwritten.</li>
+     *     <li><strong>always</strong>: Always overwrites existing target file. Equivalent of {@code overwrite=true}.</li>
+     *     <li><strong>never</strong>: Never overwrites existing target file.</li>
      * </ul>
      *
      * Note: default value of this parameter is handled programmatically (as "content") for programmatic detection reasons.
@@ -384,6 +385,8 @@ public class ResourcesMojo extends AbstractMojo {
                     return ChangeDetection.TIMESTAMP_AND_CONTENT;
                 case "always":
                     return ChangeDetection.ALWAYS;
+                case "never":
+                    return ChangeDetection.NEVER;
                 default:
                     throw new IllegalArgumentException("Invalid value for changeDetection: " + changeDetection);
             }
