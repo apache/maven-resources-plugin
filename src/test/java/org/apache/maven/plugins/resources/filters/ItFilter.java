@@ -23,6 +23,8 @@ import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +32,6 @@ import java.util.List;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
-
-import static org.apache.commons.io.FileUtils.writeLines;
 
 /**
  * @author Olivier Lamy
@@ -73,7 +73,9 @@ public class ItFilter implements MavenResourcesFiltering {
                             .getMavenSession()
                             .getSystemProperties()
                             .getProperty("toto"));
-            writeLines(f, lines);
+            Path target = f.toPath();
+            Files.createDirectories(target.getParent());
+            Files.write(target, lines);
         } catch (IOException e) {
             throw new MavenFilteringException(e.getMessage(), e);
         }

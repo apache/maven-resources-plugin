@@ -76,6 +76,7 @@ under the License.
     <project.build.outputTimestamp>2025-11-22T21:31:20Z</project.build.outputTimestamp>
 
     <version.slf4j>1.7.36</version.slf4j>
+    <version.plexus-utils>3.6.0</version.plexus-utils>
     <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
   </properties>
 
@@ -84,12 +85,11 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-filtering</artifactId>
-      <version>3.4.0</version>
+      <version>3.4.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.20.0</version>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
     </dependency>
 
     <!-- Maven (provided) -->
@@ -146,11 +146,6 @@ under the License.
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${version.slf4j}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

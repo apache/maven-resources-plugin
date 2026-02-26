@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -39,9 +38,11 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.filtering.ChangeDetection;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Copy resources for the main source code to the main output directory. Always uses the project.build.resources element
@@ -156,9 +157,31 @@ public class ResourcesMojo extends AbstractMojo {
      * Overwrite existing files even if the destination files are newer.
      *
      * @since 2.3
+     * @deprecated Use {@link #changeDetection} instead.
      */
+    @Deprecated
     @Parameter(defaultValue = "false")
     private boolean overwrite;
+
+    /**
+     * The strategy to use for change detection. Supported values are listed below. If this parameter is configured,
+     * it will override the value of {@link #overwrite}.
+     *
+     * Strategies and their behavior are as follows:
+     * <ul>
+     *     <li><strong>content</strong>: This is the default strategy since version 3.4.0. Overwrites existing target file only if content differs.</li>
+     *     <li><strong>timestamp</strong>: This was the default strategy before version 3.4.0. Overwrites existing target file only if target timestamp is older than source timestamp.</li>
+     *     <li><strong>timestamp+content</strong>: Combines the two strategies above; if timestamp is older and if content differs, existing target file will be overwritten.</li>
+     *     <li><strong>always</strong>: Always overwrites existing target file. Equivalent of {@code overwrite=true}.</li>
+     *     <li><strong>never</strong>: Never overwrites existing target file.</li>
+     * </ul>
+     *
+     * Note: default value of this parameter is handled programmatically (as "content") for programmatic detection reasons.
+     *
+     * @since 3.5.0
+     */
+    @Parameter
+    private String changeDetection;
 
     /**
      * Copy any empty directories included in the Resources.
@@ -323,7 +346,7 @@ public class ResourcesMojo extends AbstractMojo {
             mavenResourcesExecution.setInjectProjectBuildFilters(false);
 
             mavenResourcesExecution.setEscapeString(escapeString);
-            mavenResourcesExecution.setOverwrite(overwrite);
+            mavenResourcesExecution.setChangeDetection(getChangeDetection());
             mavenResourcesExecution.setIncludeEmptyDirs(includeEmptyDirs);
             mavenResourcesExecution.setSupportMultiLineFiltering(supportMultiLineFiltering);
             mavenResourcesExecution.setFilterFilenames(fileNameFiltering);
@@ -347,6 +370,29 @@ public class ResourcesMojo extends AbstractMojo {
             executeUserFilterComponents(mavenResourcesExecution);
         } catch (MavenFilteringException e) {
             throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
+
+    private ChangeDetection getChangeDetection() {
+        if (changeDetection != null) {
+            switch (changeDetection) {
+                case "content":
+                    return ChangeDetection.CONTENT;
+                case "timestamp":
+                    return ChangeDetection.TIMESTAMP;
+                case "timestamp+content":
+                    return ChangeDetection.TIMESTAMP_AND_CONTENT;
+                case "always":
+                    return ChangeDetection.ALWAYS;
+                case "never":
+                    return ChangeDetection.NEVER;
+                default:
+                    throw new IllegalArgumentException("Invalid value for changeDetection: " + changeDetection);
+            }
+        } else if (overwrite) {
+            return ChangeDetection.ALWAYS;
+        } else {
+            return ChangeDetection.CONTENT;
         }
     }
 
