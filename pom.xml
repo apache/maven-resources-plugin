@@ -71,32 +71,28 @@ under the License.
   </distributionManagement>
 
   <properties>
-    <mavenFilteringVersion>3.4.1-SNAPSHOT</mavenFilteringVersion>
     <mavenVersion>3.9.12</mavenVersion>
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2025-11-22T21:31:20Z</project.build.outputTimestamp>
-    <version.plexus-utils>3.6.0</version.plexus-utils>
 
+    <version.slf4j>1.7.36</version.slf4j>
+    <version.plexus-utils>3.6.0</version.plexus-utils>
     <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
   </properties>
 
   <dependencies>
+    <!-- Needed dependencies -->
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-filtering</artifactId>
-      <version>${mavenFilteringVersion}</version>
+      <version>3.4.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-      <scope>provided</scope>
-    </dependency>
+    <!-- Maven (provided) -->
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
@@ -121,13 +117,20 @@ under the License.
       <version>${version.maven-plugin-tools}</version>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
-      <groupId>org.apache.maven.plugin-testing</groupId>
-      <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>3.5.1</version>
-      <scope>test</scope>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+      <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${version.slf4j}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Test -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -142,7 +145,19 @@ under the License.
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>${version.slf4j}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.21.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-testing</groupId>
+      <artifactId>maven-plugin-testing-harness</artifactId>
+      <version>3.5.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
