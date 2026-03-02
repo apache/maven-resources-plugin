@@ -27,7 +27,7 @@ under the License.
   </parent>
 
   <artifactId>maven-resources-plugin</artifactId>
-  <version>3.5.0</version>
+  <version>3.5.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Apache Maven Resources Plugin</name>
@@ -52,7 +52,7 @@ under the License.
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-resources-plugin.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-resources-plugin.git</developerConnection>
-    <tag>maven-resources-plugin-3.5.0</tag>
+    <tag>HEAD</tag>
     <url>https://github.com/apache/maven-resources-plugin/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
@@ -73,7 +73,7 @@ under the License.
   <properties>
     <mavenVersion>3.9.12</mavenVersion>
     <javaVersion>8</javaVersion>
-    <project.build.outputTimestamp>2026-03-02T11:24:56Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-03-02T11:25:25Z</project.build.outputTimestamp>
 
     <version.slf4j>1.7.36</version.slf4j>
     <version.plexus-utils>3.6.0</version.plexus-utils>
