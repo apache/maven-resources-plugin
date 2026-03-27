@@ -57,7 +57,7 @@ under the License.
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.4.3</version>
+        <version>3.2.1</version>
         <configuration>
           <systemProperties>
             <!-- pass this system property through to the tests -->
