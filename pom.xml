@@ -75,7 +75,7 @@ under the License.
     <javaVersion>8</javaVersion>
     <project.build.outputTimestamp>2026-03-02T11:25:25Z</project.build.outputTimestamp>
 
-    <version.slf4j>1.7.36</version.slf4j>
+    <version.slf4j>2.0.18</version.slf4j>
     <version.plexus-utils>3.6.0</version.plexus-utils>
     <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
   </properties>
