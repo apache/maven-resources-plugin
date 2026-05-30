@@ -77,7 +77,6 @@ under the License.
 
     <version.slf4j>1.7.36</version.slf4j>
     <version.plexus-utils>3.6.0</version.plexus-utils>
-    <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
   </properties>
 
   <dependencies>
