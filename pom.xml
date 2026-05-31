@@ -82,11 +82,9 @@ under the License.
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
     <sisuVersion>1.0.0</sisuVersion>
     <slf4jVersion>2.0.13</slf4jVersion>
-    <version.maven-invoker-plugin>3.7.0</version.maven-invoker-plugin>
     <version.maven-plugin-tools>${mavenPluginPluginVersion}</version.maven-plugin-tools>
 
     <project.build.outputTimestamp>2024-06-26T08:24:00Z</project.build.outputTimestamp>
-    <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
   </properties>
 
   <dependencyManagement>
