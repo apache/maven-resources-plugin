@@ -35,7 +35,7 @@ under the License.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.14.0</version>
+      <version>@versions.junit5@</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -54,7 +54,7 @@ under the License.
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>@version.maven-surefire@</version>
         <configuration>
           <systemProperties>
             <!-- pass this system property through to the tests -->
