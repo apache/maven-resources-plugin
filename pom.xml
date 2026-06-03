@@ -76,7 +76,7 @@ under the License.
     <project.build.outputTimestamp>2026-03-02T11:25:25Z</project.build.outputTimestamp>
 
     <!-- Update to 2.x should happen, when plugin prerequisites are lifted to 3.10+ / 4.x -->
-    <version.slf4j>1.7.36</version.slf4j>
+    <version.slf4j>2.0.18</version.slf4j>
     <version.plexus-utils>3.6.0</version.plexus-utils>
   </properties>
 
