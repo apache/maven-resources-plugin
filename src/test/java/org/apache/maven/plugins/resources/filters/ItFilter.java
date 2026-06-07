@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
@@ -68,11 +69,14 @@ public class ItFilter implements MavenResourcesFiltering {
 
             lines.add("foo");
             lines.add("version=" + mavenResourcesExecution.getMavenProject().getVersion());
-            lines.add("toto="
-                    + mavenResourcesExecution
-                            .getMavenSession()
-                            .getSystemProperties()
-                            .getProperty("toto"));
+            MavenSession session = mavenResourcesExecution.getMavenSession();
+            // Maven 4 splits CLI -D into user properties strictly; Maven 3 merged them into
+            // system properties as well. Consult user properties first, then fall back.
+            String toto = session.getUserProperties().getProperty("toto");
+            if (toto == null) {
+                toto = session.getSystemProperties().getProperty("toto");
+            }
+            lines.add("toto=" + toto);
             Path target = f.toPath();
             Files.createDirectories(target.getParent());
             Files.write(target, lines);
