@@ -140,7 +140,6 @@ under the License.
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- plexus-build-api removed: maven-filtering now uses the new Maven 4 BuildContext API -->
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
       <artifactId>org.eclipse.sisu.plexus</artifactId>
