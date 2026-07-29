@@ -18,7 +18,6 @@
  */
 package org.apache.maven.plugins.resources;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,9 +33,6 @@ import org.apache.maven.api.ProjectScope;
 import org.apache.maven.api.Session;
 import org.apache.maven.api.SourceRoot;
 import org.apache.maven.api.build.context.BuildContext;
-import org.apache.maven.api.build.context.Input;
-import org.apache.maven.api.build.context.Metadata;
-import org.apache.maven.api.build.context.Status;
 import org.apache.maven.api.di.Inject;
 import org.apache.maven.api.plugin.Log;
 import org.apache.maven.api.plugin.MojoException;
@@ -303,6 +299,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     public void execute() throws MojoException {
         if (isSkip()) {
             getLog().info("Skipping the execution.");
+            buildContext.markSkipExecution();
             return;
         }
         if (resources == null) {
@@ -312,52 +309,10 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
                     .toList();
         }
 
-        // Register resource directories with the incremental build context
-        // to enable change detection across builds
-        boolean hasChanges = registerResourceInputs();
-        if (!hasChanges) {
-            getLog().info("No resource changes detected, skipping resource processing.");
-            buildContext.markSkipExecution();
-            return;
-        }
-
+        // Incremental build support is handled by maven-filtering:
+        // it registers inputs with the BuildContext, processes only changed files,
+        // and associates outputs for stale cleanup.
         doExecute();
-    }
-
-    /**
-     * Registers all resource files with the incremental {@link BuildContext}
-     * and determines whether any processing is required.
-     *
-     * @return {@code true} if at least one resource file is new or modified
-     */
-    protected boolean registerResourceInputs() {
-        if (getResources() == null || getResources().isEmpty()) {
-            return false;
-        }
-        boolean hasChanges = false;
-        for (Resource resource : getResources()) {
-            Path resourceDir = Path.of(resource.getDirectory());
-            if (!Files.isDirectory(resourceDir)) {
-                continue;
-            }
-            List<String> includes = resource.getIncludes();
-            if (includes == null || includes.isEmpty()) {
-                includes = List.of("**");
-            }
-            List<String> excludes = resource.getExcludes();
-            if (excludes == null) {
-                excludes = List.of();
-            }
-            Collection<? extends Metadata<Input>> inputs = buildContext.registerInputs(resourceDir, includes, excludes);
-            for (Metadata<Input> input : inputs) {
-                Status status = input.getStatus();
-                if (status == Status.NEW || status == Status.MODIFIED) {
-                    hasChanges = true;
-                }
-            }
-        }
-        // Also check if processing is required based on plugin configuration changes
-        return hasChanges || buildContext.isProcessingRequired();
     }
 
     static Resource newResource(SourceRoot res) {
