@@ -25,18 +25,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.api.Project;
+import org.apache.maven.api.build.context.BuildContext;
+import org.apache.maven.api.di.Priority;
 import org.apache.maven.api.di.Provides;
 import org.apache.maven.api.di.Singleton;
 import org.apache.maven.api.plugin.testing.Basedir;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
+import org.apache.maven.api.services.PathMatcherFactory;
+import org.apache.maven.impl.DefaultPathMatcherFactory;
 import org.apache.maven.impl.InternalSession;
+import org.apache.maven.internal.build.context.impl.DefaultBuildContext;
+import org.apache.maven.internal.build.context.impl.FilesystemWorkspace;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.shared.filtering.Resource;
 import org.junit.jupiter.api.Test;
@@ -628,6 +635,21 @@ class ResourcesMojoTest {
     @SuppressWarnings("unused")
     private static Project createProject() throws Exception {
         return new MavenProjectResourcesStub();
+    }
+
+    @Provides
+    @Priority(10)
+    @SuppressWarnings("unused")
+    private static PathMatcherFactory pathMatcherFactory() {
+        return new DefaultPathMatcherFactory();
+    }
+
+    @Provides
+    @Priority(10)
+    @SuppressWarnings("unused")
+    private static BuildContext buildContext() {
+        return new DefaultBuildContext(
+                new FilesystemWorkspace(), null, new HashMap<>(), null, new DefaultPathMatcherFactory());
     }
 
     static List<Resource> getResources(MavenProjectResourcesStub project) {
