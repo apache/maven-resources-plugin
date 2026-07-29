@@ -19,15 +19,9 @@
 package org.apache.maven.plugins.resources;
 
 import org.apache.maven.api.di.Named;
-import org.apache.maven.api.di.Provides;
-import org.sonatype.plexus.build.incremental.BuildContext;
-import org.sonatype.plexus.build.incremental.ThreadBuildContext;
 
 @Named
 class Providers {
-
-    @Provides
-    static BuildContext buildContext() {
-        return new ThreadBuildContext();
-    }
+    // Old plexus BuildContext provider removed — maven-filtering now uses
+    // the new Maven 4 BuildContext API from maven-api-core directly.
 }
