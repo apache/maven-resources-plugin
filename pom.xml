@@ -47,7 +47,7 @@ under the License.
   </contributors>
 
   <prerequisites>
-    <maven>[3.9.11,4.0.0-rc-4]</maven>
+    <maven>${mavenVersion}</maven>
   </prerequisites>
 
   <scm>
@@ -229,7 +229,6 @@ under the License.
         <artifactId>maven-plugin-plugin</artifactId>
         <version>${mavenPluginPluginVersion}</version>
         <configuration>
-          <requiredMavenVersion>[3.9.11,4.0.0-rc-4]</requiredMavenVersion>
           <links>
             <link>https://maven.apache.org/shared/maven-filtering/apidocs/</link>
           </links>
