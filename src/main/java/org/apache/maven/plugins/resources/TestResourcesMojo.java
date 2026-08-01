@@ -52,10 +52,19 @@ public class TestResourcesMojo extends ResourcesMojo {
     private List<Resource> resources;
 
     /**
+     * Set this to 'true' to bypass copying of test resources.
+     * Its use is NOT RECOMMENDED, but quite convenient on occasion.
+     *
+     * @since 2.6
+     */
+    @Parameter(property = "maven.test.skip", defaultValue = "false")
+    private boolean skip;
+
+    /**
      * {@inheritDoc}
      */
     public void execute() throws MojoException {
-        if (isTestSkip()) {
+        if (skip || isTestSkip()) {
             getLog().info("Not copying test resources");
             return;
         }
@@ -74,9 +83,8 @@ public class TestResourcesMojo extends ResourcesMojo {
      * and the {@code maven.test.skip} property from the session.
      *
      * @return {@code true} if test resources should not be copied
-     * @since 3.x
      */
-    protected boolean isTestSkip() {
+    private boolean isTestSkip() {
         if (isSkip()) {
             return true;
         }
