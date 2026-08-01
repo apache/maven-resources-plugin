@@ -429,13 +429,21 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
      * @return The combined filters.
      */
     protected List<String> getCombinedFiltersList() {
+        // If buildFilters was not injected (can happen with some Maven versions due to field
+        // injection issues in class hierarchies), fall back to reading directly from the project model.
+        List<String> effectiveBuildFilters = buildFilters;
+        if (effectiveBuildFilters == null && project != null) {
+            List<String> projectFilters = project.getBuild().getFilters();
+            effectiveBuildFilters = projectFilters.isEmpty() ? null : projectFilters;
+        }
+
         if (filters == null || filters.isEmpty()) {
-            return useBuildFilters ? buildFilters : null;
+            return useBuildFilters ? effectiveBuildFilters : null;
         } else {
             List<String> result = new ArrayList<>();
 
-            if (useBuildFilters && buildFilters != null) {
-                result.addAll(buildFilters);
+            if (useBuildFilters && effectiveBuildFilters != null) {
+                result.addAll(effectiveBuildFilters);
             }
 
             result.addAll(filters);

@@ -20,6 +20,7 @@ package org.apache.maven.plugins.resources;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.api.Language;
 import org.apache.maven.api.ProjectScope;
@@ -51,18 +52,10 @@ public class TestResourcesMojo extends ResourcesMojo {
     private List<Resource> resources;
 
     /**
-     * Set this to 'true' to bypass copying of test resources.
-     * Its use is NOT RECOMMENDED, but quite convenient on occasion.
-     * @since 2.6
-     */
-    @Parameter(property = "maven.test.skip", defaultValue = "false")
-    private boolean skip;
-
-    /**
      * {@inheritDoc}
      */
     public void execute() throws MojoException {
-        if (skip) {
+        if (isTestSkip()) {
             getLog().info("Not copying test resources");
             return;
         }
@@ -73,6 +66,24 @@ public class TestResourcesMojo extends ResourcesMojo {
                     .toList();
         }
         super.doExecute();
+    }
+
+    /**
+     * Returns {@code true} if test resource copying should be skipped.
+     * Checks both the inherited {@code skip} parameter (bound to {@code maven.resources.skip})
+     * and the {@code maven.test.skip} property from the session.
+     *
+     * @return {@code true} if test resources should not be copied
+     * @since 3.x
+     */
+    protected boolean isTestSkip() {
+        if (isSkip()) {
+            return true;
+        }
+        Map<String, String> userProps = session.getUserProperties();
+        Map<String, String> sysProps = session.getSystemProperties();
+        String testSkip = userProps.getOrDefault("maven.test.skip", sysProps.get("maven.test.skip"));
+        return Boolean.parseBoolean(testSkip);
     }
 
     /** {@inheritDoc} */
