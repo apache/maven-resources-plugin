@@ -429,21 +429,13 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
      * @return The combined filters.
      */
     protected List<String> getCombinedFiltersList() {
-        // If buildFilters was not injected (can happen with some Maven versions due to field
-        // injection issues in class hierarchies), fall back to reading directly from the project model.
-        List<String> effectiveBuildFilters = buildFilters;
-        if (effectiveBuildFilters == null && project != null) {
-            List<String> projectFilters = project.getBuild().getFilters();
-            effectiveBuildFilters = projectFilters.isEmpty() ? null : projectFilters;
-        }
-
         if (filters == null || filters.isEmpty()) {
-            return useBuildFilters ? effectiveBuildFilters : null;
+            return useBuildFilters ? buildFilters : null;
         } else {
             List<String> result = new ArrayList<>();
 
-            if (useBuildFilters && effectiveBuildFilters != null) {
-                result.addAll(effectiveBuildFilters);
+            if (useBuildFilters && buildFilters != null) {
+                result.addAll(buildFilters);
             }
 
             result.addAll(filters);
@@ -572,6 +564,34 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
      */
     public boolean isSkip() {
         return skip;
+    }
+
+    /**
+     * @param skip {@link #skip}
+     */
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
+    /**
+     * @param escapeString {@link #escapeString}
+     */
+    public void setEscapeString(String escapeString) {
+        this.escapeString = escapeString;
+    }
+
+    /**
+     * @param buildFilters {@link #buildFilters}
+     */
+    public void setBuildFilters(List<String> buildFilters) {
+        this.buildFilters = buildFilters;
+    }
+
+    /**
+     * @param useBuildFilters {@link #useBuildFilters}
+     */
+    public void setUseBuildFilters(boolean useBuildFilters) {
+        this.useBuildFilters = useBuildFilters;
     }
 
     protected Log getLog() {
