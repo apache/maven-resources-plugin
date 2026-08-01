@@ -47,7 +47,7 @@ under the License.
   </contributors>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>[3.9.11,4.0.0-rc-4]</maven>
   </prerequisites>
 
   <scm>
@@ -229,14 +229,7 @@ under the License.
         <artifactId>maven-plugin-plugin</artifactId>
         <version>${mavenPluginPluginVersion}</version>
         <configuration>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-plugin-plugin</artifactId>
-            <configuration>
-              <!-- Override the 'auto' calculation that locks it to Maven 4 -->
-              <requiredMavenVersion>[3.9.11,4.0.0-rc-4]</requiredMavenVersion>
-            </configuration>
-          </plugin>
+          <requiredMavenVersion>[3.9.11,4.0.0-rc-4]</requiredMavenVersion>
           <links>
             <link>https://maven.apache.org/shared/maven-filtering/apidocs/</link>
           </links>
@@ -262,7 +255,6 @@ under the License.
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-invoker-plugin</artifactId>
               <configuration>
-                <requiredMavenVersion>[3.9.11,4.0.0-rc-4]</requiredMavenVersion>
                 <debug>true</debug>
                 <postBuildHookScript>verify</postBuildHookScript>
                 <preBuildHookScript>setup</preBuildHookScript>
