@@ -254,6 +254,7 @@ under the License.
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-invoker-plugin</artifactId>
               <configuration>
+                <mavenVersion>4.0.0-rc-4</mavenVersion>
                 <debug>true</debug>
                 <postBuildHookScript>verify</postBuildHookScript>
                 <preBuildHookScript>setup</preBuildHookScript>
