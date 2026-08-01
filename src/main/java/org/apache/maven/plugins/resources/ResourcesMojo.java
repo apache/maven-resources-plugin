@@ -566,34 +566,6 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         return skip;
     }
 
-    /**
-     * @param skip {@link #skip}
-     */
-    public void setSkip(boolean skip) {
-        this.skip = skip;
-    }
-
-    /**
-     * @param escapeString {@link #escapeString}
-     */
-    public void setEscapeString(String escapeString) {
-        this.escapeString = escapeString;
-    }
-
-    /**
-     * @param buildFilters {@link #buildFilters}
-     */
-    public void setBuildFilters(List<String> buildFilters) {
-        this.buildFilters = buildFilters;
-    }
-
-    /**
-     * @param useBuildFilters {@link #useBuildFilters}
-     */
-    public void setUseBuildFilters(boolean useBuildFilters) {
-        this.useBuildFilters = useBuildFilters;
-    }
-
     protected Log getLog() {
         return logger;
     }
