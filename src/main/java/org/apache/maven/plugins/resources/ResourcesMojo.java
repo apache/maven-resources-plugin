@@ -32,6 +32,7 @@ import org.apache.maven.api.Project;
 import org.apache.maven.api.ProjectScope;
 import org.apache.maven.api.Session;
 import org.apache.maven.api.SourceRoot;
+import org.apache.maven.api.build.context.BuildContext;
 import org.apache.maven.api.di.Inject;
 import org.apache.maven.api.plugin.Log;
 import org.apache.maven.api.plugin.MojoException;
@@ -291,10 +292,14 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     @Inject
     private Log logger;
 
+    @Inject
+    protected BuildContext buildContext;
+
     /** {@inheritDoc} */
     public void execute() throws MojoException {
         if (isSkip()) {
             getLog().info("Skipping the execution.");
+            buildContext.markSkipExecution();
             return;
         }
         if (resources == null) {
@@ -303,6 +308,10 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
                     .map(ResourcesMojo::newResource)
                     .toList();
         }
+
+        // Incremental build support is handled by maven-filtering:
+        // it registers inputs with the BuildContext, processes only changed files,
+        // and associates outputs for stale cleanup.
         doExecute();
     }
 
