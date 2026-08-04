@@ -67,6 +67,11 @@ public class TestResourcesMojo extends ResourcesMojo {
         // configurator writes the superclass one, leaving this class's field false
         // however the build configured <skip>. Reading both is what makes
         // <skip>true</skip> reach this goal at all.
+        //
+        // TODO temporary: drop the isSkip() half once apache/maven#12626 is in a
+        // release. That fixes the cause in the core configurator, where
+        // buildFieldCache() lets a parent field shadow the child's, and then this
+        // class's own field will be configured directly.
         if (skip || isSkip()) {
             getLog().info("Not copying test resources");
             return;
