@@ -62,7 +62,12 @@ public class TestResourcesMojo extends ResourcesMojo {
      * {@inheritDoc}
      */
     public void execute() throws MojoException {
-        if (skip) {
+        // isSkip() reads ResourcesMojo's own field. Both classes declare a private
+        // "skip", so the two collapse into a single descriptor parameter and the
+        // configurator writes the superclass one, leaving this class's field false
+        // however the build configured <skip>. Reading both is what makes
+        // <skip>true</skip> reach this goal at all.
+        if (skip || isSkip()) {
             getLog().info("Not copying test resources");
             return;
         }
