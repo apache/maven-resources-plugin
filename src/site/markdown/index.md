@@ -1,105 +1,62 @@
- ------
- Introduction
- ------
- Franz Allan See
- ------
- 2013-07-22
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-${project.name}
+# Apache Maven Resources Plugin
+The Resources Plugin handles the copying of project resources to the output directory. There are two different kinds of resources: main resources and test resources. The difference is that the main resources are the resources associated to the main source code while the test resources are associated to the test source code.
 
- The Resources Plugin handles the copying of project resources to the output
- directory. There are two different kinds of resources: main resources and test resources. The
- difference is that the main resources are the resources associated to the main
- source code while the test resources are associated to the test source code.
+Thus, this allows the separation of resources for the main source code and its unit tests.
 
- Thus, this allows the separation of resources for the main source code and its
- unit tests.
+This plugin uses the [Maven Filtering](http://maven.apache.org/shared/maven-filtering/) shared component for filtering resources.
 
- This plugin uses the {{{http://maven.apache.org/shared/maven-filtering/}Maven Filtering}}
- shared component for filtering resources.
+## Goals Overview
 
-* Goals Overview
+The Resources Plugin copies files specified by Resource elements, to an output directory. The three variations below only differ in how the resource and output directory elements are specified or defaulted. The Resources Plugin has three goals:
 
-   The Resources Plugin copies files specified by Resource elements, to an output directory.  The three
-   variations below only differ in how the resource and output directory elements are specified or defaulted.
-   The Resources Plugin has three goals:
+- [resources:resources](./resources-mojo.html) copies the resources for the main source code to the main output directory.
 
-   * {{{./resources-mojo.html}resources:resources}} copies the
-     resources for the main source code to the main output directory.
-     
-     This goal usually executes automatically, because it is bound by default to the process-resources life-cycle phase.
-     It always uses the project.build.resources element to specify the resources, and by default uses the 
-     project.build.outputDirectory to specify the copy destination.
+    This goal usually executes automatically, because it is bound by default to the process-resources life-cycle phase. It always uses the project.build.resources element to specify the resources, and by default uses the project.build.outputDirectory to specify the copy destination.
 
-   * {{{./testResources-mojo.html}resources:testResources}} copies the
-     resources for the test source code to the test output directory.
-     
-     This goal usually executes automatically, because it is bound by default to the process-test-resources life-cycle phase.
-     It always uses the project.build.testResources element to specify the resources, and by default uses the 
-     project.build.testOutputDirectory to specify the copy destination.
+- [resources:testResources](./testResources-mojo.html) copies the resources for the test source code to the test output directory.
 
-   * {{{./copy-resources-mojo.html}resources:copy-resources}} copies resources to an output directory.
-     
-     This goal requires that you configure the resources to be copied, and specify the outputDirectory.
+    This goal usually executes automatically, because it is bound by default to the process-test-resources life-cycle phase. It always uses the project.build.testResources element to specify the resources, and by default uses the project.build.testOutputDirectory to specify the copy destination.
 
-* Usage
+- [resources:copy-resources](./copy-resources-mojo.html) copies resources to an output directory.
 
-  General instructions on how to use the Resources Plugin can be found on the {{{./usage.html}usage page}}. Some more
-  specific use cases are described in the examples given below.
+    This goal requires that you configure the resources to be copied, and specify the outputDirectory.
 
-  In case you still have questions regarding the plugin's usage, please have a look at the {{{./faq.html}FAQ}} and feel
-  free to contact the {{{./mailing-lists.html}user mailing list}}. The posts to the mailing list are archived and could
-  already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching
-  the {{{./mailing-lists.html}mail archive}}.
+## Usage
 
-  If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our
-  {{{./issue-management.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your
-  concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason,
-  entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated.
-  Of course, patches are welcome, too. Contributors can check out the project from our
-  {{{./scm.html}source repository}} and will find supplementary information in the
-  {{{http://maven.apache.org/guides/development/guide-helping.html}guide to helping with Maven}}.
+General instructions on how to use the Resources Plugin can be found on the [usage page](./usage.html). Some more specific use cases are described in the examples given below.
 
-* Examples
+In case you still have questions regarding the plugin's usage, please have a look at the [FAQ](./faq.html) and feel free to contact the [user mailing list](./mailing-lists.html). The posts to the mailing list are archived and could already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching the [mail archive](./mailing-lists.html).
 
-   The following examples show how to use the Resources Plugin in more advanced
-   use cases:
+If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our [issue tracker](./issue-management.html). When creating a new issue, please provide a comprehensive description of your concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason, entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated. Of course, patches are welcome, too. Contributors can check out the project from our [source repository](./scm.html) and will find supplementary information in the [guide to helping with Maven](http://maven.apache.org/guides/development/guide-helping.html).
 
-   * {{{./examples/encoding.html}Specifying a character encoding scheme}}
+## Examples
 
-   * {{{./examples/resource-directory.html}Specifying resource directories}}
+The following examples show how to use the Resources Plugin in more advanced use cases:
 
-   * {{{./examples/filter.html}Filtering}}
-
-   * {{{./examples/include-exclude.html}Including and excluding files and directories}}
-
-   * {{{./examples/escape-filtering.html}Escape filtering}}
-
-   * {{{./examples/copy-resources.html}Copy resources}}
-
-   * {{{./examples/binaries-filtering.html}Binaries filtering}}
-
-   * {{{./examples/custom-resource-filters.html}Custom resources filters}}
-
-   []
+- [Specifying a character encoding scheme](./examples/encoding.html)
+- [Specifying resource directories](./examples/resource-directory.html)
+- [Filtering](./examples/filter.html)
+- [Including and excluding files and directories](./examples/include-exclude.html)
+- [Escape filtering](./examples/escape-filtering.html)
+- [Copy resources](./examples/copy-resources.html)
+- [Binaries filtering](./examples/binaries-filtering.html)
+- [Custom resources filters](./examples/custom-resource-filters.html)
