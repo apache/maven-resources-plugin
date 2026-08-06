@@ -1,57 +1,44 @@
- ------
- Custom resource filters
- ------
- Olivier Lamy
- ------
- 2010-09-24
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-Custom resources filters
+# Custom resources filters
 
- You can build your own custom resources filters.
- Custom resource filter classes implement
- {{{/shared/maven-filtering/apidocs/org/apache/maven/shared/filtering/MavenResourcesFiltering.html}org.apache.maven.shared.filtering.MavenResourcesFiltering}}.
- 
-* Custom Resources Filter Implementation
+You can build your own custom resources filters. Custom resource filter classes implement [org.apache.maven.shared.filtering.MavenResourcesFiltering](/shared/maven-filtering/apidocs/org/apache/maven/shared/filtering/MavenResourcesFiltering.html).
 
-Custom resource filter classes must be marked as a component with 
-the javax.inject.Named annotation, and are usually also singletons.
-Below is an example named "itFilter"
+Custom Resources Filter Implementation
+--------------------------------------
 
-+-----+
+# Custom resource filter classes must be marked as a component with the javax.inject.Named annotation, and are usually also singletons. Below is an example named "itFilter"
+
+```unknown
 @Singleton
 @Named("itFilter")
 public class ItFilter
     implements MavenResourcesFiltering
+```
 
-+-----+ 
- 
-* Dependency declaration 
- 
-Your classes must be available in the maven-resources-plugin classpath.
-This can be done by adding your artifact to the plugin dependencies. 
- 
-+-----+
+Dependency declaration
+----------------------
+
+# Your classes must be available in the maven-resources-plugin classpath. This can be done by adding your artifact to the plugin dependencies.
+
+```unknown
 <project>
   ...
   <build>
@@ -76,13 +63,14 @@ This can be done by adding your artifact to the plugin dependencies.
   </build>
   ...
 </project>
-+-----+ 
- 
-* Use of your Custom Resource Filter with the maven-resources-plugin
+```
 
-You must now declare the custom filter in the plugin. 
- 
-+-----+
+Use of your Custom Resource Filter with the maven-resources-plugin
+------------------------------------------------------------------
+
+# You must now declare the custom filter in the plugin.
+
+```unknown
   <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-resources-plugin</artifactId>
@@ -96,6 +84,6 @@ You must now declare the custom filter in the plugin.
      ...
    </configuration>
  </plugin>
-+-----+ 
-  
- And that's it!
+```
+
+And that's it!

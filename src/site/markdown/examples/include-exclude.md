@@ -1,40 +1,29 @@
- ------
- Including and excluding files and directories
- ------
- Franz Allan See
- ------
- 2008-09-05
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-Including and excluding files and directories
+# Including and excluding files and directories
 
- When specifying a resource directory, every file within that directory may not
- be used. Thus, we may have to specify only the files that we want to include or
- specify the files that we want to exclude.
+When specifying a resource directory, every file within that directory may not be used. Thus, we may have to specify only the files that we want to include or specify the files that we want to exclude.
 
- To include a resource, we only need to add an <<<\<includes\>>>> element.
+To include a resource, we only need to add an `<includes>` element.
 
-+-----+
+```unknown
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -58,11 +47,11 @@ Including and excluding files and directories
   </build>
   ...
 </project>
-+-----+
+```
 
- And to exclude a resource, we only need to add an <<<\<excludes\>>>> element.
+And to exclude a resource, we only need to add an `<excludes>` element.
 
-+-----+
+```unknown
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -86,13 +75,11 @@ Including and excluding files and directories
   </build>
   ...
 </project>
-+-----+
+```
 
- For example, if we want to include all text and RTF files under our
- <<<src/my-resources>>> directory and in all its subdirectories, we can do the
- following:
+For example, if we want to include all text and RTF files under our `src/my-resources` directory and in all its subdirectories, we can do the following:
 
-+-----+
+```unknown
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -113,12 +100,11 @@ Including and excluding files and directories
   </build>
   ...
 </project>
-+-----+
+```
 
- Also, if we want to include everything except the bitmaps, jpegs, and gifs, we
- can simply exclude them by:
+Also, if we want to include everything except the bitmaps, jpegs, and gifs, we can simply exclude them by:
 
-+-----+
+```unknown
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -141,13 +127,11 @@ Including and excluding files and directories
   </build>
   ...
 </project>
-+-----+
+```
 
- Of course, we can also have both <<<\<includes\>>>> and <<<\<excludes\>>>> elements. For example, if we
- want to include all text files that does not contain the word "test" in their
- filename.
+Of course, we can also have both `<includes>` and `<excludes>` elements. For example, if we want to include all text files that does not contain the word "test" in their filename.
 
-+-----+
+```unknown
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -170,4 +154,4 @@ Including and excluding files and directories
   </build>
   ...
 </project>
-+-----+
+```
