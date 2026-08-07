@@ -116,4 +116,4 @@ You must now declare you custom filter in the plugin. mavenFilteringHint must re
  </plugin>
 ```
 
-And that's it \!
+And that's it !
