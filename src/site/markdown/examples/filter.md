@@ -147,7 +147,7 @@ and adding that to our POM
 </project>
 ```
 
-**Warning:** Do not filter files with binary content like images\! This will most likely result in corrupt output.
+**Warning:** Do not filter files with binary content like images! This will most likely result in corrupt output.
 
 If you have both text files and binary files as resources it is recommended to have two separated folders. One folder `src/main/resources` (default) for the resources which are not filtered and another folder `src/main/resources-filtered` for the resources which are filtered.
 
