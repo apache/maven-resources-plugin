@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+---
+title: Frequently Asked Questions
+---
 
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
@@ -19,65 +21,50 @@ specific language governing permissions and limitations
 under the License.
 -->
 
+<a id="top"></a>
 
-<faqs xmlns="http://maven.apache.org/FML/1.0.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
-  id="FAQ" title="Frequently Asked Questions">
-  <part id="General">
-    <faq id="What are resources?">
-      <question>
-        What are resources?
-      </question>
-      <answer>
-        <p>Resources are non-source code files used by your project. Examples of
-        these are properties files, images and XML files.</p>
-      </answer>
-    </faq>
-    <faq id="When should I use the resouces plugin's goal outside a lifecycle?">
-      <question>
-        When should I use the Resources Plugin's goal outside a lifecycle?
-      </question>
-      <answer>
-        <p>The Maven Resource Plugin simply copies resources from your source to
-        your build output (with optional filtering). So if that's the only
-        operation you are interested in, you can skip the other phases such as
-        compilation and testing and simply do</p>
+# Frequently Asked Questions
 
-        <source>mvn resources:resources</source>
+1. [What are resources?](#What_are_resources.3F)
+2. [When should I use the Resources Plugin's goal outside a lifecycle?](#When_should_I_use_the_resouces_plugin.27s_goal_outside_a_lifecycle.3F)
+3. [Do my main resources go to my test resources as well?](#Do_my_main_resources_go_to_my_test_resources_as_well.3F)
+4. [What encoding values are allowed?](#What_encoding_values_are_allowed.3F)
 
-        <p>For example, if you just debugged your configuration file and you
-        want to manually test it in your container if it works, you can simply
-        do</p>
+### What are resources?
 
-        <source>mvn resources:resources</source>
+Resources are non-source code files used by your project. Examples of these are properties files, images and
+XML files.
 
-        <p>This will produce those configuration files on your
-        output thus skipping the other phases which may eat up a huge amount of
-        your time.</p>
-      </answer>
-    </faq>
-    <faq id="Do my main resources go to my test resources as well?">
-      <question>
-        Do my main resources go to my test resources as well?
-      </question>
-      <answer>
-        <p>No. Your main resources and your test resources are separated from
-        each other.</p>
+<a id="When_should_I_use_the_resouces_plugin.27s_goal_outside_a_lifecycle.3F"></a>
 
-        <p>Your test resources should only be used by your tests. Thus, they are
-        separated from the main to avoid any side effects that may occur.</p>
-      </answer>
-    </faq>
-    <faq id="What encoding values are allowed?">
-      <question>
-        What encoding values are allowed?
-      </question>
-      <answer>
-        <p>The Maven Resource Plugin only allows encoding values representing
-        the charsets supported by the Java platform, namely <code>US-ASCII</code>,
-        <code>ISO-8859-1</code>, <code>UTF-8</code>, <code>UTF-16BE</code>, <code>UTF-16LE</code> and <code>UTF-16</code>.</p>
-      </answer>
-    </faq>
-  </part>
-</faqs>
+### When should I use the Resources Plugin's goal outside a lifecycle?
+
+The Maven Resource Plugin simply copies resources from your source to your build output (with optional
+filtering). So if that's the only operation you are interested in, you can skip the other phases such as
+compilation and testing and simply do
+
+```
+mvn resources:resources
+```
+
+For example, if you just debugged your configuration file and you want to manually test it in your container if
+it works, you can simply do
+
+```
+mvn resources:resources
+```
+
+This will produce those configuration files on your output thus skipping the other phases which may eat up a
+huge amount of your time.
+
+### Do my main resources go to my test resources as well?
+
+No. Your main resources and your test resources are separated from each other.
+
+Your test resources should only be used by your tests. Thus, they are separated from the main to avoid any side
+effects that may occur.
+
+### What encoding values are allowed?
+
+The Maven Resource Plugin only allows encoding values representing the charsets supported by the Java platform,
+namely `US-ASCII`, `ISO-8859-1`, `UTF-8`, `UTF-16BE`, `UTF-16LE` and `UTF-16`.
