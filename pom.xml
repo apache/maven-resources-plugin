@@ -78,6 +78,9 @@ under the License.
     <!-- Update to 2.x should happen, when plugin prerequisites are lifted to 3.10+ / 4.x -->
     <version.slf4j>1.7.36</version.slf4j>
     <version.plexus-utils>3.6.0</version.plexus-utils>
+
+    <!-- Used by site documentation as well, do not remove -->
+    <mavenFilteringVersion>3.5.1</mavenFilteringVersion>
   </properties>
 
   <dependencies>
@@ -85,7 +88,7 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-filtering</artifactId>
-      <version>3.5.1</version>
+      <version>${mavenFilteringVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
