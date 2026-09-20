@@ -108,10 +108,10 @@ try
     }
 
     //escapeString=${project.version}
-    indexOf = paramContent.indexOf( "escapeString=${project.artifactId}" );
+    indexOf = paramContent.indexOf( 'escapeString=${project.artifactId}' );
     if ( indexOf < 0 )
     {
-      System.err.println( "/classes/SomeResource.txt not contains escapeString=${project.version}" );
+      System.err.println( '/classes/SomeResource.txt not contains escapeString=${project.version}' );
       System.out.println (" content " + paramContent );
       return false;
     }
@@ -131,7 +131,7 @@ try
     paramContent = FileUtils.fileRead( someResource );
 
     //test:direct resolution project.version=1.0-SNAPSHOT
-    int indexOf = paramContent.indexOf( "test:direct resolution project.version=1.0-SNAPSHOT" );
+    indexOf = paramContent.indexOf( "test:direct resolution project.version=1.0-SNAPSHOT" );
     if ( indexOf < 0 )
     {
       System.err.println( "/test-classes/SomeResource.txt not contains test:direct resolution project.version=1.0-SNAPSHOT" );
@@ -180,10 +180,10 @@ try
     }
 
     //escapeString=${project.version}
-    indexOf = paramContent.indexOf( "escapeString=${project.version}" );
+    indexOf = paramContent.indexOf( 'escapeString=${project.version}' );
     if ( indexOf < 0 )
     {
-      System.err.println( "/test-classes/SomeResource.txt not contains escapeString=${project.version}" );
+      System.err.println( '/test-classes/SomeResource.txt not contains escapeString=${project.version}' );
       return false;
     }
 

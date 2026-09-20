@@ -49,7 +49,7 @@ try
       return false;
     }
 
-    int indexOf = paramContent.indexOf( "version=1.0.1-SNAPSHOT" );
+    indexOf = paramContent.indexOf( "version=1.0.1-SNAPSHOT" );
     if ( indexOf < 0 )
     {
       System.err.println( "configuration.properties not contains version=1.0.1-SNAPSHOT" );
