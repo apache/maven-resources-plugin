@@ -42,10 +42,10 @@ try
 
     String paramContent = FileUtils.fileRead( someResource );
 
-    int indexOf = paramContent.indexOf( "fileValue=${foo.file}" );
+    int indexOf = paramContent.indexOf( 'fileValue=${foo.file}' );
     if ( indexOf < 0 )
     {
-      System.err.println( "SomeResource.txt not contains fileValue=${foo.file}" );
+      System.err.println( 'SomeResource.txt not contains fileValue=${foo.file}' );
       return false;
     }
 }
