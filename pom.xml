@@ -162,10 +162,10 @@ under the License.
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
-          <excludes combine.children="append">
+          <inputExcludes combine.children="append">
             <!-- ITs and IT resources -->
             <exclude>src/it/**</exclude>
-          </excludes>
+          </inputExcludes>
         </configuration>
       </plugin>
     </plugins>
