@@ -38,6 +38,7 @@ import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.api.plugin.annotations.Mojo;
 import org.apache.maven.api.plugin.annotations.Parameter;
 import org.apache.maven.api.services.ProjectManager;
+import org.apache.maven.shared.filtering.ChangeDetection;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
@@ -153,10 +154,33 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected String escapeString;
 
     /**
+     * Strategy used to decide whether an existing destination file needs to be overwritten.
+     * Accepted values:
+     * <ul>
+     *   <li>{@code CONTENT} — (default) only overwrite when the content differs (uses
+     *       {@code CachingOutputStream} / {@code CachingWriter}); destination timestamp is
+     *       preserved when the content is identical. This is the behaviour since 3.4.0.</li>
+     *   <li>{@code TIMESTAMP} — only overwrite when the source is newer than the destination
+     *       (timestamp-based, as it was before 3.4.0).</li>
+     *   <li>{@code TIMESTAMP_AND_CONTENT} — overwrite only when the source is newer
+     *       <em>and</em> the content differs.</li>
+     *   <li>{@code ALWAYS} — always overwrite existing files (equivalent to the former
+     *       {@code <overwrite>true</overwrite>}).</li>
+     *   <li>{@code NEVER} — never overwrite an existing destination file.</li>
+     * </ul>
+     *
+     * @since 3.4.0
+     */
+    @Parameter(defaultValue = "CONTENT", property = "maven.resources.changeDetection")
+    private ChangeDetection changeDetection;
+
+    /**
      * Overwrite existing files even if the destination files are newer.
      *
      * @since 2.3
+     * @deprecated Use {@link #changeDetection} with {@code ALWAYS} instead.
      */
+    @Deprecated
     @Parameter(defaultValue = "false")
     private boolean overwrite;
 
@@ -341,7 +365,9 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
             mavenResourcesExecution.setInjectProjectBuildFilters(false);
 
             mavenResourcesExecution.setEscapeString(escapeString);
-            mavenResourcesExecution.setOverwrite(overwrite);
+            // Resolve change detection: deprecated 'overwrite=true' maps to ALWAYS; otherwise use changeDetection.
+            ChangeDetection effectiveDetection = overwrite ? ChangeDetection.ALWAYS : changeDetection;
+            mavenResourcesExecution.setChangeDetection(effectiveDetection);
             mavenResourcesExecution.setIncludeEmptyDirs(includeEmptyDirs);
             mavenResourcesExecution.setSupportMultiLineFiltering(supportMultiLineFiltering);
             mavenResourcesExecution.setFilterFilenames(fileNameFiltering);
@@ -490,15 +516,33 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     }
 
     /**
-     * @return {@link #overwrite}
+     * @return {@link #changeDetection}
      */
+    public ChangeDetection getChangeDetection() {
+        return changeDetection;
+    }
+
+    /**
+     * @param changeDetection the change detection strategy to use.
+     */
+    public void setChangeDetection(ChangeDetection changeDetection) {
+        this.changeDetection = changeDetection;
+    }
+
+    /**
+     * @return {@link #overwrite}
+     * @deprecated Use {@link #getChangeDetection()} instead.
+     */
+    @Deprecated
     public boolean isOverwrite() {
         return overwrite;
     }
 
     /**
      * @param overwrite true to overwrite false otherwise.
+     * @deprecated Use {@link #setChangeDetection(ChangeDetection)} instead.
      */
+    @Deprecated
     public void setOverwrite(boolean overwrite) {
         this.overwrite = overwrite;
     }
