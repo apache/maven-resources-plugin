@@ -21,6 +21,7 @@ package org.apache.maven.plugins.resources;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +39,7 @@ import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.api.plugin.testing.stubs.SessionMock;
 import org.apache.maven.impl.InternalSession;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
+import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +52,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MojoTest
 class ResourcesMojoTest {
+
+    @Test
+    void malformedInputExplainsHowToHandleBinaryResources() {
+        MavenFilteringException exception = new MavenFilteringException(
+                "Input length = 1", new IOException(new MalformedInputException(1)));
+
+        assertEquals(
+                "Input length = 1. The resource may be binary; configure its extension in "
+                        + "nonFilteredFileExtensions or disable filtering for it.",
+                ResourcesMojo.filteringFailureMessage(exception));
+    }
 
     private static final String CONFIG_XML = "classpath:/unit/resources-test/plugin-config.xml";
 
