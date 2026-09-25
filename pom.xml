@@ -144,16 +144,10 @@ under the License.
       <version>${plexusBuildApiVersion}</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
-      <version>2.1.1</version>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.plexus</artifactId>
+      <version>${sisuVersion}</version>
       <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.xbean</groupId>
-          <artifactId>xbean-reflect</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
