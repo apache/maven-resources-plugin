@@ -26,7 +26,11 @@ under the License.
 
 # Copy Resources
 
-You can use the mojo copy-resources to copy resources which are not in the default maven layout or not declared in the build/resources element and attach it to a phase
+You can use the mojo copy-resources to copy resources which are not in the default maven layout or not declared in the build/resources element and attach it to a phase.
+
+Note that filtering in `copy-resources` follows the same property precedence rules as the
+`resources` goal. See [Filtering — Property Precedence](./filter.html#Property_Precedence)
+for details.
 
 ```unknown
 <project>

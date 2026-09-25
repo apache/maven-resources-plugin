@@ -179,3 +179,78 @@ If you have both text files and binary files as resources, it is recommended to 
 Now you can put those files into `src/main/resources` which should not filtered and the other files into `src/main/resources-filtered`.
 
 As already mentioned, filtering binary files like images, pdf\`s, etc. can result in corrupted output. To prevent such problems you can [configure file extensions](./binaries-filtering.html) which will not be filtered.
+
+## Property Precedence
+
+When multiple property sources are used simultaneously, the following precedence applies
+(highest priority listed first). A property defined in a higher-priority source always wins
+over the same property in a lower-priority source.
+
+1. **`maven.build.timestamp`** and `maven.build.timestamp.format` — injected last, always win
+2. **User properties** (`-Dkey=value` on the command line)
+3. **System properties** (JVM system properties)
+4. **POM `<properties>`** — always override filter file values (see note below)
+5. **`<build><filters>` files** — loaded in declaration order; later files override earlier ones
+6. **`<filters>` / `<extraFilters>` files** in the plugin execution — loaded in declaration order
+
+Additionally, `${project.version}`, `${project.artifactId}`, and other `${project.*}` /
+`${pom.*}` expressions always resolve live from the POM model and are not affected by filter
+files.
+
+**Important:** POM `<properties>` (priority 4) always override filter file values (priority 5–6).
+Filter files therefore act as *defaults* that the POM can override — not the reverse.
+
+### Using filter files as defaults
+
+A common pattern is to provide default values in a filter file and let the POM (or the
+command line) override specific values:
+
+`default-values.properties`:
+```unknown
+app.name = My Application
+app.description = A sample application
+```
+
+POM:
+```xml
+<project>
+  ...
+  <build>
+    <filters>
+      <filter>default-values.properties</filter>
+    </filters>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+  </build>
+  <properties>
+    <!-- This overrides the value from default-values.properties -->
+    <app.name>My Overridden Application Name</app.name>
+  </properties>
+  ...
+</project>
+```
+
+In this example, `${app.name}` resolves to `My Overridden Application Name` (from POM
+`<properties>`), while `${app.description}` resolves to `A sample application` (from the
+filter file, since there is no POM override).
+
+### Using multiple filter files
+
+Multiple filter files are declared in order; later files override earlier ones. This lets
+you layer a base configuration with environment-specific overrides:
+
+```xml
+<build>
+  <filters>
+    <filter>src/main/filters/base.properties</filter>
+    <filter>src/main/filters/${env}.properties</filter>
+  </filters>
+</build>
+```
+
+In this setup `${env}.properties` values override `base.properties` values, but both are
+still overridden by any matching POM `<properties>`.
