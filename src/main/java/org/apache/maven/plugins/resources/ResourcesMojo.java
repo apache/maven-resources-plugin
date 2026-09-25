@@ -317,6 +317,11 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     }
 
     protected void doExecute() throws MojoException {
+        if (getResources().isEmpty()) {
+            getLog().info("No resources configured, skipping.");
+            return;
+        }
+
         if ((encoding == null || encoding.isEmpty()) && isFilteringEnabled(getResources())) {
             getLog().warn("File encoding has not been set, using platform encoding "
                     + System.getProperty("file.encoding")
