@@ -18,6 +18,7 @@
  */
 package org.apache.maven.plugins.resources;
 
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -364,8 +365,26 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
 
             executeUserFilterComponents(mavenResourcesExecution);
         } catch (MavenFilteringException e) {
-            throw new MojoException(e.getMessage(), e);
+            throw new MojoException(filteringFailureMessage(e), e);
         }
+    }
+
+    static String filteringFailureMessage(MavenFilteringException exception) {
+        if (hasCause(exception, MalformedInputException.class)) {
+            return exception.getMessage()
+                    + ". The resource may be binary; configure its extension in nonFilteredFileExtensions "
+                    + "or disable filtering for it.";
+        }
+        return exception.getMessage();
+    }
+
+    private static boolean hasCause(Throwable failure, Class<? extends Throwable> type) {
+        for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
+            if (type.isInstance(cause)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
