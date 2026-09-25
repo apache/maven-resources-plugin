@@ -169,12 +169,76 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected boolean includeEmptyDirs;
 
     /**
-     * Additional file extensions to not apply filtering (already defined are : jpg, jpeg, gif, bmp, png)
+     * Additional file extensions to not apply filtering.
+     * The following extensions are already excluded from filtering by default:
+     * images (jpg, jpeg, gif, bmp, png, ico),
+     * Java archives and native libraries (jar, war, ear, aar, rar, jnilib, so, dll, dylib),
+     * generic archives (zip, gz, bz2, xz, zst, 7z, tar),
+     * executables (exe, bin, class),
+     * documents (pdf, doc, docx, xls, xlsx, ppt, pptx),
+     * audio/video (mp3, mp4, ogg, wav, avi, mov, flv, swf),
+     * fonts (ttf, otf, woff, woff2, eot).
      *
      * @since 2.3
      */
     @Parameter
     protected List<String> nonFilteredFileExtensions;
+
+    /**
+     * Additional binary file extensions that are never text-filtered, supplementing the defaults already
+     * defined in maven-filtering. This list covers common binary formats that would be corrupted if
+     * subjected to character-set decoding during filtering (MRESOURCES-301).
+     */
+    private static final List<String> ADDITIONAL_DEFAULT_NON_FILTERED_EXTENSIONS = List.of(
+            // Java archives and native libraries
+            "jar",
+            "war",
+            "ear",
+            "aar",
+            "rar",
+            "jnilib",
+            "so",
+            "dll",
+            "dylib",
+            // Generic archives and compressed files
+            "zip",
+            "gz",
+            "bz2",
+            "xz",
+            "zst",
+            "7z",
+            "tar",
+            // Executables and class files
+            "exe",
+            "bin",
+            "class",
+            // Documents
+            "pdf",
+            "doc",
+            "docx",
+            "xls",
+            "xlsx",
+            "ppt",
+            "pptx",
+            // Audio/video
+            "mp3",
+            "mp4",
+            "ogg",
+            "wav",
+            "avi",
+            "mov",
+            "flv",
+            "swf",
+            // Fonts
+            "ttf",
+            "otf",
+            "woff",
+            "woff2",
+            "eot",
+            // Additional image formats
+            "webp",
+            "tif",
+            "tiff");
 
     /**
      * Whether to escape backslashes and colons in windows-style paths.
@@ -358,7 +422,11 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
             mavenResourcesExecution.setPropertiesEncoding(propertiesEncoding);
 
             if (nonFilteredFileExtensions != null) {
-                mavenResourcesExecution.setNonFilteredFileExtensions(nonFilteredFileExtensions);
+                List<String> merged = new ArrayList<>(ADDITIONAL_DEFAULT_NON_FILTERED_EXTENSIONS);
+                merged.addAll(nonFilteredFileExtensions);
+                mavenResourcesExecution.setNonFilteredFileExtensions(merged);
+            } else {
+                mavenResourcesExecution.setNonFilteredFileExtensions(ADDITIONAL_DEFAULT_NON_FILTERED_EXTENSIONS);
             }
             mavenResourcesFiltering.filterResources(mavenResourcesExecution);
 
