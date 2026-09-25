@@ -55,8 +55,8 @@ class ResourcesMojoTest {
 
     @Test
     void malformedInputExplainsHowToHandleBinaryResources() {
-        MavenFilteringException exception = new MavenFilteringException(
-                "Input length = 1", new IOException(new MalformedInputException(1)));
+        MavenFilteringException exception =
+                new MavenFilteringException("Input length = 1", new IOException(new MalformedInputException(1)));
 
         assertEquals(
                 "Input length = 1. The resource may be binary; configure its extension in "
