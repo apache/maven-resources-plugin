@@ -25,6 +25,7 @@ under the License.
   <version>1.0-SNAPSHOT</version>
 
   <build>
+    <resources />
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
