@@ -23,7 +23,7 @@ import org.codehaus.plexus.util.*;
 
 boolean result = true;
 
-filesAreIdentical( File expected, File current )
+boolean filesAreIdentical( File expected, File current )
     throws IOException
 {
     if ( expected.length() != current.length() )

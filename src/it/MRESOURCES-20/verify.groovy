@@ -33,26 +33,19 @@ try
         return false;
     }
 
-    File resource = new File( target, "/extra-resources/configuration.properties" );
-    if ( !resource.exists() || resource.isDirectory() )
+    File someResource = new File( target, "/classes/resource.txt" );
+    if ( !someResource.exists() || someResource.isDirectory() )
     {
-        System.err.println( "configuration.properties is missing or not a file." );
+        System.err.println( "SomeResource.txt is missing or not a file." );
         return false;
     }
 
-    String paramContent = FileUtils.fileRead( resource );
+    String paramContent = FileUtils.fileRead( someResource );
 
-    int indexOf = paramContent.indexOf( "artifactId=maven-resources-plugin-copy-resources-it" );
+    int indexOf = paramContent.indexOf( 'fileValue=${foo.file}' );
     if ( indexOf < 0 )
     {
-      System.err.println( "configuration.properties not contains artifactId=maven-resources-plugin-copy-resources-it" );
-      return false;
-    }
-
-    int indexOf = paramContent.indexOf( "version=1.0.1-SNAPSHOT" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "configuration.properties not contains version=1.0.1-SNAPSHOT" );
+      System.err.println( 'SomeResource.txt not contains fileValue=${foo.file}' );
       return false;
     }
 }
