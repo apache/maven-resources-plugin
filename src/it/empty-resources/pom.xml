@@ -25,12 +25,14 @@ under the License.
   <version>1.0-SNAPSHOT</version>
 
   <build>
-    <resources />
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>@project.version@</version>
+        <configuration>
+          <resources />
+        </configuration>
       </plugin>
     </plugins>
   </build>
