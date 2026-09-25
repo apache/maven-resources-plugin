@@ -19,4 +19,4 @@
 
 content = new File(basedir, 'build.log').text
 
-assert !content.contains('Copying 0 resource')
+assert content.contains('No resources configured, skipping.')
