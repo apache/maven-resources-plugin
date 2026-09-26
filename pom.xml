@@ -76,7 +76,7 @@ under the License.
     <javaVersion>17</javaVersion>
 
     <guiceVersion>7.0.0</guiceVersion>
-    <mavenFilteringVersion>4.0.0-beta-1</mavenFilteringVersion>
+    <mavenFilteringVersion>4.0.0-beta-2-SNAPSHOT</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-beta-2</mavenPluginPluginVersion>
     <mavenPluginTestingVersion>4.0.0-beta-4</mavenPluginTestingVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
@@ -86,6 +86,17 @@ under the License.
 
     <project.build.outputTimestamp>2024-06-26T08:24:00Z</project.build.outputTimestamp>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
 
   <dependencyManagement>
     <dependencies>
