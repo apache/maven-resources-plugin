@@ -28,7 +28,6 @@ under the License.
   <name>MRESOURCES-110</name>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <replaceThis>I am the replacement</replaceThis>
   </properties>
 
