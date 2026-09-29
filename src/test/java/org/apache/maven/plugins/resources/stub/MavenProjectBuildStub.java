@@ -46,8 +46,6 @@ import java.util.HashMap;
 
 import org.codehaus.plexus.util.FileUtils;
 
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-
 public class MavenProjectBuildStub extends MavenProjectBasicStub {
     protected String srcDirectory;
 
@@ -162,19 +160,19 @@ public class MavenProjectBuildStub extends MavenProjectBasicStub {
 
     public void cleanBuildEnvironment() throws Exception {
         if (new File(resourcesDirectory).exists()) {
-            deleteDirectory(new File(resourcesDirectory));
+            FileUtils.deleteDirectory(new File(resourcesDirectory));
         }
 
         if (new File(testResourcesDirectory).exists()) {
-            deleteDirectory(new File(testResourcesDirectory));
+            FileUtils.deleteDirectory(new File(testResourcesDirectory));
         }
 
         if (new File(outputDirectory).exists()) {
-            deleteDirectory(new File(outputDirectory));
+            FileUtils.deleteDirectory(new File(outputDirectory));
         }
 
         if (new File(testOutputDirectory).exists()) {
-            deleteDirectory(new File(testOutputDirectory));
+            FileUtils.deleteDirectory(new File(testOutputDirectory));
         }
     }
 
