@@ -75,7 +75,8 @@ under the License.
     <mavenVersion>4.0.0-rc-7</mavenVersion>
     <javaVersion>17</javaVersion>
 
-    <mavenFilteringVersion>4.0.0-beta-1</mavenFilteringVersion>
+    <guiceVersion>7.0.0</guiceVersion>
+    <mavenFilteringVersion>4.0.0-beta-2-SNAPSHOT</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-beta-2</mavenPluginPluginVersion>
     <mavenPluginTestingVersion>4.0.0-beta-4</mavenPluginTestingVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
