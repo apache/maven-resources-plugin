@@ -72,6 +72,23 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
 
     /**
      * The output directory into which to copy the resources.
+     *
+     * <p><strong>Note:</strong> When setting this parameter, use an execution-specific configuration
+     * rather than a global plugin-level configuration, so that the setting does not inadvertently
+     * affect the {@code testResources} goal. For example:</p>
+     * <pre>{@code
+     * <executions>
+     *   <execution>
+     *     <id>default-resources</id>
+     *     <configuration>
+     *       <outputDirectory>/custom/output</outputDirectory>
+     *     </configuration>
+     *   </execution>
+     * </executions>
+     * }</pre>
+     * <p>A plugin-level {@code <configuration>} block applies to all goals of the plugin
+     * (both {@code resources} and {@code testResources}), which would override the test output
+     * directory and cause test resources to be copied to the wrong location.</p>
      */
     @Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
     protected Path outputDirectory;

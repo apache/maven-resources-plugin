@@ -39,7 +39,20 @@ import org.apache.maven.shared.filtering.Resource;
 @Mojo(name = "testResources", defaultPhase = "process-test-resources", projectRequired = true)
 public class TestResourcesMojo extends ResourcesMojo {
     /**
-     * The output directory into which to copy the resources.
+     * The output directory into which to copy the test resources.
+     * Defaults to {@code ${project.build.testOutputDirectory}}.
+     *
+     * <p>To override this, scope the configuration to the {@code default-testResources} execution:</p>
+     * <pre>{@code
+     * <executions>
+     *   <execution>
+     *     <id>default-testResources</id>
+     *     <configuration>
+     *       <outputDirectory>/custom/test-output</outputDirectory>
+     *     </configuration>
+     *   </execution>
+     * </executions>
+     * }</pre>
      */
     @Parameter(defaultValue = "${project.build.testOutputDirectory}", required = true)
     private Path outputDirectory;
