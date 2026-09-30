@@ -60,7 +60,9 @@ class ResourcesMojoTest {
 
         assertEquals(
                 "Input length = 1. The resource may be binary; configure its extension in "
-                        + "nonFilteredFileExtensions or disable filtering for it.",
+                        + "nonFilteredFileExtensions,"
+                        + " add a glob pattern to <nonFilteredFiles> inside the <resource> block,"
+                        + " or disable filtering for it.",
                 ResourcesMojo.filteringFailureMessage(exception));
     }
 
