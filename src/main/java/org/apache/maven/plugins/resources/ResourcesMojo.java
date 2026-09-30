@@ -212,6 +212,27 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
      *   <li>{@code NEVER} — never overwrite an existing destination file.</li>
      * </ul>
      *
+     * <p>This parameter sets the <em>default</em> strategy for all resources.
+     * Individual {@code <resource>} blocks can override this default by specifying their own
+     * {@code <changeDetection>} element inside the plugin's {@code <configuration>}:</p>
+     * <pre>{@code
+     * <plugin>
+     *   <artifactId>maven-resources-plugin</artifactId>
+     *   <configuration>
+     *     <resources>
+     *       <resource>
+     *         <directory>src/main/resources</directory>
+     *         <changeDetection>ALWAYS</changeDetection>
+     *       </resource>
+     *       <resource>
+     *         <directory>src/main/generated</directory>
+     *         <changeDetection>NEVER</changeDetection>
+     *       </resource>
+     *     </resources>
+     *   </configuration>
+     * </plugin>
+     * }</pre>
+     *
      * @since 4.0.0-beta-2
      */
     @Parameter(defaultValue = "CONTENT", property = "maven.resources.changeDetection")
