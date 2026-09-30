@@ -64,6 +64,31 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     protected String encoding;
 
     /**
+     * The character encoding to use when writing filtered resources.
+     * When set, enables encoding conversion during filtering: resources are read with {@link #encoding}
+     * and written with this encoding. Useful to convert legacy EBCDIC or Latin-1 source files to UTF-8
+     * (or vice-versa) as part of the build.
+     * <p>
+     * Common encodings include {@code UTF-8}, {@code ISO-8859-1} (Latin-1), {@code US-ASCII},
+     * and {@code UTF-16}. The full list of supported encodings depends on the JVM implementation;
+     * see {@link java.nio.charset.Charset} for details.
+     * </p>
+     * <p>
+     * When not set (the default), the same encoding is used for reading and writing, preserving
+     * backward compatibility.
+     * </p>
+     * <p>
+     * This parameter is ignored when filtering is disabled (i.e. when no resource has
+     * {@code &lt;filtering&gt;true&lt;/filtering&gt;}), because non-filtered files are always copied
+     * as raw bytes.
+     * </p>
+     *
+     * @since 4.0.0-beta-2
+     */
+    @Parameter(property = "maven.resources.outputEncoding")
+    protected String outputEncoding;
+
+    /**
      * The character encoding to use when reading and writing filtered properties files.
      * If not specified, it will default to the value of the "encoding" parameter.
      *
@@ -469,6 +494,11 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
 
             // Handle MRESOURCES-171
             mavenResourcesExecution.setPropertiesEncoding(propertiesEncoding);
+
+            // Handle MRESOURCES-232: separate input/output encoding for encoding conversion
+            if (outputEncoding != null) {
+                mavenResourcesExecution.setOutputEncoding(outputEncoding);
+            }
 
             if (nonFilteredFileExtensions != null) {
                 List<String> merged = new ArrayList<>(ADDITIONAL_DEFAULT_NON_FILTERED_EXTENSIONS);
