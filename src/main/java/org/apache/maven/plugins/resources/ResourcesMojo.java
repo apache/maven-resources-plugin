@@ -433,6 +433,24 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     @Parameter(property = "maven.resources.failOnMissingFilterValue", defaultValue = "false")
     private boolean failOnMissingFilterValue;
 
+    /**
+     * When set to {@code true}, files that trigger a {@code MalformedInputException} during filtering
+     * (i.e. binary files whose encoding cannot be read as text) are skipped and copied as-is
+     * instead of failing the build. A {@code WARN}-level log entry is emitted for each skipped file.
+     * <p>
+     * Use this as a last-resort fallback when it is not practical to enumerate every binary extension
+     * in {@code nonFilteredFileExtensions} or to exempt files via per-resource {@code nonFilteredFiles}
+     * glob patterns. Prefer those targeted approaches when possible.
+     * </p>
+     * <p>
+     * Defaults to {@code false} so that real encoding errors are not silently swallowed.
+     * </p>
+     *
+     * @since 4.0.0-beta-2
+     */
+    @Parameter(property = "maven.resources.gracefulBinaryHandling", defaultValue = "false")
+    private boolean gracefulBinaryHandling;
+
     @Inject
     private Log logger;
 
@@ -522,6 +540,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
                 mavenResourcesExecution.setNonFilteredFileExtensions(ADDITIONAL_DEFAULT_NON_FILTERED_EXTENSIONS);
             }
             mavenResourcesExecution.setFailOnMissingFilterValue(failOnMissingFilterValue);
+            mavenResourcesExecution.setGracefulBinaryHandling(gracefulBinaryHandling);
             mavenResourcesFiltering.filterResources(mavenResourcesExecution);
 
             executeUserFilterComponents(mavenResourcesExecution);
