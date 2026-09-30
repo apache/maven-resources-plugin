@@ -419,6 +419,20 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     @Parameter(property = "maven.resources.skip", defaultValue = "false")
     private boolean skip;
 
+    /**
+     * When set to {@code true}, the build fails if a filter expression in a resource file cannot be resolved
+     * (i.e. the placeholder is left unsubstituted in the output). For example, if a resource contains
+     * {@code ${missing.property}} and no property with that name is defined, the build will fail instead
+     * of copying the literal text {@code ${missing.property}} to the output.
+     * <p>
+     * Defaults to {@code false} to preserve backward compatibility.
+     * </p>
+     *
+     * @since 4.0.0-beta-2
+     */
+    @Parameter(property = "maven.resources.failOnMissingFilterValue", defaultValue = "false")
+    private boolean failOnMissingFilterValue;
+
     @Inject
     private Log logger;
 
@@ -507,6 +521,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
             } else {
                 mavenResourcesExecution.setNonFilteredFileExtensions(ADDITIONAL_DEFAULT_NON_FILTERED_EXTENSIONS);
             }
+            mavenResourcesExecution.setFailOnMissingFilterValue(failOnMissingFilterValue);
             mavenResourcesFiltering.filterResources(mavenResourcesExecution);
 
             executeUserFilterComponents(mavenResourcesExecution);
