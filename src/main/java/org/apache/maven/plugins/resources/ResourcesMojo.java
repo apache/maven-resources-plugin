@@ -533,8 +533,9 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     static String filteringFailureMessage(MavenFilteringException exception) {
         if (hasCause(exception, MalformedInputException.class)) {
             return exception.getMessage()
-                    + ". The resource may be binary; configure its extension in nonFilteredFileExtensions "
-                    + "or disable filtering for it.";
+                    + ". The resource may be binary; configure its extension in nonFilteredFileExtensions,"
+                    + " add a glob pattern to <nonFilteredFiles> inside the <resource> block,"
+                    + " or disable filtering for it.";
         }
         return exception.getMessage();
     }
