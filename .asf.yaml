@@ -28,6 +28,8 @@ github:
     squash: true
     merge: false
     rebase: true
+  autolink_jira:
+    - MRESOURCES
   protected_branches:
     master: { }
     maven-resources-plugin-4.x : { }
