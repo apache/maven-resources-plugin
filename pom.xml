@@ -79,7 +79,7 @@ under the License.
     <mavenPluginPluginVersion>4.0.0-beta-2</mavenPluginPluginVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
     <sisuVersion>1.1.1</sisuVersion>
-    <slf4jVersion>2.0.13</slf4jVersion>
+    <slf4jVersion>2.0.20</slf4jVersion>
     <version.maven-plugin-tools>${mavenPluginPluginVersion}</version.maven-plugin-tools>
 
     <project.build.outputTimestamp>2026-10-01T15:03:37Z</project.build.outputTimestamp>
