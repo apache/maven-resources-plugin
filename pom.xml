@@ -77,7 +77,7 @@ under the License.
 
     <!-- Update to 2.x should happen, when plugin prerequisites are lifted to 3.10+ / 4.x -->
     <version.slf4j>1.7.36</version.slf4j>
-    <version.plexus-utils>3.6.0</version.plexus-utils>
+    <version.plexus-utils>3.6.2</version.plexus-utils>
 
     <!-- Used by site documentation as well, do not remove -->
     <mavenFilteringVersion>3.5.1</mavenFilteringVersion>
