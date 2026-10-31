@@ -57,13 +57,10 @@ If you feel like the plugin is missing a feature or has a defect, you can fill a
 
 ## Examples
 
-The following examples show how to use the Resources Plugin in more advanced use cases:
+The [guide to filtering resources](https://maven.apache.org/guides/mini/guide-filtering-resources.html) covers variables, filter files, escaping and encoding. The following examples show how to use the Resources Plugin in more advanced use cases:
 
-- [Specifying a character encoding scheme](./examples/encoding.html)
 - [Specifying resource directories](./examples/resource-directory.html)
-- [Filtering](./examples/filter.html)
 - [Including and excluding files and directories](./examples/include-exclude.html)
-- [Escape filtering](./examples/escape-filtering.html)
 - [Copy resources](./examples/copy-resources.html)
 - [Binaries filtering](./examples/binaries-filtering.html)
 - [Custom resources filters](./examples/custom-resource-filters.html)

@@ -32,18 +32,14 @@ under the License.
       <item name="Download" href="download.html"/>
     </menu>
     <menu name="Examples">
-      <item name="Specifying a character encoding scheme"
-            href="/examples/encoding.html"/>
+      <item name="Filtering resources (guide)"
+            href="https://maven.apache.org/guides/mini/guide-filtering-resources.html"/>
       <item name="Specifying resource directories"
             href="/examples/resource-directory.html"/>
-      <item name="Filtering"
-            href="/examples/filter.html"/>
       <item name="Filtering properties files"
             href="/examples/filtering-properties-files.html"/>
       <item name="Including and excluding files and directories"
             href="/examples/include-exclude.html"/>
-      <item name="Escape Filtering"
-            href="/examples/escape-filtering.html"/>
       <item name="Copy Resources"
             href="/examples/copy-resources.html"/>
       <item name="Binaries Filtering"
