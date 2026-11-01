@@ -74,6 +74,7 @@ under the License.
   <properties>
     <mavenVersion>4.0.0-rc-7</mavenVersion>
     <javaVersion>17</javaVersion>
+    <maven.site.path.suffix>LATEST-4.x</maven.site.path.suffix>
 
     <mavenFilteringVersion>4.0.0-beta-2</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-beta-2</mavenPluginPluginVersion>
