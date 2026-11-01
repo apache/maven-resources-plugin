@@ -33,35 +33,21 @@ Your custom resources filter classes must implements [org.apache.maven.shared.fi
 Custom Resources Filter Implementation
 --------------------------------------
 
-Your custom resources filter classes must be marked as a Plexus Component. Below a sample with a roleHint itFilter.
+Your custom resources filter classes must be JSR-330 components, named by the hint that selects them. Below a sample named `itFilter`.
 
 ```java
+import javax.inject.Named;
+import javax.inject.Singleton;
 
-/**
- * @plexus.component role="org.apache.maven.shared.filtering.MavenResourcesFiltering" 
- *                   role-hint="itFilter"
- */
+import org.apache.maven.shared.filtering.MavenResourcesFiltering;
+
+@Singleton
+@Named("itFilter")
 public class ItFilter
     implements MavenResourcesFiltering
 ```
 
-Then you must activate in your build the mojo which will scan javadoc annotations to transform thoses to plexus component metadata.
-
-```xml
-
-  <plugin>
-    <groupId>org.codehaus.plexus</groupId>
-    <artifactId>plexus-component-metadata</artifactId>
-    <version>1.7.1</version>
-    <executions>
-      <execution>
-        <goals>
-          <goal>generate-metadata</goal>
-        </goals>
-      </execution>
-    </executions>
-  </plugin>
-```
+The JAR that contains the filter needs the component index that the `sisu-maven-plugin` writes; see [How to use JSR-330](https://maven.apache.org/maven-jsr330.html#How_to_use_JSR-330).
 
 Dependency declaration
 ----------------------
@@ -98,7 +84,7 @@ Your classes must be available in the maven-resources-plugin classpath, this can
 Use of your Custom Resource Filter with the maven-resources-plugin
 ------------------------------------------------------------------
 
-You must now declare you custom filter in the plugin. mavenFilteringHint must respect same syntax as your Plexus Component roleHint.
+You must now declare your custom filter in the plugin. Each `mavenFilteringHint` is the `@Named` value of a filter.
 
 ```xml
   <plugin>
