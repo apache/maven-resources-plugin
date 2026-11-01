@@ -35,7 +35,7 @@ Custom Resources Filter Implementation
 
 Your custom resources filter classes must be marked as a Plexus Component. Below a sample with a roleHint itFilter.
 
-```unknown
+```java
 
 /**
  * @plexus.component role="org.apache.maven.shared.filtering.MavenResourcesFiltering" 
