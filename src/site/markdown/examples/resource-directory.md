@@ -28,7 +28,7 @@ under the License.
 
 By default, Maven will look for your project's resources under `src/main/resources`.
 
-```unknown
+```text
 Project
 |-- pom.xml
 `-- src
@@ -56,7 +56,7 @@ However, all your resources may not be in `src/main/resources`. Thus, you'd have
 
 So if your resources resides in `src/my-resources`
 
-```unknown
+```text
 Project
 |-- pom.xml
 `-- src
