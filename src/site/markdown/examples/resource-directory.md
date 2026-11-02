@@ -28,7 +28,7 @@ under the License.
 
 By default, Maven will look for your project's resources under `src/main/resources`.
 
-```unknown
+```text
 Project
 |-- pom.xml
 `-- src
@@ -38,7 +38,7 @@ Project
 
 However, all your resources may not be in `src/main/resources`. Thus, you'd have to specify those directories by adding the following to your POM.
 
-```unknown
+```xml
 <project>
  ...
  <build>
@@ -56,7 +56,7 @@ However, all your resources may not be in `src/main/resources`. Thus, you'd have
 
 So if your resources resides in `src/my-resources`
 
-```unknown
+```text
 Project
 |-- pom.xml
 `-- src
@@ -65,7 +65,7 @@ Project
 
 you can specify that directory by doing the following:
 
-```unknown
+```xml
 <project>
    ...
    <resources>
@@ -79,7 +79,7 @@ you can specify that directory by doing the following:
 
 Furthermore, you can have several directories by adding multiple `<resource>` elements:
 
-```unknown
+```xml
 <project>
    ...
    <resources>

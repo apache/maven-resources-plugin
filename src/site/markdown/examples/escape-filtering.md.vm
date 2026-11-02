@@ -32,7 +32,7 @@ This means expression ${esc.d}{ } and @ @ preceded will replace by the expressio
 
 **The escapeString will be removed**
 
-```unknown
+```xml
 <project>
   ...
   <build>

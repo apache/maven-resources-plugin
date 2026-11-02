@@ -30,7 +30,7 @@ When specifying a resource directory, every file within that directory may not b
 
 To include a resource, we only need to add an `<includes>` element.
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -58,7 +58,7 @@ To include a resource, we only need to add an `<includes>` element.
 
 And to exclude a resource, we only need to add an `<excludes>` element.
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -86,7 +86,7 @@ And to exclude a resource, we only need to add an `<excludes>` element.
 
 For example, if we want to include all text and RTF files under our `src/my-resources` directory and in all its subdirectories, we can do the following:
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -111,7 +111,7 @@ For example, if we want to include all text and RTF files under our `src/my-reso
 
 Also, if we want to include everything except the bitmaps, jpegs, and gifs, we can simply exclude them by:
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -138,7 +138,7 @@ Also, if we want to include everything except the bitmaps, jpegs, and gifs, we c
 
 Of course, we can also have both `<includes>` and `<excludes>` elements. For example, if we want to include all text files that does not contain the word "test" in their filename.
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>

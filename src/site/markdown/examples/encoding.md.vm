@@ -31,7 +31,7 @@ A character encoding scheme such as `ASCII`, `UTF-8` or `UTF-16` can be chosen t
 
 The best practice is to [define encoding](https://maven.apache.org/general.html#encoding-warning) for copying filtered resources via the property `${esc.d}{project.build.sourceEncoding}` which should be defined in the pom properties section like this:
 
-```unknown
+```xml
 <project ...>
  ...
  <properties>
@@ -46,7 +46,7 @@ By using the above property `maven-resources-plugin` will automatically use this
 
 Occasionally you need to change the encoding explicitly for different purposes. This can be done by defining the encoding via the configuration like this: 
 
-```unknown
+```xml
 <project>
   ...
   <build>
