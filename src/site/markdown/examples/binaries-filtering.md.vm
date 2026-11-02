@@ -30,7 +30,7 @@ The plugin will prevent binary files filtering without adding some `excludes` co
 
 If you like to add supplemental file extensions this can simply achieved by using a configuration like the following:
 
-```unknown
+```xml
 <project>
   ...
   <build>

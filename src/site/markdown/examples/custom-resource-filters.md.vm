@@ -33,7 +33,7 @@ Custom Resources Filter Implementation
 
 # Custom resource filter classes must be marked as a component with the javax.inject.Named annotation, and are usually also singletons. Below is an example named "itFilter"
 
-```unknown
+```java
 @Singleton
 @Named("itFilter")
 public class ItFilter
@@ -45,7 +45,7 @@ Dependency declaration
 
 # Your classes must be available in the maven-resources-plugin classpath. This can be done by adding your artifact to the plugin dependencies.
 
-```unknown
+```xml
 <project>
   ...
   <build>
@@ -77,7 +77,7 @@ Use of your Custom Resource Filter with the maven-resources-plugin
 
 # You must now declare the custom filter in the plugin.
 
-```unknown
+```xml
   <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-resources-plugin</artifactId>

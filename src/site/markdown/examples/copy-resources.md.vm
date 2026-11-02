@@ -32,7 +32,7 @@ Note that filtering in `copy-resources` follows the same property precedence rul
 `resources` goal. See [Filtering — Property Precedence](./filter.html#Property_Precedence)
 for details.
 
-```unknown
+```xml
 <project>
   ...
   <build>

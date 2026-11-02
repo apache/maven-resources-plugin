@@ -30,13 +30,13 @@ Variables can be included in your resources. These variables, denoted by the `${
 
 For example, if you have a resource `src/main/resources/hello.txt` containing
 
-```unknown
+```text
 Hello ${name}
 ```
 
 And a POM like this
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -57,19 +57,19 @@ And a POM like this
 
 Upon calling
 
-```unknown
+```shell
 mvn resources:resources
 ```
 
 This will create a resource output in `target/classes/hello.txt` which contains exactly the same text.
 
-```unknown
+```text
 Hello ${name}
 ```
 
 However, if you add a `<filtering>` element to our POM and set it to `true` like this:
 
-```unknown
+```xml
 <project>
       ...
       <resource>
@@ -82,13 +82,13 @@ However, if you add a `<filtering>` element to our POM and set it to `true` like
 
 Your `target/classes/hello.txt` after calling
 
-```unknown
+```shell
 mvn resources:resources
 ```
 
 would be
 
-```unknown
+```text
 Hello My Resources Plugin Practice Project
 ```
 
@@ -96,19 +96,19 @@ That's because the name variable was replaced by the value of the project's name
 
 Moreover, you can also assign values through the command line using the "-D" option. For example, to change the value for the variable `name` to "world", invoke this command:
 
-```unknown
+```bash
 mvn resources:resources -Dname="world"
 ```
 
 And the output in `target/classes/hello.txt` would be
 
-```unknown
+```text
 Hello world
 ```
 
 Furthermore, you are not limited to pre-defined project variables. You can specify your own variables and their values in the `<properties>` element. For example, if you want to change the variable from "name" to "your.name", add a `<your.name>` element within the `<properties>` element.
 
-```unknown
+```xml
 <project>
   ...
   <properties>
@@ -120,7 +120,7 @@ Furthermore, you are not limited to pre-defined project variables. You can speci
 
 But to organize your project, you may want to put all your variables and their values in a separate file so that you will not have to rewrite your POM, or set their values all the time with every build. This can be done by adding a filter.
 
-```unknown
+```xml
 <project>
   ...
   <name>My Resources Plugin Practice Project</name>
@@ -138,13 +138,13 @@ But to organize your project, you may want to put all your variables and their v
 
 For example, you can separate "your.name" from the POM by specifying a filter file `my-filter-values.properties` containing:
 
-```unknown
+```text
 your.name = world
 ```
 
 and adding that to our POM
 
-```unknown
+```xml
 <project>
     ...
     <filters>
@@ -158,7 +158,7 @@ and adding that to our POM
 
 If you have both text files and binary files as resources, it is recommended to have two separated folders: one folder `src/main/resources` (default) for the resources which are not filtered and another folder `src/main/resources-filtered` for the resources which are filtered.
 
-```unknown
+```xml
 <project>
   ...
   <build>
@@ -206,7 +206,7 @@ A common pattern is to provide default values in a filter file and let the POM (
 command line) override specific values:
 
 `default-values.properties`:
-```unknown
+```text
 app.name = My Application
 app.description = A sample application
 ```

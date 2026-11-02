@@ -53,7 +53,7 @@ You need to do 2 things:
 1. Decide which encoding to use for properties files, based on how you use them in your project.
 1. Explicitly configure Maven Resource Plugin accordingly using the `propertiesEncoding` configuration parameter, that was introduced in version 3.2.0. In most cases it would look like this:
 
-    ```unknown
+    ```xml
     <project>
       ...
       <build>

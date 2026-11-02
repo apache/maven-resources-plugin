@@ -33,7 +33,7 @@ To handle filtering this version of Maven Resources Plugin uses [Maven Filtering
 Copy resources for the main source code
 ---------------------------------------
 
-```unknown
+```shell
 mvn resources:resources
 ```
 
@@ -44,7 +44,7 @@ Moreover, this goal is bound to the `process-resources` phase.
 Copy resources for the unit tests
 ---------------------------------
 
-```unknown
+```shell
 mvn resources:testResources
 ```
 
@@ -55,7 +55,7 @@ Furthermore, this is bound to the `process-test-resources` phase.
 Copy resources specified by a &lt;resources&gt; configuration element
 ---------------------------------------------------------------------
 
-```unknown
+```shell
 mvn resources:copy-resources
 ```
 
