@@ -71,6 +71,10 @@ under the License.
   </distributionManagement>
 
   <properties>
+    <!-- the JUnit version maven-parent 50 manages -->
+    <versions.junit>5.14.4</versions.junit>
+    <!-- the name maven-parent 50 and older read; remove with the parent update -->
+    <versions.junit5>${versions.junit}</versions.junit5>
     <mavenVersion>3.9.16</mavenVersion>
     <project.build.outputTimestamp>2026-03-02T11:25:25Z</project.build.outputTimestamp>
 

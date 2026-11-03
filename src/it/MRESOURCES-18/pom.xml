@@ -37,7 +37,7 @@ under the License.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>@versions.junit5@</version>
+      <version>@versions.junit@</version>
       <type>jar</type>
       <scope>test</scope>
     </dependency>
