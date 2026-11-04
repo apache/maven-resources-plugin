@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.Properties;
 
@@ -35,6 +37,7 @@ import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
@@ -42,6 +45,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import static org.apache.maven.api.plugin.testing.MojoExtension.setVariableValueToObject;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.assertContains;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.fixture;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.read;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -489,6 +495,100 @@ class ResourcesMojoTest {
         assertEquals(
                 "base path is C:\\\\Users\\\\Administrator\ndocuments path is C:\\\\Users\\\\Administrator\\\\Documents",
                 FileUtils.fileRead(new File(resourcesDir, "path-listing.txt")));
+    }
+
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "skip", value = "true")
+    void testSkipCopiesNothing(ResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = (MavenProjectResourcesStub) this.projectStub;
+        project.getBuild()
+                .getResources()
+                .get(0)
+                .setDirectory(fixture("skip-yes").toString());
+        project.setupBuildEnvironment();
+
+        mojo.execute();
+
+        assertFalse(new File(project.getOutputDirectory(), "test-resource.txt").exists());
+    }
+
+    /**
+     * Two resource entries over the same directory: only the {@code .properties} files are filtered, only the
+     * {@code .xml} files are copied raw, and {@code test.txt} matches neither include.
+     */
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    void testTwoResourceEntriesOnOneDirectory(ResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = (MavenProjectResourcesStub) this.projectStub;
+        project.setVersion("1.0-SNAPSHOT");
+        project.addProperty("cacheName", "cacheNameValue");
+        Resource filtered = project.getBuild().getResources().get(0);
+        filtered.setDirectory(fixture("gh-444").toString());
+        filtered.setFiltering(true);
+        filtered.addInclude("**/*.properties");
+        Resource raw = new Resource();
+        raw.setDirectory(fixture("gh-444").toString());
+        raw.addInclude("**/*.xml");
+        project.getBuild().addResource(raw);
+        project.setupBuildEnvironment();
+
+        mojo.execute();
+
+        String properties = read(new File(project.getOutputDirectory(), "test.properties").toPath());
+        assertContains(properties, "project.version=1.0-SNAPSHOT");
+        assertContains(properties, "loginSession.refNoCl_cache=cacheNameValue");
+        String xml = read(new File(project.getOutputDirectory(), "test.xml").toPath());
+        assertContains(xml, "<version>${project.version}</version>");
+        assertFalse(new File(project.getOutputDirectory(), "test.txt").exists());
+    }
+
+    /**
+     * {@code .gitignore} is not in plexus-utils' default excludes any more, so it is copied either way; {@code .DS_Store}
+     * shows whether {@code addDefaultExcludes} takes effect.
+     */
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "addDefaultExcludes", value = "false")
+    void testDotFilesAreCopiedWithoutDefaultExcludes(ResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = (MavenProjectResourcesStub) this.projectStub;
+        project.setupBuildEnvironment();
+        createDotFiles(project);
+
+        mojo.execute();
+
+        File classes = new File(project.getOutputDirectory());
+        assertTrue(new File(classes, ".gitignore").isFile(), ".gitignore");
+        assertTrue(new File(classes, "dir-with-dot-file").isDirectory(), "dir-with-dot-file");
+        assertTrue(new File(classes, "dir-with-dot-file/.gitignore").isFile(), "dir-with-dot-file/.gitignore");
+        assertTrue(new File(classes, ".DS_Store").isFile(), ".DS_Store");
+    }
+
+    @Test
+    @InjectMojo(goal = "resources")
+    void testDefaultExcludesSkipOnlyTheirOwnFiles(ResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = (MavenProjectResourcesStub) this.projectStub;
+        project.setupBuildEnvironment();
+        createDotFiles(project);
+
+        mojo.execute();
+
+        File classes = new File(project.getOutputDirectory());
+        assertTrue(new File(classes, ".gitignore").isFile(), ".gitignore");
+        assertTrue(new File(classes, "dir-with-dot-file/.gitignore").isFile(), "dir-with-dot-file/.gitignore");
+        assertFalse(new File(classes, ".DS_Store").exists(), ".DS_Store");
+    }
+
+    private void createDotFiles(MavenProjectResourcesStub project) throws IOException {
+        File resources = new File(project.getResourcesDirectory());
+        File nested = new File(resources, "dir-with-dot-file");
+        assertTrue(nested.mkdirs());
+        for (File dir : new File[] {resources, nested}) {
+            Files.write(
+                    new File(dir, ".gitignore").toPath(), "# Test for .gitignore\n".getBytes(StandardCharsets.UTF_8));
+        }
+        Files.write(new File(resources, ".DS_Store").toPath(), new byte[0]);
     }
 
     /**
