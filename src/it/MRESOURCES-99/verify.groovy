@@ -17,120 +17,36 @@
  * under the License.
  */
 
-import java.io.*;
+def resource = new File(basedir, 'target/classes/SomeResource.txt')
+assert resource.isFile() : 'target/classes/SomeResource.txt is missing'
 
-import java.util.List;
-import java.util.Collections;
-import java.util.Arrays;
+def props = new Properties()
+resource.withReader('ISO-8859-1') { reader -> props.load(reader) }
 
-boolean result = true;
-
-File target = new File( basedir, "target" );
-if ( !target.exists() || !target.isDirectory() )
-{
-    System.err.println( "target folder is missing or not a directory." );
-    return false;
-}
-
-File someResource = new File( target, "/classes/SomeResource.txt" );
-if ( !someResource.exists() || someResource.isDirectory() )
-{
-    System.err.println( "SomeResource.txt is missing or not a file." );
-    return false;
-}
-
-Properties props = new Properties();
-
-try (FileInputStream fis = new FileInputStream( someResource )) {
-    props.load( fis );
-}
-catch ( IOException ex )
-{
-  System.err.println( "Failure during reading the properties " + someResource.getAbsolutePath() );
-  return false;
-}
-
+// each of these keys has to be present in the filtered file
 def keysWhichHaveToExist = [
-    "timestamp", 
-    "at.timestamp", 
-    "build.timestamp",
-    "project.build.timestamp", 
-    "baseUri", 
-    "project.baseUri",
-    "pom.baseUri", 
-    "at.baseUri", 
-    "groupId", 
-    "basedir",
-    "project.basedir",
+    'timestamp', 'at.timestamp', 'build.timestamp', 'project.build.timestamp',
+    'baseUri', 'project.baseUri', 'pom.baseUri', 'at.baseUri',
+    'groupId', 'basedir', 'project.basedir',
 ]
-
- 
-keysWhichHaveToExist.each { key ->
-  if (!props.containsKey(key)) {
-      println "Missing the key '" + key + "'"
-      return false
-  }
+for (key in keysWhichHaveToExist) {
+    assert props.containsKey(key) : "Missing the key '${key}'"
 }
 
-currentTimestamp = props.get("timestamp") 
-currentAtTimeStamp = props.get("at.timestamp")
-if (  !currentTimestamp.equals (currentAtTimeStamp) 
-    && !currentTimestamp.equals('${maven.build.timestamp}') 
-    && !currentAtTimeStamp.equals('@maven.build.timestamp@') ) {
-  println 'The ${maven.build.timestamp} has not correctly being replaced.'
-  return false
-} 
+// ${maven.build.timestamp} and @maven.build.timestamp@ are replaced by the plugin
+def timestampFormat = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/
+assert props['timestamp'] ==~ timestampFormat : "\${maven.build.timestamp} was not replaced: ${props['timestamp']}"
+assert props['at.timestamp'] == props['timestamp'] : "@maven.build.timestamp@ was not replaced the same way: ${props['at.timestamp']}"
 
-buildTimeStamp = props.get("build.timestamp") 
-if ( !buildTimeStamp.equals ('${build.timestamp}') ) {
-  println 'The ${build.timestamp} has been replaced.'
-  return false
-}
+// only these expressions are replaced
+assert props['project.baseUri'] == basedir.getAbsoluteFile().toURI().toString()
+assert props['groupId'] == 'org.apache.maven.plugins'
+assert props['basedir'] == basedir.getAbsolutePath()
+assert props['project.basedir'] == basedir.getAbsolutePath()
 
-currentProjectBuildTimeStamp = props.get('project.build.timestamp')
-if ( !currentProjectBuildTimeStamp.equals ('${project.build.timestamp}') ) {
-  println 'The ${project.build.timestamp} has been replaced.'
-  return false
-}
-
-currentBaseUri = props.get('baseUri')
-if ( !currentBaseUri.equals ('${baseUri}') ) {
-  println 'The ${baseUri} has been replaced.'
-  return false
-}
-
-currentProjectBaseUri = props.get('project.baseUri')
-if ( currentProjectBaseUri.equals ('${project.baseUri}') ) {
-  println 'The ${project.baseUri} has not been replaced.'
-  return false
-}
-
-currentPomBaseUri = props.get('pom.baseUri')
-if ( !currentPomBaseUri.equals ('${pom.baseUri}') ) {
-  println 'The ${pom.baseUri} has been replaced.'
-  return false
-}
-
-currentAtBaseUri = props.get('at.baseUri')
-if ( !currentAtBaseUri.equals ('@baseUri@') ) {
-  println 'The @baseUri@ has been replaced.'
-  return false
-}
-
-currentGroupId = props.get('project.groupId')
-if ( currentGroupId.equals ('${project.groupId}') ) {
-  println 'The ${project.groupId} has not been replaced.'
-  return false
-}
-currentBaseDir = props.get('basedir')
-if ( currentBaseDir.equals ('${basedir}') ) {
-  println 'The ${basedir} has not been replaced.'
-  return false
-}
-currentProjectBaseDir = props.get('project.basedir')
-if ( currentBaseDir.equals ('${project.basedir}') ) {
-  println 'The ${project.basedir} has not been replaced.'
-  return false
-}
-
-return result;
+// these have no value in the filtering context and stay as they are
+assert props['build.timestamp'] == '${build.timestamp}'
+assert props['project.build.timestamp'] == '${project.build.timestamp}'
+assert props['baseUri'] == '${baseUri}'
+assert props['pom.baseUri'] == '${pom.baseUri}'
+assert props['at.baseUri'] == '@baseUri@'
