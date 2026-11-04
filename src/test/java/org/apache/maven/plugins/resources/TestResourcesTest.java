@@ -24,13 +24,22 @@ import java.io.File;
 
 import org.apache.maven.api.di.Provides;
 import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import static org.apache.maven.api.plugin.testing.MojoExtension.setVariableValueToObject;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.assertContains;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.assertMatrixLines;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.filters;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.fixture;
+import static org.apache.maven.plugins.resources.ResourcesMojoFilteringTest.read;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -81,5 +90,57 @@ class TestResourcesTest {
         assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
         assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
         assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/test"));
+    }
+
+    /** Points the stub's single test resource entry at a fixture directory. */
+    private MavenProjectResourcesStub testResources(String fixture) throws Exception {
+        MavenProjectResourcesStub project = (MavenProjectResourcesStub) this.projectStub;
+        Resource resource = project.getBuild().getTestResources().get(0);
+        resource.setDirectory(fixture(fixture).toString());
+        resource.setFiltering(true);
+        project.setupBuildEnvironment();
+        project.setVersion("1.0-SNAPSHOT");
+        project.addProperty("projectProperty", "foo-projectProperty-bar");
+        project.addProperty("profileProperty", "foo-profileProperty-bar");
+        return project;
+    }
+
+    @Test
+    @InjectMojo(goal = "testResources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    void testResourcesAreFilteredWithBuildFilters(TestResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = testResources("filter-matrix/resources/test-resources");
+        setVariableValueToObject(mojo, "buildFilters", filters("test.filter"));
+
+        mojo.execute();
+
+        assertMatrixLines(read(new File(project.getTestOutputDirectory(), "SomeResource.txt").toPath()));
+    }
+
+    @Test
+    @InjectMojo(goal = "testResources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    @MojoParameter(name = "escapeString", value = "\\")
+    void escapedExpressionInTestResourcesIsNotInterpolated(TestResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = testResources("filter-matrix/resources/escape-test");
+        setVariableValueToObject(mojo, "buildFilters", filters("my.filter"));
+
+        mojo.execute();
+
+        String content = read(new File(project.getTestOutputDirectory(), "SomeResource.txt").toPath());
+        assertMatrixLines(content);
+        // \${project.version} loses the escape and keeps the expression
+        assertContains(content, "escapeString=${project.version}");
+    }
+
+    @Test
+    @InjectMojo(goal = "testResources")
+    @MojoParameter(name = "skip", value = "true")
+    void skipCopiesNothing(TestResourcesMojo mojo) throws Exception {
+        MavenProjectResourcesStub project = testResources("MRESOURCES-131");
+
+        mojo.execute();
+
+        assertFalse(new File(project.getTestOutputDirectory(), "skipped.txt").exists());
     }
 }
