@@ -23,5 +23,6 @@ def lines = new File(basedir, 'target/classes/test.properties').readLines()
 assert lines.contains('#init test value (true|false) LINE IS essential for this bug report.#')
 // $toto.value$ is replaced
 assert lines.contains('toto.value=foo')
-// #test.value# and @test.value@ are replaced
-assert lines.findAll { it.startsWith('test.value=') }.take(2) == ['test.value=true', 'test.value=true']
+// #test.value# and @test.value@ are replaced; ${test.value} is not, because the $ delimiter takes its
+// opening $ and finds no closing $ on the line (#572)
+assert lines.findAll { it.startsWith('test.value=') } == ['test.value=true', 'test.value=true', 'test.value=${test.value}']
