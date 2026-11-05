@@ -225,6 +225,12 @@ public class ResourcesMojo extends AbstractMojo {
      * <p>
      * Since the {@code @} delimiter is the same on both ends, we don't need to specify {@code @*@} (though we can).
      * </p>
+     * <p>
+     * A delimiter that is the same on both ends takes precedence over a longer delimiter that starts with the same
+     * character, whatever their order: with both {@code $} and {@code ${*}}, {@code $name$} is replaced but
+     * {@code ${name}} is copied unchanged, because {@code $} takes its opening character and finds no closing
+     * {@code $} on the line.
+     * </p>
      *
      * @since 2.4
      */
