@@ -38,6 +38,7 @@ import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
@@ -52,6 +53,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @MojoTest
 class ResourcesMojoTest {
@@ -507,9 +510,12 @@ class ResourcesMojoTest {
                 .get(0)
                 .setDirectory(fixture("skip-yes").toString());
         project.setupBuildEnvironment();
+        Log log = mock(Log.class);
+        mojo.setLog(log);
 
         mojo.execute();
 
+        verify(log).info("Skipping the execution.");
         assertFalse(new File(project.getOutputDirectory(), "test-resource.txt").exists());
     }
 
