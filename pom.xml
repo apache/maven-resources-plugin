@@ -83,7 +83,7 @@ under the License.
     <mavenFilteringVersion>4.0.0-beta-2</mavenFilteringVersion>
     <mavenPluginPluginVersion>4.0.0-beta-2</mavenPluginPluginVersion>
     <plexusBuildApiVersion>0.0.7</plexusBuildApiVersion>
-    <sisuVersion>1.1.1</sisuVersion>
+    <sisuVersion>1.1.2</sisuVersion>
     <slf4jVersion>2.0.20</slf4jVersion>
     <version.maven-plugin-tools>${mavenPluginPluginVersion}</version.maven-plugin-tools>
 
