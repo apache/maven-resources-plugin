@@ -41,7 +41,6 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -466,11 +465,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(new File(new File(resourcesDir, "path-listing.txt").getAbsolutePath()).exists());
+        assertTrue(new File(resourcesDir, "path-listing.txt").exists());
 
         assertEquals(
                 "base path is C:\\Users\\Administrator\ndocuments path is C:\\Users\\Administrator\\Documents",
-                FileUtils.fileRead(new File(resourcesDir, "path-listing.txt")));
+                new String(Files.readAllBytes(new File(resourcesDir, "path-listing.txt").toPath())));
     }
 
     @Test
@@ -493,11 +492,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(new File(new File(resourcesDir, "path-listing.txt").getAbsolutePath()).exists());
+        assertTrue(new File(resourcesDir, "path-listing.txt").exists());
 
         assertEquals(
                 "base path is C:\\\\Users\\\\Administrator\ndocuments path is C:\\\\Users\\\\Administrator\\\\Documents",
-                FileUtils.fileRead(new File(resourcesDir, "path-listing.txt")));
+                new String(Files.readAllBytes(new File(resourcesDir, "path-listing.txt").toPath())));
     }
 
     @Test

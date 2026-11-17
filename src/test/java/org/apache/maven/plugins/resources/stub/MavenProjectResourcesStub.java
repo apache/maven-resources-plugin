@@ -29,7 +29,6 @@ import java.util.Properties;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 
 public class MavenProjectResourcesStub extends MavenProject {
     private String testRootDir;
@@ -67,7 +66,7 @@ public class MavenProjectResourcesStub extends MavenProject {
         dataMap = new HashMap<>();
 
         if (!new File(testRootDir).exists()) {
-            FileUtils.mkdir(testRootDir);
+            new File(testRootDir).mkdirs();
         }
 
         setupBuild();
@@ -138,11 +137,11 @@ public class MavenProjectResourcesStub extends MavenProject {
 
         // setup src dir
         if (!new File(resourcesDirectory).exists()) {
-            FileUtils.mkdir(resourcesDirectory);
+            new File(resourcesDirectory).mkdirs();
         }
 
         if (!new File(testResourcesDirectory).exists()) {
-            FileUtils.mkdir(testResourcesDirectory);
+            new File(testResourcesDirectory).mkdirs();
         }
 
         createDirectories(resourcesDirectory, testResourcesDirectory);
@@ -150,11 +149,11 @@ public class MavenProjectResourcesStub extends MavenProject {
 
         // setup target dir
         if (!new File(outputDirectory).exists()) {
-            FileUtils.mkdir(outputDirectory);
+            new File(outputDirectory).mkdirs();
         }
 
         if (!new File(testOutputDirectory).exists()) {
-            FileUtils.mkdir(testOutputDirectory);
+            new File(testOutputDirectory).mkdirs();
         }
     }
 
