@@ -39,6 +39,7 @@ class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
 
     protected static final String PROP_FILE_NAME = "target/test-classes/unit/propertiesutils-test/basic.properties";
 
+    @Override
     protected Path getPropertyFile() {
         Path propFile = Paths.get(getBasedir(), PROP_FILE_NAME);
 
@@ -49,6 +50,7 @@ class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
         return propFile;
     }
 
+    @Override
     protected Path getValidationFile() {
         Path validationFile = Paths.get(getBasedir(), VALIDATION_FILE_NAME);
 
