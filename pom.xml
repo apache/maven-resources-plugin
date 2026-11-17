@@ -243,7 +243,6 @@ under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>${mavenPluginPluginVersion}</version>
         <configuration>
           <links>
             <link>https://maven.apache.org/shared/maven-filtering/apidocs/</link>
