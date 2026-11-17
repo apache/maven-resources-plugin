@@ -101,11 +101,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file4.txt"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file3.nottest"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/test"));
+        assertTrue(new File(resourcesDir + "/file4.txt").exists());
+        assertTrue(new File(resourcesDir + "/package/file3.nottest").exists());
+        assertTrue(new File(resourcesDir + "/notpackage/file1.include").exists());
+        assertTrue(new File(resourcesDir + "/package/test").exists());
+        assertTrue(new File(resourcesDir + "/notpackage/test").exists());
     }
 
     @Test
@@ -127,11 +127,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = mojo.getOutputDirectory().getAbsolutePath();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file4.txt"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file3.nottest"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/test"));
+        assertTrue(new File(resourcesDir + "/file4.txt").exists());
+        assertTrue(new File(resourcesDir + "/package/file3.nottest").exists());
+        assertTrue(new File(resourcesDir + "/notpackage/file1.include").exists());
+        assertTrue(new File(resourcesDir + "/package/test").exists());
+        assertTrue(new File(resourcesDir + "/notpackage/test").exists());
     }
 
     @Test
@@ -150,7 +150,7 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file4.txt"));
+        assertTrue(new File(resourcesDir + "/file4.txt").exists());
     }
 
     @Test
@@ -187,11 +187,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file1.include"));
-        assertFalse(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
-        assertFalse(FileUtils.fileExists(resourcesDir + "/notpackage/nottest/file.txt"));
+        assertTrue(new File(resourcesDir + "/package/test").exists());
+        assertTrue(new File(resourcesDir + "/file1.include").exists());
+        assertTrue(new File(resourcesDir + "/package/file1.include").exists());
+        assertFalse(new File(resourcesDir + "/notpackage/file1.include").exists());
+        assertFalse(new File(resourcesDir + "/notpackage/nottest/file.txt").exists());
     }
 
     @Test
@@ -229,11 +229,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file1.include"));
-        assertFalse(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
-        assertFalse(FileUtils.fileExists(resourcesDir + "/notpackage/nottest/file.txt"));
+        assertTrue(new File(resourcesDir + "/package/test").exists());
+        assertTrue(new File(resourcesDir + "/file1.include").exists());
+        assertTrue(new File(resourcesDir + "/package/file1.include").exists());
+        assertFalse(new File(resourcesDir + "/notpackage/file1.include").exists());
+        assertFalse(new File(resourcesDir + "/notpackage/nottest/file.txt").exists());
     }
 
     @Test
@@ -256,11 +256,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/org/apache/maven/plugin/test/file4.txt"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/org/apache/maven/plugin/test/package/file3.nottest"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/org/apache/maven/plugin/test/notpackage/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/org/apache/maven/plugin/test/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/org/apache/maven/plugin/test/notpackage/test"));
+        assertTrue(new File(resourcesDir + "/org/apache/maven/plugin/test/file4.txt").exists());
+        assertTrue(new File(resourcesDir + "/org/apache/maven/plugin/test/package/file3.nottest").exists());
+        assertTrue(new File(resourcesDir + "/org/apache/maven/plugin/test/notpackage/file1.include").exists());
+        assertTrue(new File(resourcesDir + "/org/apache/maven/plugin/test/package/test").exists());
+        assertTrue(new File(resourcesDir + "/org/apache/maven/plugin/test/notpackage/test").exists());
     }
 
     @Test
@@ -466,7 +466,7 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(new File(resourcesDir, "path-listing.txt").getAbsolutePath()));
+        assertTrue(new File(new File(resourcesDir, "path-listing.txt").getAbsolutePath()).exists());
 
         assertEquals(
                 "base path is C:\\Users\\Administrator\ndocuments path is C:\\Users\\Administrator\\Documents",
@@ -493,7 +493,7 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(new File(resourcesDir, "path-listing.txt").getAbsolutePath()));
+        assertTrue(new File(new File(resourcesDir, "path-listing.txt").getAbsolutePath()).exists());
 
         assertEquals(
                 "base path is C:\\\\Users\\\\Administrator\ndocuments path is C:\\\\Users\\\\Administrator\\\\Documents",
@@ -601,7 +601,7 @@ class ResourcesMojoTest {
      * Ensures the file exists and its first line equals the given data.
      */
     private void assertContent(String fileName, String data) throws IOException {
-        assertTrue(FileUtils.fileExists(fileName));
+        assertTrue(new File(fileName).exists());
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             assertEquals(data, reader.readLine());
         }

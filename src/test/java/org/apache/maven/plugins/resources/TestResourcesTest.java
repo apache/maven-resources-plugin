@@ -29,7 +29,6 @@ import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugins.resources.stub.MavenProjectResourcesStub;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -85,11 +84,11 @@ class TestResourcesTest {
 
         String resourcesDir = project.getTestOutputDirectory();
 
-        assertTrue(FileUtils.fileExists(resourcesDir + "/file4.txt"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/file3.nottest"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/file1.include"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/package/test"));
-        assertTrue(FileUtils.fileExists(resourcesDir + "/notpackage/test"));
+        assertTrue(new File(resourcesDir + "/file4.txt").exists());
+        assertTrue(new File(resourcesDir + "/package/file3.nottest").exists());
+        assertTrue(new File(resourcesDir + "/notpackage/file1.include").exists());
+        assertTrue(new File(resourcesDir + "/package/test").exists());
+        assertTrue(new File(resourcesDir + "/notpackage/test").exists());
     }
 
     /** Points the stub's single test resource entry at a fixture directory. */

@@ -66,7 +66,7 @@ public class MavenProjectResourcesStub extends MavenProject {
         directoryList = new ArrayList<>();
         dataMap = new HashMap<>();
 
-        if (!FileUtils.fileExists(testRootDir)) {
+        if (!new File(testRootDir).exists()) {
             FileUtils.mkdir(testRootDir);
         }
 
@@ -137,11 +137,11 @@ public class MavenProjectResourcesStub extends MavenProject {
         // populate dummy resources and dummy test resources
 
         // setup src dir
-        if (!FileUtils.fileExists(resourcesDirectory)) {
+        if (!new File(resourcesDirectory).exists()) {
             FileUtils.mkdir(resourcesDirectory);
         }
 
-        if (!FileUtils.fileExists(testResourcesDirectory)) {
+        if (!new File(testResourcesDirectory).exists()) {
             FileUtils.mkdir(testResourcesDirectory);
         }
 
@@ -149,11 +149,11 @@ public class MavenProjectResourcesStub extends MavenProject {
         createFiles(resourcesDirectory, testResourcesDirectory);
 
         // setup target dir
-        if (!FileUtils.fileExists(outputDirectory)) {
+        if (!new File(outputDirectory).exists()) {
             FileUtils.mkdir(outputDirectory);
         }
 
-        if (!FileUtils.fileExists(testOutputDirectory)) {
+        if (!new File(testOutputDirectory).exists()) {
             FileUtils.mkdir(testOutputDirectory);
         }
     }
