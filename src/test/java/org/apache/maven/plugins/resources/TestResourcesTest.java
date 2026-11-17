@@ -19,7 +19,7 @@
 package org.apache.maven.plugins.resources;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,7 +76,7 @@ class TestResourcesTest {
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", resources);
         setVariableValueToObject(
-                mojo, "outputDirectory", Paths.get(project.getBuild().getTestOutputDirectory()));
+                mojo, "outputDirectory", Path.of(project.getBuild().getTestOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();

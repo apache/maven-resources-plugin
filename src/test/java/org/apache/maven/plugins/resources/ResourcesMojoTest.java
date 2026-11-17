@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,18 +96,18 @@ class ResourcesMojoTest {
 
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file3.nottest")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/file4.txt")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/file3.nottest")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/notpackage/file1.include")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/notpackage/test")));
     }
 
     /**
@@ -129,7 +128,7 @@ class ResourcesMojoTest {
         project.addFile("notpackage/test/file2.txt");
         project.setupBuildEnvironment();
 
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
@@ -138,11 +137,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file3.nottest")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/notpackage/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/file4.txt")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/file3.nottest")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/notpackage/file1.include")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/notpackage/test")));
     }
 
     /**
@@ -162,14 +161,14 @@ class ResourcesMojoTest {
         setVariableValueToObject(mojo, "encoding", "UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file4.txt")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/file4.txt")));
     }
 
     /**
@@ -205,7 +204,7 @@ class ResourcesMojoTest {
         project.addInclude("**/test/file*");
         project.addInclude("**/package/*.include");
 
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
@@ -214,11 +213,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/nottest/file.txt")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/file1.include")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/file1.include")));
+        assertFalse(Files.exists(Path.of(resourcesDir + "/notpackage/file1.include")));
+        assertFalse(Files.exists(Path.of(resourcesDir + "/notpackage/nottest/file.txt")));
     }
 
     /**
@@ -255,7 +254,7 @@ class ResourcesMojoTest {
         project.addExclude("**/notpackage*");
         project.addExclude("**/notpackage*/**");
 
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
@@ -264,11 +263,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/package/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/file1.include")));
-        assertFalse(Files.exists(Paths.get(resourcesDir + "/notpackage/nottest/file.txt")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/file1.include")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/package/file1.include")));
+        assertFalse(Files.exists(Path.of(resourcesDir + "/notpackage/file1.include")));
+        assertFalse(Files.exists(Path.of(resourcesDir + "/notpackage/nottest/file.txt")));
     }
 
     /**
@@ -290,7 +289,7 @@ class ResourcesMojoTest {
         project.addFile("notpackage/test/file2.txt");
         project.setupBuildEnvironment();
 
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
@@ -299,11 +298,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/file4.txt")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/package/file3.nottest")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/notpackage/file1.include")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/package/test")));
-        assertTrue(Files.exists(Paths.get(resourcesDir + "/org/apache/maven/plugin/test/notpackage/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/org/apache/maven/plugin/test/file4.txt")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/org/apache/maven/plugin/test/package/file3.nottest")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/org/apache/maven/plugin/test/notpackage/file1.include")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/org/apache/maven/plugin/test/package/test")));
+        assertTrue(Files.exists(Path.of(resourcesDir + "/org/apache/maven/plugin/test/notpackage/test")));
     }
 
     /**
@@ -323,7 +322,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.TRUE);
@@ -334,14 +333,14 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        Path userDir = Paths.get(System.getProperty("user.dir"));
+        Path userDir = Path.of(System.getProperty("user.dir"));
         assertTrue(Files.exists(userDir));
 
         Properties props = new Properties();
-        try (InputStream inStream = Files.newInputStream(Paths.get(resourcesDir, "file4.txt"))) {
+        try (InputStream inStream = Files.newInputStream(Path.of(resourcesDir, "file4.txt"))) {
             props.load(inStream);
         }
-        Path fileFromFiltering = Paths.get(props.getProperty("current-working-directory"));
+        Path fileFromFiltering = Path.of(props.getProperty("current-working-directory"));
 
         assertTrue(Files.exists(fileFromFiltering), fileFromFiltering.toAbsolutePath() + " does not exist.");
         assertEquals(userDir.toAbsolutePath(), fileFromFiltering.toAbsolutePath());
@@ -365,7 +364,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
@@ -396,7 +395,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.TRUE);
@@ -429,7 +428,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", filterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
@@ -461,7 +460,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "filters", filterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
@@ -499,7 +498,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", filterList);
         setVariableValueToObject(mojo, "filters", extraFilterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
@@ -508,7 +507,7 @@ class ResourcesMojoTest {
         String resourcesDir = project.getOutputDirectory();
         String checkString = "current working directory=testdir; old working directory=testdir2";
 
-        Path file = Paths.get(resourcesDir, "main-extra.properties");
+        Path file = Path.of(resourcesDir, "main-extra.properties");
         assertContent(file.toAbsolutePath().toString(), checkString);
     }
 
@@ -537,7 +536,7 @@ class ResourcesMojoTest {
         // setVariableValueToObject(mojo,"encoding","UTF-8");
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", filterList);
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         mojo.execute();
@@ -567,7 +566,7 @@ class ResourcesMojoTest {
 
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
         setVariableValueToObject(mojo, "escapeWindowsPaths", Boolean.FALSE);
@@ -576,11 +575,11 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir, "path-listing.txt").toAbsolutePath()));
+        assertTrue(Files.exists(Path.of(resourcesDir, "path-listing.txt").toAbsolutePath()));
 
         assertEquals(
                 "base path is C:\\Users\\Administrator\ndocuments path is C:\\Users\\Administrator\\Documents",
-                new String(Files.readAllBytes(Paths.get(resourcesDir, "path-listing.txt"))));
+                new String(Files.readAllBytes(Path.of(resourcesDir, "path-listing.txt"))));
     }
 
     @Test
@@ -602,7 +601,7 @@ class ResourcesMojoTest {
 
         setVariableValueToObject(mojo, "project", project);
         setVariableValueToObject(mojo, "resources", getResources(project));
-        setVariableValueToObject(mojo, "outputDirectory", Paths.get(project.getOutputDirectory()));
+        setVariableValueToObject(mojo, "outputDirectory", Path.of(project.getOutputDirectory()));
         setVariableValueToObject(mojo, "buildFilters", Collections.emptyList());
         setVariableValueToObject(mojo, "useBuildFilters", Boolean.TRUE);
 
@@ -612,19 +611,19 @@ class ResourcesMojoTest {
 
         String resourcesDir = project.getOutputDirectory();
 
-        assertTrue(Files.exists(Paths.get(resourcesDir, "path-listing.txt").toAbsolutePath()));
+        assertTrue(Files.exists(Path.of(resourcesDir, "path-listing.txt").toAbsolutePath()));
 
         assertEquals(
                 "base path is C:\\\\Users\\\\Administrator\ndocuments path is C:\\\\Users\\\\Administrator\\\\Documents",
-                new String(Files.readAllBytes(Paths.get(resourcesDir, "path-listing.txt"))));
+                new String(Files.readAllBytes(Path.of(resourcesDir, "path-listing.txt"))));
     }
 
     /**
      * Ensures the file exists and its first line equals the given data.
      */
     private void assertContent(String fileName, String data) throws IOException {
-        assertTrue(Files.exists(Paths.get(fileName)));
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
+        assertTrue(Files.exists(Path.of(fileName)));
+        try (BufferedReader reader = Files.newBufferedReader(Path.of(fileName))) {
             assertEquals(data, reader.readLine());
         }
     }

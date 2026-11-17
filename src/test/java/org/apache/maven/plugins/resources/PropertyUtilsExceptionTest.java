@@ -19,7 +19,7 @@
 package org.apache.maven.plugins.resources;
 
 import java.io.FileNotFoundException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.apache.maven.shared.filtering.PropertyUtils;
 import org.junit.jupiter.api.Test;
@@ -35,6 +35,6 @@ class PropertyUtilsExceptionTest {
     void loadPropertyFileShouldFailWithFileNotFoundException() {
         assertThrows(
                 FileNotFoundException.class,
-                () -> PropertyUtils.loadPropertyFile(Paths.get("NON_EXISTENT_FILE"), true, true));
+                () -> PropertyUtils.loadPropertyFile(Path.of("NON_EXISTENT_FILE"), true, true));
     }
 }
