@@ -46,6 +46,7 @@ public class ItFilter implements MavenResourcesFiltering {
     /**
      * @see org.apache.maven.shared.filtering.MavenResourcesFiltering#getDefaultNonFilteredFileExtensions()
      */
+    @Override
     public List<String> getDefaultNonFilteredFileExtensions() {
         //  no op
         return Collections.emptyList();
@@ -54,6 +55,7 @@ public class ItFilter implements MavenResourcesFiltering {
     /**
      * @see org.apache.maven.shared.filtering.MavenResourcesFiltering#filteredFileExtension(String, List)
      */
+    @Override
     public boolean filteredFileExtension(String fileName, List<String> userNonFilteredFileExtensions) {
         return false;
     }
@@ -61,6 +63,7 @@ public class ItFilter implements MavenResourcesFiltering {
     /**
      * @see org.apache.maven.shared.filtering.MavenResourcesFiltering#filterResources(org.apache.maven.shared.filtering.MavenResourcesExecution)
      */
+    @Override
     public void filterResources(MavenResourcesExecution mavenResourcesExecution) throws MavenFilteringException {
         System.out.println("ItFilter filterResources");
         try {

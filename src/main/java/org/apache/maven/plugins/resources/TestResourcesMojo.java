@@ -59,6 +59,7 @@ public class TestResourcesMojo extends ResourcesMojo {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute() throws MojoExecutionException {
         if (skip) {
             getLog().info("Not copying test resources");
@@ -68,21 +69,25 @@ public class TestResourcesMojo extends ResourcesMojo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public File getOutputDirectory() {
         return outputDirectory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Resource> getResources() {
         return resources;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
