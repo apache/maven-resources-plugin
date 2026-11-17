@@ -320,6 +320,7 @@ public class ResourcesMojo extends AbstractMojo {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute() throws MojoExecutionException {
         if (isSkip()) {
             getLog().info("Skipping the execution.");
