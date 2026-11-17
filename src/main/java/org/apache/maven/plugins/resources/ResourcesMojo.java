@@ -496,7 +496,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         resource.setFiltering(res.stringFiltering());
         resource.setExcludes(res.excludes());
         resource.setIncludes(res.includes());
-        res.targetPath().ifPresent((p) -> resource.setTargetPath(p.toString()));
+        res.targetPath().ifPresent(p -> resource.setTargetPath(p.toString()));
         return resource;
     }
 
