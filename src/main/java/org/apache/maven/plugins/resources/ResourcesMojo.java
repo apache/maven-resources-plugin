@@ -476,6 +476,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     private Log logger;
 
     /** {@inheritDoc} */
+    @Override
     public void execute() throws MojoException {
         if (isSkip()) {
             getLog().info("Skipping the execution.");

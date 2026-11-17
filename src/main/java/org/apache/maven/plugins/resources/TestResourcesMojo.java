@@ -74,6 +74,7 @@ public class TestResourcesMojo extends ResourcesMojo {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void execute() throws MojoException {
         // isSkip() reads ResourcesMojo's own field. Both classes declare a private
         // "skip", so the two collapse into a single descriptor parameter and the
@@ -99,21 +100,25 @@ public class TestResourcesMojo extends ResourcesMojo {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Path getOutputDirectory() {
         return outputDirectory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setOutputDirectory(Path outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<Resource> getResources() {
         return resources;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
