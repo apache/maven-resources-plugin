@@ -20,7 +20,6 @@ package org.apache.maven.plugins.resources;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.maven.api.plugin.testing.MojoTest;
@@ -41,7 +40,7 @@ class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
 
     @Override
     protected Path getPropertyFile() {
-        Path propFile = Paths.get(getBasedir(), PROP_FILE_NAME);
+        Path propFile = Path.of(getBasedir(), PROP_FILE_NAME);
 
         if (!Files.exists(propFile)) {
             propFile = null;
@@ -52,7 +51,7 @@ class BasicPropertyUtilsTest extends AbstractPropertyUtilsTest {
 
     @Override
     protected Path getValidationFile() {
-        Path validationFile = Paths.get(getBasedir(), VALIDATION_FILE_NAME);
+        Path validationFile = Path.of(getBasedir(), VALIDATION_FILE_NAME);
 
         if (!Files.exists(validationFile)) {
             validationFile = null;

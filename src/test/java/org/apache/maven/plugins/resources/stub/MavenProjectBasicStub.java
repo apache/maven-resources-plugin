@@ -21,7 +21,6 @@ package org.apache.maven.plugins.resources.stub;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.apache.maven.api.plugin.testing.MojoExtension;
@@ -40,9 +39,9 @@ public class MavenProjectBasicStub extends ProjectStub {
         properties = new Properties();
         identifier = id;
         testRootDir = MojoExtension.getBasedir() + "/target/test-classes/unit/test-dir/" + identifier;
-        setBasedir(Paths.get(testRootDir));
+        setBasedir(Path.of(testRootDir));
 
-        Path path = Paths.get(testRootDir);
+        Path path = Path.of(testRootDir);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
