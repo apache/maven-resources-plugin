@@ -65,9 +65,7 @@ public class MavenProjectResourcesStub extends MavenProject {
         directoryList = new ArrayList<>();
         dataMap = new HashMap<>();
 
-        if (!new File(testRootDir).exists()) {
-            new File(testRootDir).mkdirs();
-        }
+        new File(testRootDir).mkdirs();
 
         setupBuild();
 
@@ -136,25 +134,17 @@ public class MavenProjectResourcesStub extends MavenProject {
         // populate dummy resources and dummy test resources
 
         // setup src dir
-        if (!new File(resourcesDirectory).exists()) {
-            new File(resourcesDirectory).mkdirs();
-        }
+        new File(resourcesDirectory).mkdirs();
 
-        if (!new File(testResourcesDirectory).exists()) {
-            new File(testResourcesDirectory).mkdirs();
-        }
+        new File(testResourcesDirectory).mkdirs();
 
         createDirectories(resourcesDirectory, testResourcesDirectory);
         createFiles(resourcesDirectory, testResourcesDirectory);
 
         // setup target dir
-        if (!new File(outputDirectory).exists()) {
-            new File(outputDirectory).mkdirs();
-        }
+        new File(outputDirectory).mkdirs();
 
-        if (!new File(testOutputDirectory).exists()) {
-            new File(testOutputDirectory).mkdirs();
-        }
+        new File(testOutputDirectory).mkdirs();
     }
 
     public void addInclude(String pattern) {
