@@ -34,7 +34,7 @@ import org.apache.maven.api.ProjectScope;
 import org.apache.maven.api.Session;
 import org.apache.maven.api.SourceRoot;
 import org.apache.maven.api.di.Inject;
-import org.apache.maven.api.plugin.Log;
+import org.apache.maven.api.logging.Logger;
 import org.apache.maven.api.plugin.MojoException;
 import org.apache.maven.api.plugin.annotations.Mojo;
 import org.apache.maven.api.plugin.annotations.Parameter;
@@ -473,7 +473,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
     private boolean gracefulBinaryHandling;
 
     @Inject
-    private Log logger;
+    private Logger logger;
 
     /** {@inheritDoc} */
     @Override
@@ -806,7 +806,7 @@ public class ResourcesMojo implements org.apache.maven.api.plugin.Mojo {
         return skip;
     }
 
-    protected Log getLog() {
+    protected Logger getLog() {
         return logger;
     }
 }
