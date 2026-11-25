@@ -18,56 +18,20 @@
  * under the License.
  */
 
-import java.io.*;
-import java.util.*;
+File target = new File( basedir, "target" );
+assert target.isDirectory() : "target file is missing or a directory."
 
-boolean result = true;
+File someResource = new File( target, "/classes/filter.properties" );
+assert someResource.isFile() : "file.txt is missing or not a file."
 
-try
-{
-    File target = new File( basedir, "target" );
-    if ( !target.exists() || !target.isDirectory() )
-    {
-        System.err.println( "target file is missing or a directory." );
-        return false;
-    }
+Properties p = new Properties();
+someResource.withInputStream { p.load( it ) }
 
-    File someResource = new File( target, "/classes/filter.properties" );
-    if ( !someResource.exists() || !someResource.isFile() )
-    {
-        System.err.println( "file.txt is missing or not a file." );
-        return false;
-    }
+File f = new File( p.getProperty( "location" ) );
+assert f.exists() : "Property was not correctly filtered: " + f + "\n" + f.getAbsolutePath()
 
-    FileInputStream fis = new FileInputStream( someResource );
-    Properties p = new Properties();
-    p.load( fis );
+File filteredBasedir = new File( p.getProperty( "basedir" ) );
+assert filteredBasedir.exists() : "Property was not correctly filtered: " + filteredBasedir + "\n" + filteredBasedir.getAbsolutePath()
 
-    File f = new File( p.getProperty( "location" ) );
-    if ( !f.exists() )
-    {
-        System.err.println( "Property was not correctly filtered: " + f + "\n" + f.getAbsolutePath() );
-        result = false;
-    }
-
-    File basedir = new File( p.getProperty( "basedir" ) );
-    if ( !basedir.exists() )
-    {
-        System.err.println( "Property was not correctly filtered: " + basedir + "\n" + basedir.getAbsolutePath() );
-        result = false;
-    }
-
-    File expectedLocation = new File( basedir, "src/main/resources/file.txt" );
-    if ( !expectedLocation.equals( f ) )
-    {
-        System.err.println( "Files doesn't match:\n" + basedir + "\n" + expectedLocation );
-        result = false;
-    }
-}
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
-}
-
-return result;
+File expectedLocation = new File( filteredBasedir, "src/main/resources/file.txt" );
+assert expectedLocation.equals( f ) : "Files doesn't match:\n" + filteredBasedir + "\n" + expectedLocation
