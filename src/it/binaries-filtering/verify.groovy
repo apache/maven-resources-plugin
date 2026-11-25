@@ -18,78 +18,66 @@
  * under the License.
  */
 
-import java.io.*;
-import org.codehaus.plexus.util.*;
+import java.io.*
+import org.codehaus.plexus.util.*
 
-boolean result = true;
+boolean result = true
 
-boolean filesAreIdentical( File expected, File current )
-    throws IOException
-{
-    if ( expected.length() != current.length() )
-    {
-        return false;
+boolean filesAreIdentical(File expected, File current)
+throws IOException {
+    if (expected.length() != current.length()) {
+        return false
     }
-    FileInputStream expectedIn = new FileInputStream( expected );
-    FileInputStream currentIn = new FileInputStream( current );
-    try
-    {
-        byte[] expectedBuffer = IOUtil.toByteArray( expectedIn );
+    FileInputStream expectedIn = new FileInputStream(expected)
+    FileInputStream currentIn = new FileInputStream(current)
+    try {
+        byte[] expectedBuffer = IOUtil.toByteArray(expectedIn)
 
-        byte[] currentBuffer = IOUtil.toByteArray( currentIn );
-        if (expectedBuffer.length != currentBuffer.length)
-        {
-            return false;
+        byte[] currentBuffer = IOUtil.toByteArray(currentIn)
+        if (expectedBuffer.length != currentBuffer.length) {
+            return false
         }
-        for (int i = 0,size = expectedBuffer.length;i<size;i++)
-        {
-            if(expectedBuffer[i]!= currentBuffer[i])
-            {
-                return false;
+        for (int i = 0, size = expectedBuffer.length;i<size;i++) {
+            if(expectedBuffer[i]!= currentBuffer[i]) {
+                return false
             }
         }
     }
-    finally
-    {
-        expectedIn.close();
-        currentIn.close();
+    finally {
+        expectedIn.close()
+        currentIn.close()
     }
-    return true;
+    return true
 }
 
-try
-{
+try {
 
-	File originalImg = new File( basedir, "src/main/resources/happy_duke.gif" );
-	
-	File targetImg = new File( basedir, "target/classes/happy_duke.gif" );
+    File originalImg = new File(basedir, "src/main/resources/happy_duke.gif")
 
-  boolean identical = filesAreIdentical( originalImg, targetImg );
+    File targetImg = new File(basedir, "target/classes/happy_duke.gif")
 
-  if (!identical)
-  {
-      System.err.println( "filtered images happy_duke.gif are not identical." );
-      return false;
-  }
+    boolean identical = filesAreIdentical(originalImg, targetImg)
 
-  originalImg = new File( basedir, "src/main/resources/duke-beerjpg.img" );
+    if (!identical) {
+        System.err.println("filtered images happy_duke.gif are not identical.")
+        return false
+    }
 
-  targetImg = new File( basedir, "target/classes/duke-beerjpg.img" );
+    originalImg = new File(basedir, "src/main/resources/duke-beerjpg.img")
 
-  identical = filesAreIdentical( originalImg, targetImg );
+    targetImg = new File(basedir, "target/classes/duke-beerjpg.img")
 
-  if (!identical)
-  {
-      System.err.println( "filtered .img duke-beer.jpg.img are not identical." );
-      return false;
-  }
+    identical = filesAreIdentical(originalImg, targetImg)
 
+    if (!identical) {
+        System.err.println("filtered .img duke-beer.jpg.img are not identical.")
+        return false
+    }
 }
-catch( Throwable e )
-{
-    e.printStackTrace();
-    result = false;
+catch(Throwable e) {
+    e.printStackTrace()
+    result = false
 }
 
-return result;
+return result
 

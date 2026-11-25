@@ -19,30 +19,30 @@
 
 // MRESOURCES-301: binary .jar files must be binary-copied by default (no nonFilteredFileExtensions config needed)
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.*
+import java.nio.file.*
 
-boolean filesAreIdentical( File expected, File current ) throws IOException {
-    if ( expected.length() != current.length() ) {
-        return false;
+boolean filesAreIdentical(File expected, File current) throws IOException {
+    if (expected.length() != current.length()) {
+        return false
     }
-    byte[] expectedBytes = Files.readAllBytes( expected.toPath() );
-    byte[] currentBytes  = Files.readAllBytes( current.toPath() );
-    return Arrays.equals( expectedBytes, currentBytes );
+    byte[] expectedBytes = Files.readAllBytes(expected.toPath())
+    byte[] currentBytes = Files.readAllBytes(current.toPath())
+    return Arrays.equals(expectedBytes, currentBytes)
 }
 
-File src    = new File( basedir, "src/main/resources/lib/binary.jar" );
-File target = new File( basedir, "target/classes/lib/binary.jar" );
+File src = new File(basedir, "src/main/resources/lib/binary.jar")
+File target = new File(basedir, "target/classes/lib/binary.jar")
 
-if ( !target.exists() ) {
-    System.err.println( "MRESOURCES-301: target/classes/lib/binary.jar does not exist" );
-    return false;
+if (!target.exists()) {
+    System.err.println("MRESOURCES-301: target/classes/lib/binary.jar does not exist")
+    return false
 }
 
-if ( !filesAreIdentical( src, target ) ) {
-    System.err.println( "MRESOURCES-301: binary.jar was modified during filtering — content is not identical to source" );
-    return false;
+if (!filesAreIdentical(src, target)) {
+    System.err.println("MRESOURCES-301: binary.jar was modified during filtering — content is not identical to source")
+    return false
 }
 
-System.out.println( "MRESOURCES-301: binary.jar was binary-copied correctly without nonFilteredFileExtensions config" );
-return true;
+System.out.println("MRESOURCES-301: binary.jar was binary-copied correctly without nonFilteredFileExtensions config")
+return true

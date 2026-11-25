@@ -23,16 +23,16 @@
 //   1. Have the token expanded (${world} → World)
 //   2. Encode é as UTF-8 (0xC3 0xA9)
 
-File output = new File( basedir, 'target/classes/message.txt' );
-assert output.exists() : "message.txt was not copied";
+File output = new File(basedir, 'target/classes/message.txt')
+assert output.exists() : "message.txt was not copied"
 
 // Read as UTF-8 — if the file were still Latin-1 this would produce garbage for é
-String content = output.getText( 'UTF-8' );
+String content = output.getText( 'UTF-8' )
 assert content.trim() == 'Bonjour World! caf\u00e9' : "Unexpected content: '${content.trim()}'"
 
 // Also verify the raw bytes: é should be the two-byte UTF-8 sequence 0xC3 0xA9
-byte[] bytes = output.bytes;
-String hex = bytes.collect { String.format('%02x', it & 0xFF) }.join(' ');
+byte[] bytes = output.bytes
+String hex = bytes.collect { String.format('%02x', it & 0xFF) }.join(' ')
 assert hex.contains('c3 a9') : "Expected UTF-8 é (c3 a9) in output bytes, got: ${hex}"
 
-return true;
+return true

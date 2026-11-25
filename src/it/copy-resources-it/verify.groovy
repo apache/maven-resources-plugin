@@ -18,48 +18,42 @@
  * under the License.
  */
 
-import java.io.*;
+import java.io.*
 
-import org.codehaus.plexus.util.*;
+import org.codehaus.plexus.util.*
 
-boolean result = true;
+boolean result = true
 
-try
-{
-    File target = new File( basedir, "target" );
-    if ( !target.exists() || !target.isDirectory() )
-    {
-        System.err.println( "target file is missing or a directory." );
-        return false;
+try {
+    File target = new File(basedir, "target")
+    if (!target.exists() || !target.isDirectory()) {
+        System.err.println("target file is missing or a directory.")
+        return false
     }
 
-    File resource = new File( target, "/extra-resources/configuration.properties" );
-    if ( !resource.exists() || resource.isDirectory() )
-    {
-        System.err.println( "configuration.properties is missing or not a file." );
-        return false;
+    File resource = new File(target, "/extra-resources/configuration.properties")
+    if (!resource.exists() || resource.isDirectory()) {
+        System.err.println("configuration.properties is missing or not a file.")
+        return false
     }
 
-    String paramContent = FileUtils.fileRead( resource );
+    String paramContent = FileUtils.fileRead(resource)
 
-    int indexOf = paramContent.indexOf( "artifactId=maven-resources-plugin-copy-resources-it" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "configuration.properties not contains artifactId=maven-resources-plugin-copy-resources-it" );
-      return false;
+    int indexOf = paramContent.indexOf("artifactId=maven-resources-plugin-copy-resources-it")
+    if (indexOf < 0) {
+        System.err.println("configuration.properties not contains artifactId=maven-resources-plugin-copy-resources-it")
+        return false
     }
 
-    indexOf = paramContent.indexOf( "version=1.0.1-SNAPSHOT" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "configuration.properties not contains version=1.0.1-SNAPSHOT" );
-      return false;
+    indexOf = paramContent.indexOf("version=1.0.1-SNAPSHOT")
+    if (indexOf < 0) {
+        System.err.println("configuration.properties not contains version=1.0.1-SNAPSHOT")
+        return false
     }
 }
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
+catch(IOException e) {
+    e.printStackTrace()
+    result = false
 }
 
-return result;
+return result

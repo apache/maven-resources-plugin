@@ -19,7 +19,7 @@
 
 // MRESOURCES-162: when failOnMissingFilterValue=true, the build must fail
 // and the error message must identify the unresolved token.
-def buildLog = new File( basedir, "build.log" )
-assert buildLog.text.contains( "BUILD FAILURE" )
-assert buildLog.text.contains( "missing.property" )
+def buildLog = new File(basedir, "build.log")
+assert buildLog.text.contains("BUILD FAILURE")
+assert buildLog.text.contains("missing.property")
 return true

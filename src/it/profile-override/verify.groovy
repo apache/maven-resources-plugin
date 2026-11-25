@@ -18,43 +18,36 @@
  * under the License.
  */
 
-import java.io.*;
+import java.io.*
 
-import org.codehaus.plexus.util.*;
+import org.codehaus.plexus.util.*
 
-boolean result = true;
+boolean result = true
 
-try
-{
-    File target = new File( basedir, "target" );
-    if ( !target.exists() || !target.isDirectory() )
-    {
-        System.err.println( "target file is missing or a directory." );
-        return false;
+try {
+    File target = new File(basedir, "target")
+    if (!target.exists() || !target.isDirectory()) {
+        System.err.println("target file is missing or a directory.")
+        return false
     }
 
-    File someResource = new File( target, "/classes/config.properties" );
-    if ( !someResource.exists() || someResource.isDirectory() )
-    {
-        System.err.println( "config.properties is missing or not a file." );
-        return false;
+    File someResource = new File(target, "/classes/config.properties")
+    if (!someResource.exists() || someResource.isDirectory()) {
+        System.err.println("config.properties is missing or not a file.")
+        return false
     }
 
-    String paramContent = FileUtils.fileRead( someResource );
+    String paramContent = FileUtils.fileRead(someResource)
 
-    int indexOf = paramContent.indexOf( "env=production" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "config.properties not contains env=production" );
-      return false;
+    int indexOf = paramContent.indexOf("env=production")
+    if (indexOf < 0) {
+        System.err.println("config.properties not contains env=production")
+        return false
     }
-
-
 }
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
+catch(IOException e) {
+    e.printStackTrace()
+    result = false
 }
 
-return result;
+return result

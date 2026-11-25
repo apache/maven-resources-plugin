@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File( basedir, 'target/classes/test.properties' ).exists();
-assert new File( basedir, 'target/classes/test.txt' ).exists();
+assert new File(basedir, 'target/classes/test.properties').exists()
+assert new File(basedir, 'target/classes/test.txt').exists()
 
-sourceTextContent = new File( basedir, 'src/main/resources/test.txt' ).text;
-targetTextContent = new File( basedir, 'target/classes/test.txt' ).text;
-assert sourceTextContent.equals( targetTextContent );
-return true;
+sourceTextContent = new File(basedir, 'src/main/resources/test.txt').text
+targetTextContent = new File(basedir, 'target/classes/test.txt').text
+assert sourceTextContent.equals(targetTextContent)
+return true

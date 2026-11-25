@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-skippedFile = new File(basedir, 'target/test-classes/skipped.txt');
-assert !skippedFile.exists();
+skippedFile = new File(basedir, 'target/test-classes/skipped.txt')
+assert !skippedFile.exists()
 
-return true;
+return true

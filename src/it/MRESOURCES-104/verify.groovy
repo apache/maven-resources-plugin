@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes/test.properties').exists();
+assert new File(basedir, 'target/classes/test.properties').exists()
 
-content = new File(basedir, 'target/classes/test.properties').text;
-assert content.contains( 'email=foo@bar.com');
-assert content.contains( 'foo=0.0.1-SNAPSHOT');
-assert content.contains( 'bar=0.0.1-SNAPSHOT');
-return true;
+content = new File(basedir, 'target/classes/test.properties').text
+assert content.contains('email=foo@bar.com')
+assert content.contains('foo=0.0.1-SNAPSHOT')
+assert content.contains('bar=0.0.1-SNAPSHOT')
+return true

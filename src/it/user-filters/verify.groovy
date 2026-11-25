@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'module/target/classes/foo.txt').exists();
+assert new File(basedir, 'module/target/classes/foo.txt').exists()
 
-content = new File(basedir, 'module/target/classes/foo.txt').text;
-assert content.contains( 'foo');
-assert content.contains( 'version=1.0.16-SNAPSHOT');
-assert content.contains( 'toto=titi');
+content = new File(basedir, 'module/target/classes/foo.txt').text
+assert content.contains('foo')
+assert content.contains('version=1.0.16-SNAPSHOT')
+assert content.contains('toto=titi')
 
-return true;
+return true

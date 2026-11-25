@@ -17,77 +17,71 @@
  * under the License.
  */
 
-import java.io.*;
+import java.io.*
 
-import org.codehaus.plexus.util.*;
+import org.codehaus.plexus.util.*
 
-boolean result = true;
+boolean result = true
 
-try
-{
-    File resources = new File( basedir, "src/main/resources/" );
-    if ( !resources.mkdirs() ) {
-      System.out.println ( "Failed to create src/main/resources directory." );
-      result = false;
+try {
+    File resources = new File(basedir, "src/main/resources/")
+    if (!resources.mkdirs()) {
+        System.out.println("Failed to create src/main/resources directory.")
+        result = false
     }
 
-    File gitIgnore = new File ( resources, ".gitignore" );
+    File gitIgnore = new File(resources, ".gitignore")
 
 
-    BufferedWriter writer;
+    BufferedWriter writer
     try {
 
-      writer = new BufferedWriter(new FileWriter(gitIgnore));
-      writer.write ("# Test for .gitignore");
-      writer.newLine();
+        writer = new BufferedWriter(new FileWriter(gitIgnore))
+        writer.write("# Test for .gitignore")
+        writer.newLine()
     }
     finally {
-      try {
-        // Close the writer regardless of what happens...
-        writer.close();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+        try {
+            // Close the writer regardless of what happens...
+            writer.close()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
-
 }
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
+catch(IOException e) {
+    e.printStackTrace()
+    result = false
 }
 
-try
-{
-    File resources = new File( basedir, "src/main/resources/dir-with-dot-file/" );
+try {
+    File resources = new File(basedir, "src/main/resources/dir-with-dot-file/")
 
-    if ( !resources.mkdirs() ) {
-      System.out.println ( "Failed to create dir-with-dot-file folder." );
-      result = false;
+    if (!resources.mkdirs()) {
+        System.out.println("Failed to create dir-with-dot-file folder.")
+        result = false
     }
-    File gitIgnore = new File ( resources, ".gitignore" );
+    File gitIgnore = new File(resources, ".gitignore")
 
 
-    BufferedWriter writer;
+    BufferedWriter writer
     try {
 
-      writer = new BufferedWriter(new FileWriter(gitIgnore));
-      writer.write ("# Test for .gitignore");
-      writer.newLine();
+        writer = new BufferedWriter(new FileWriter(gitIgnore))
+        writer.write("# Test for .gitignore")
+        writer.newLine()
     }
     finally {
-      try {
-        // Close the writer regardless of what happens...
-        writer.close();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+        try {
+            // Close the writer regardless of what happens...
+            writer.close()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
-
 }
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
+catch(IOException e) {
+    e.printStackTrace()
+    result = false
 }
-return result;
+return result

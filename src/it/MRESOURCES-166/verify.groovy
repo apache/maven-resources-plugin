@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes/resource.txt').exists();
+assert new File(basedir, 'target/classes/resource.txt').exists()
 
-filteredContent = new File(basedir, 'target/classes/resource.txt').text;
-assert filteredContent.contains( 'fileValue=${foo.file}');
-assert filteredContent.contains( 'export SERVER_ENV=${SERVER_ENV:sandbox}');
+filteredContent = new File(basedir, 'target/classes/resource.txt').text
+assert filteredContent.contains('fileValue=${foo.file}')
+assert filteredContent.contains('export SERVER_ENV=${SERVER_ENV:sandbox}')
 
-return true;
+return true
