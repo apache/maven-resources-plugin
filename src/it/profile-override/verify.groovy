@@ -18,43 +18,12 @@
  * under the License.
  */
 
-import java.io.*;
+File target = new File( basedir, "target" );
+assert target.isDirectory() : "target file is missing or a directory."
 
-import org.codehaus.plexus.util.*;
+File someResource = new File( target, "/classes/config.properties" );
+assert someResource.isFile() : "config.properties is missing or not a file."
 
-boolean result = true;
+String paramContent = someResource.getText( 'UTF-8' );
 
-try
-{
-    File target = new File( basedir, "target" );
-    if ( !target.exists() || !target.isDirectory() )
-    {
-        System.err.println( "target file is missing or a directory." );
-        return false;
-    }
-
-    File someResource = new File( target, "/classes/config.properties" );
-    if ( !someResource.exists() || someResource.isDirectory() )
-    {
-        System.err.println( "config.properties is missing or not a file." );
-        return false;
-    }
-
-    String paramContent = FileUtils.fileRead( someResource );
-
-    int indexOf = paramContent.indexOf( "env=production" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "config.properties not contains env=production" );
-      return false;
-    }
-
-
-}
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
-}
-
-return result;
+assert paramContent.contains( "env=production" ) : "config.properties not contains env=production"
