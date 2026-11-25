@@ -181,16 +181,10 @@ under the License.
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-invoker-plugin</artifactId>
               <configuration>
-                <debug>true</debug>
-                <postBuildHookScript>verify</postBuildHookScript>
-                <preBuildHookScript>setup</preBuildHookScript>
-                <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                 <goals>
                   <goal>clean</goal>
                   <goal>process-test-resources</goal>
                 </goals>
-                <settingsFile>src/it/settings.xml</settingsFile>
-                <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                 <properties>
                   <execProps>fromExecProps</execProps>
                 </properties>
