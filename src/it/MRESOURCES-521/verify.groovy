@@ -24,44 +24,44 @@ import java.nio.file.*
 
 // --- 1) Verify the binary .p12 file was copied byte-for-byte ---
 
-File src    = new File( basedir, "src/main/resources/certs/keystore.p12" )
-File target = new File( basedir, "target/classes/certs/keystore.p12" )
+File src = new File(basedir, "src/main/resources/certs/keystore.p12")
+File target = new File(basedir, "target/classes/certs/keystore.p12")
 
-if ( !target.exists() ) {
-    System.err.println( "MRESOURCES-521: target/classes/certs/keystore.p12 does not exist" )
+if (!target.exists()) {
+    System.err.println("MRESOURCES-521: target/classes/certs/keystore.p12 does not exist")
     return false
 }
 
-byte[] expectedBytes = Files.readAllBytes( src.toPath() )
-byte[] actualBytes   = Files.readAllBytes( target.toPath() )
+byte[] expectedBytes = Files.readAllBytes(src.toPath())
+byte[] actualBytes = Files.readAllBytes(target.toPath())
 
-if ( !Arrays.equals( expectedBytes, actualBytes ) ) {
-    System.err.println( "MRESOURCES-521: keystore.p12 was modified during filtering — content is not identical to source" )
-    System.err.println( "  source size: " + expectedBytes.length + ", target size: " + actualBytes.length )
+if (!Arrays.equals(expectedBytes, actualBytes)) {
+    System.err.println("MRESOURCES-521: keystore.p12 was modified during filtering — content is not identical to source")
+    System.err.println("  source size: " + expectedBytes.length + ", target size: " + actualBytes.length)
     return false
 }
 
-System.out.println( "MRESOURCES-521: keystore.p12 was binary-copied correctly (nonFilteredFiles pattern matched)" )
+System.out.println("MRESOURCES-521: keystore.p12 was binary-copied correctly (nonFilteredFiles pattern matched)")
 
 // --- 2) Verify that text files NOT matched by the pattern were still filtered ---
 
-File propsTarget = new File( basedir, "target/classes/config.properties" )
+File propsTarget = new File(basedir, "target/classes/config.properties")
 
-if ( !propsTarget.exists() ) {
-    System.err.println( "MRESOURCES-521: target/classes/config.properties does not exist" )
+if (!propsTarget.exists()) {
+    System.err.println("MRESOURCES-521: target/classes/config.properties does not exist")
     return false
 }
 
 String propsContent = propsTarget.text
-if ( propsContent.contains( '${project.version}' ) ) {
-    System.err.println( "MRESOURCES-521: config.properties was NOT filtered — still contains \${project.version}" )
+if (propsContent.contains('${project.version}')) {
+    System.err.println("MRESOURCES-521: config.properties was NOT filtered — still contains \${project.version}")
     return false
 }
-if ( !propsContent.contains( "1.0-SNAPSHOT" ) ) {
-    System.err.println( "MRESOURCES-521: config.properties does not contain the resolved version 1.0-SNAPSHOT" )
+if (!propsContent.contains("1.0-SNAPSHOT")) {
+    System.err.println("MRESOURCES-521: config.properties does not contain the resolved version 1.0-SNAPSHOT")
     return false
 }
 
-System.out.println( "MRESOURCES-521: config.properties was correctly filtered (nonFilteredFiles did not suppress it)" )
+System.out.println("MRESOURCES-521: config.properties was correctly filtered (nonFilteredFiles did not suppress it)")
 
 return true

@@ -18,10 +18,10 @@
  * under the License.
  */
 
-import java.io.*;
+import java.io.*
 
-import org.codehaus.plexus.util.*;
+import org.codehaus.plexus.util.*
 
-File conf = new File( basedir, "src/main/resources/test/config.properties" );
-conf.setLastModified( System.currentTimeMillis() );
+File conf = new File(basedir, "src/main/resources/test/config.properties")
+conf.setLastModified(System.currentTimeMillis())
 

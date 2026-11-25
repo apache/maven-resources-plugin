@@ -34,12 +34,12 @@ def outputDir = new File(basedir, "target/classes")
 def neverDest = new File(outputDir, "never.txt")
 assert neverDest.exists() : "never.txt must exist after process-resources"
 assert neverDest.text.normalize().trim() == "sentinel \u2014 do not overwrite" :
-        "changeDetection=NEVER must leave the existing file untouched; found: '${neverDest.text}'"
+"changeDetection=NEVER must leave the existing file untouched; found: '${neverDest.text}'"
 
 // 2) ALWAYS — the source content must be copied
 def alwaysDest = new File(outputDir, "always.txt")
 assert alwaysDest.exists() : "always.txt must exist after process-resources"
 assert alwaysDest.text.normalize().trim() == "always-overwrite me" :
-        "changeDetection=ALWAYS must copy the source content; found: '${alwaysDest.text}'"
+"changeDetection=ALWAYS must copy the source content; found: '${alwaysDest.text}'"
 
 return true

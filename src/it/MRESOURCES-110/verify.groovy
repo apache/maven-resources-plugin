@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes/mresources-110.xml').exists();
+assert new File(basedir, 'target/classes/mresources-110.xml').exists()
 
-content = new File(basedir, 'target/classes/mresources-110.xml').text;
-assert content.contains( '<broken-tag>Content with replacement: I am the replacement !</broken-tag>');
-assert content.contains( '<broken-tag>Content with escaped replacement: Do not ${replaceThis} !</broken-tag>');
+content = new File(basedir, 'target/classes/mresources-110.xml').text
+assert content.contains('<broken-tag>Content with replacement: I am the replacement !</broken-tag>')
+assert content.contains('<broken-tag>Content with escaped replacement: Do not ${replaceThis} !</broken-tag>')
 
-return true;
+return true

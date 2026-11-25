@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-def buildLogFile = new File( basedir, "build.log");
+def buildLogFile = new File(basedir, "build.log")
 
 assert buildLogFile.text.contains("Skipping the execution.")
-return true;
+return true

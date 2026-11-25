@@ -18,56 +18,48 @@
  * under the License.
  */
 
-import java.io.*;
+import java.io.*
 
-import org.codehaus.plexus.util.*;
+import org.codehaus.plexus.util.*
 
-boolean result = true;
+boolean result = true
 
-try
-{
-    File target = new File( basedir, "target" );
-    if ( !target.exists() || !target.isDirectory() )
-    {
-        System.err.println( "target file is missing or not a directory." );
-        return false;
+try {
+    File target = new File(basedir, "target")
+    if (!target.exists() || !target.isDirectory()) {
+        System.err.println("target file is missing or not a directory.")
+        return false
     }
 
-    File classes = new File( target, "classes" );
-    if ( !classes.exists() || !classes.isDirectory() )
-    {
-        System.err.println( "target/classes file is missing or not a directory." );
-        return false;
+    File classes = new File(target, "classes")
+    if (!classes.exists() || !classes.isDirectory()) {
+        System.err.println("target/classes file is missing or not a directory.")
+        return false
     }
 
-    File gitIngoreInClasses = new File ( classes, ".gitignore" );
-    if ( !gitIngoreInClasses.exists() || !gitIngoreInClasses.isFile() )
-    {
-        System.err.println( "target/classes/.gitignore file is missing." );
-        return false;
+    File gitIngoreInClasses = new File(classes, ".gitignore")
+    if (!gitIngoreInClasses.exists() || !gitIngoreInClasses.isFile()) {
+        System.err.println("target/classes/.gitignore file is missing.")
+        return false
     }
 
 
 
-    File dirWithDotFile = new File( classes, "dir-with-dot-file" );
-    if ( !dirWithDotFile.exists() || !dirWithDotFile.isDirectory() )
-    {
-        System.err.println( "target/classes/dir-with-dot-file file is missing or not a directory." );
-        return false;
+    File dirWithDotFile = new File(classes, "dir-with-dot-file")
+    if (!dirWithDotFile.exists() || !dirWithDotFile.isDirectory()) {
+        System.err.println("target/classes/dir-with-dot-file file is missing or not a directory.")
+        return false
     }
 
-    File gitIngoreInDirWithDotFile = new File ( dirWithDotFile, ".gitignore" );
-    if ( !gitIngoreInDirWithDotFile.exists() || !gitIngoreInDirWithDotFile.isFile() )
-    {
-        System.err.println( "target/classes/dir-with-dot-file/.gitignore file is missing." );
-        return false;
+    File gitIngoreInDirWithDotFile = new File(dirWithDotFile, ".gitignore")
+    if (!gitIngoreInDirWithDotFile.exists() || !gitIngoreInDirWithDotFile.isFile()) {
+        System.err.println("target/classes/dir-with-dot-file/.gitignore file is missing.")
+        return false
     }
-
 }
-catch( IOException e )
-{
-    e.printStackTrace();
-    result = false;
+catch(IOException e) {
+    e.printStackTrace()
+    result = false
 }
 
-return result;
+return result

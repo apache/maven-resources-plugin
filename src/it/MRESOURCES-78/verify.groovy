@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes/filtered.properties').exists();
-assert new File(basedir, 'target/classes/unfiltered.properties').exists();
+assert new File(basedir, 'target/classes/filtered.properties').exists()
+assert new File(basedir, 'target/classes/unfiltered.properties').exists()
 
-filteredContent = new File(basedir, 'target/classes/filtered.properties').text;
-assert filteredContent.contains( 'bar=this is bar');
-assert filteredContent.contains( 'escaped=${escaped}');
-assert filteredContent.contains( 'escaped.at=@escaped.at@');
+filteredContent = new File(basedir, 'target/classes/filtered.properties').text
+assert filteredContent.contains('bar=this is bar')
+assert filteredContent.contains('escaped=${escaped}')
+assert filteredContent.contains('escaped.at=@escaped.at@')
 
-return true;
+return true

@@ -18,19 +18,19 @@
  */
 def fileName = '1.0-SNAPSHOT.txt'
 def targetClassFolder = 'target/classes/'
-assert new File(basedir, targetClassFolder + fileName).exists();
+assert new File(basedir, targetClassFolder + fileName).exists()
 
-content = new File(basedir, targetClassFolder + fileName).text;
-assert content.contains( 'org.apache.maven.plugins');
-assert content.contains( 'maven-resources-plugin-it-filter-filenames');
-assert content.contains( '1.0-SNAPSHOT');
+content = new File(basedir, targetClassFolder + fileName).text
+assert content.contains('org.apache.maven.plugins')
+assert content.contains('maven-resources-plugin-it-filter-filenames')
+assert content.contains('1.0-SNAPSHOT')
 
 fileName = 'maven-resources-plugin-it-filter-filenames.txt'
-assert new File(basedir, targetClassFolder + fileName).exists();
+assert new File(basedir, targetClassFolder + fileName).exists()
 
-content = new File(basedir, targetClassFolder + fileName).text;
-assert content.contains( 'org.apache.maven.plugins');
-assert content.contains( 'maven-resources-plugin-it-filter-filenames');
-assert content.contains( '1.0-SNAPSHOT');
+content = new File(basedir, targetClassFolder + fileName).text
+assert content.contains('org.apache.maven.plugins')
+assert content.contains('maven-resources-plugin-it-filter-filenames')
+assert content.contains('1.0-SNAPSHOT')
 
-return true;
+return true

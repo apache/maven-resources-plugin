@@ -21,12 +21,12 @@
 // the build succeeds and the unresolved placeholder is passed through as-is.
 import org.codehaus.plexus.util.FileUtils
 
-def resource = new File( basedir, "target/classes/resource.txt" )
+def resource = new File(basedir, "target/classes/resource.txt")
 assert resource.exists()
 
-def content = FileUtils.fileRead( resource )
+def content = FileUtils.fileRead(resource)
 // defined.property must be resolved
-assert content.contains( "defined=hello" )
+assert content.contains("defined=hello")
 // missing.property must be passed through literally
-assert content.contains( 'missing=${missing.property}' )
+assert content.contains('missing=${missing.property}')
 return true
