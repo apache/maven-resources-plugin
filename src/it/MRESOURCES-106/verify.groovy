@@ -18,20 +18,20 @@
  * under the License.
  */
 
-File target = new File( basedir, "target" );
+File target = new File(basedir, "target")
 assert target.isDirectory() : "target file is missing or a directory."
 
-File someResource = new File( target, "/classes/filter.properties" );
+File someResource = new File( target, "/classes/filter.properties" )
 assert someResource.isFile() : "file.txt is missing or not a file."
 
-Properties p = new Properties();
+Properties p = new Properties()
 someResource.withInputStream { p.load( it ) }
 
-File f = new File( p.getProperty( "location" ) );
+File f = new File( p.getProperty( "location" ) )
 assert f.exists() : "Property was not correctly filtered: " + f + "\n" + f.getAbsolutePath()
 
-File filteredBasedir = new File( p.getProperty( "basedir" ) );
+File filteredBasedir = new File( p.getProperty( "basedir" ) )
 assert filteredBasedir.exists() : "Property was not correctly filtered: " + filteredBasedir + "\n" + filteredBasedir.getAbsolutePath()
 
-File expectedLocation = new File( filteredBasedir, "src/main/resources/file.txt" );
+File expectedLocation = new File( filteredBasedir, "src/main/resources/file.txt" )
 assert expectedLocation.equals( f ) : "Files doesn't match:\n" + filteredBasedir + "\n" + expectedLocation

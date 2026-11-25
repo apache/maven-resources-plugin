@@ -16,8 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/classes/test.txt').exists();
+assert new File(basedir, 'target/classes/test.txt').exists()
 
-content = new File(basedir, 'target/classes/test.txt').text;
-assert content.contains( 'something\\with\\default\\escape\\string\\and\\a\\property\\like\\UTF-8\\in\\between' );
-return true;
+content = new File(basedir, 'target/classes/test.txt').text
+assert content.contains('something\\with\\default\\escape\\string\\and\\a\\property\\like\\UTF-8\\in\\between')
+return true

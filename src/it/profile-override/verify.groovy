@@ -18,12 +18,12 @@
  * under the License.
  */
 
-File target = new File( basedir, "target" );
+File target = new File(basedir, "target")
 assert target.isDirectory() : "target file is missing or a directory."
 
-File someResource = new File( target, "/classes/config.properties" );
+File someResource = new File( target, "/classes/config.properties" )
 assert someResource.isFile() : "config.properties is missing or not a file."
 
-String paramContent = someResource.getText( 'UTF-8' );
+String paramContent = someResource.getText( 'UTF-8' )
 
 assert paramContent.contains( "env=production" ) : "config.properties not contains env=production"

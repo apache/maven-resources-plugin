@@ -25,9 +25,17 @@ resource.withReader('ISO-8859-1') { reader -> props.load(reader) }
 
 // each of these keys has to be present in the filtered file
 def keysWhichHaveToExist = [
-    'timestamp', 'at.timestamp', 'build.timestamp', 'project.build.timestamp',
-    'baseUri', 'project.baseUri', 'pom.baseUri', 'at.baseUri',
-    'groupId', 'basedir', 'project.basedir',
+    'timestamp',
+    'at.timestamp',
+    'build.timestamp',
+    'project.build.timestamp',
+    'baseUri',
+    'project.baseUri',
+    'pom.baseUri',
+    'at.baseUri',
+    'groupId',
+    'basedir',
+    'project.basedir',
 ]
 for (key in keysWhichHaveToExist) {
     assert props.containsKey(key) : "Missing the key '${key}'"

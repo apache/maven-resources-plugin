@@ -25,4 +25,6 @@ assert lines.contains('#init test value (true|false) LINE IS essential for this 
 assert lines.contains('toto.value=foo')
 // #test.value# and @test.value@ are replaced; ${test.value} is not, because the $ delimiter takes its
 // opening $ and finds no closing $ on the line (#572)
-assert lines.findAll { it.startsWith('test.value=') } == ['test.value=true', 'test.value=true', 'test.value=${test.value}']
+assert lines.findAll {
+    it.startsWith('test.value=')
+} == ['test.value=true', 'test.value=true', 'test.value=${test.value}']
