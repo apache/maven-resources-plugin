@@ -22,6 +22,8 @@ import javax.inject.Inject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -32,6 +34,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.api.di.Provides;
 import org.apache.maven.api.plugin.testing.InjectMojo;
@@ -398,5 +401,101 @@ class ResourcesMojoFilteringTest {
             assertContains(content, "maven-resources-plugin-it-filter-filenames");
             assertContains(content, "1.0-SNAPSHOT");
         }
+    }
+
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    @MojoParameter(name = "useDefaultDelimiters", value = "false")
+    void customDelimitersReplaceTheDefaultsAndFilterFileValuesApply(ResourcesMojo mojo) throws Exception {
+        resource("MRESOURCES-105/resources", true);
+        setVariableValueToObject(mojo, "buildFilters", filters("../../MRESOURCES-105/my.properties"));
+        mojo.setDelimiters(new LinkedHashSet<>(Arrays.asList("$", "@", "#", "${*}")));
+
+        mojo.execute();
+
+        List<String> lines = Arrays.asList(output("test.txt").split("\\R"));
+        // the first line has to survive: it is the reason for the bug report
+        assertTrue(lines.contains("#init test value (true|false) LINE IS essential for this bug report.#"));
+        // $toto.value$ is replaced
+        assertTrue(lines.contains("toto.value=foo"));
+        // #test.value# and @test.value@ are replaced; ${test.value} is not, because the $ delimiter takes its
+        // opening $ and finds no closing $ on the line
+        List<String> testValue = new ArrayList<>();
+        for (String line : lines) {
+            if (line.startsWith("test.value=")) {
+                testValue.add(line);
+            }
+        }
+        assertEquals(Arrays.asList("test.value=true", "test.value=true", "test.value=${test.value}"), testValue);
+    }
+
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    void basedirInsideAPropertyValueIsResolvedOnce(ResourcesMojo mojo) throws Exception {
+        project().addProperty("location", "${basedir}/src/main/resources/file.txt");
+        resource("MRESOURCES-106", true);
+
+        mojo.execute();
+
+        Properties filtered = new Properties();
+        try (InputStream in =
+                Files.newInputStream(new File(project().getOutputDirectory(), "filter.properties").toPath())) {
+            filtered.load(in);
+        }
+        String basedir = project().getBasedir().getAbsolutePath();
+        assertEquals(basedir, filtered.getProperty("basedir"));
+        // not prefixed twice: the path is the base directory plus the relative part, nothing else
+        assertEquals(new File(basedir, "src/main/resources/file.txt"), new File(filtered.getProperty("location")));
+    }
+
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    @MojoParameter(name = "escapeString", value = "")
+    void emptyEscapeStringIsNotAnEscape(ResourcesMojo mojo) throws Exception {
+        project().addProperty("project.build.sourceEncoding", "UTF-8");
+        resource("MRESOURCES-231", true);
+
+        mojo.execute();
+
+        assertContains(
+                output("test.txt"),
+                "something\\with\\default\\escape\\string\\and\\a\\property\\like\\UTF-8\\in\\between");
+    }
+
+    @Test
+    @InjectMojo(goal = "resources")
+    @MojoParameter(name = "encoding", value = "UTF-8")
+    void buildTimestampBaseUriAndBasedirExpressions(ResourcesMojo mojo) throws Exception {
+        project().setGroupId("org.apache.maven.plugins");
+        resource("MRESOURCES-99", true);
+
+        mojo.execute();
+
+        Properties props = new Properties();
+        try (Reader in = Files.newBufferedReader(
+                new File(project().getOutputDirectory(), "SomeResource.txt").toPath(), StandardCharsets.ISO_8859_1)) {
+            props.load(in);
+        }
+        // ${maven.build.timestamp} and @maven.build.timestamp@ are replaced by the plugin
+        String timestamp = props.getProperty("timestamp");
+        assertTrue(
+                timestamp.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z"),
+                () -> "${maven.build.timestamp} was not replaced: " + timestamp);
+        assertEquals(timestamp, props.getProperty("at.timestamp"));
+        // only these expressions are replaced
+        String basedir = project().getBasedir().getAbsolutePath();
+        assertEquals(project().getBasedir().getAbsoluteFile().toURI().toString(), props.getProperty("project.baseUri"));
+        assertEquals("org.apache.maven.plugins", props.getProperty("groupId"));
+        assertEquals(basedir, props.getProperty("basedir"));
+        assertEquals(basedir, props.getProperty("project.basedir"));
+        // these have no value in the filtering context and stay as they are
+        assertEquals("${build.timestamp}", props.getProperty("build.timestamp"));
+        assertEquals("${project.build.timestamp}", props.getProperty("project.build.timestamp"));
+        assertEquals("${baseUri}", props.getProperty("baseUri"));
+        assertEquals("${pom.baseUri}", props.getProperty("pom.baseUri"));
+        assertEquals("@baseUri@", props.getProperty("at.baseUri"));
     }
 }
